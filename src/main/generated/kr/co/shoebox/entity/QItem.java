@@ -26,6 +26,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath brand = createString("brand");
+
     public final StringPath itemDetail = createString("itemDetail");
 
     public final StringPath itemNm = createString("itemNm");

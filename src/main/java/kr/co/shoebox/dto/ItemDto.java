@@ -13,6 +13,8 @@ public class ItemDto {
 
     private String itemNm;
 
+    private String brand;
+
     private Integer price;
 
     private String itemDetail;
