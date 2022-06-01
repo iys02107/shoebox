@@ -36,6 +36,7 @@ class ItemRepositoryTest {
     public void createItemTest(){
         Item item = new Item();
         item.setItemNm("테스트 상품");
+        item.setBrand("나이키");
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
         item.setItemSellStatus(ItemSellStatus.SELL);
@@ -50,6 +51,7 @@ class ItemRepositoryTest {
         for(int i=1;i<=10;i++){
             Item item = new Item();
             item.setItemNm("테스트 상품" + i);
+            item.setBrand("나이키" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
             item.setItemSellStatus(ItemSellStatus.SELL);
@@ -131,6 +133,7 @@ class ItemRepositoryTest {
         for(int i=1;i<=5;i++){
             Item item = new Item();
             item.setItemNm("테스트 상품" + i);
+            item.setBrand("나이키" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
             item.setItemSellStatus(ItemSellStatus.SELL);
@@ -143,6 +146,7 @@ class ItemRepositoryTest {
         for(int i=6;i<=10;i++){
             Item item = new Item();
             item.setItemNm("테스트 상품" + i);
+            item.setBrand("나이키" + i);
             item.setPrice(10000 + i);
             item.setItemDetail("테스트 상품 상세 설명" + i);
             item.setItemSellStatus(ItemSellStatus.SOLD_OUT);

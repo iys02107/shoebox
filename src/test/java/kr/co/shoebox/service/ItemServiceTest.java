@@ -41,7 +41,7 @@ class ItemServiceTest {
         List<MultipartFile> multipartFileList = new ArrayList<>();
 
         for(int i=0;i<5;i++){
-            String path = "C:/shop/item/";
+            String path = "C:/shoebox/item/";
             String imageName = "image" + i + ".jpg";
             MockMultipartFile multipartFile =
                     new MockMultipartFile(path, imageName, "image/jpg", new byte[]{1,2,3,4});
@@ -57,6 +57,7 @@ class ItemServiceTest {
     void saveItem() throws Exception {
         ItemFormDto itemFormDto = new ItemFormDto();
         itemFormDto.setItemNm("테스트상품");
+        itemFormDto.setBrand("나이키");
         itemFormDto.setItemSellStatus(ItemSellStatus.SELL);
         itemFormDto.setItemDetail("테스트 상품 입니다.");
         itemFormDto.setPrice(1000);
@@ -70,6 +71,7 @@ class ItemServiceTest {
                 .orElseThrow(EntityNotFoundException::new);
 
         assertEquals(itemFormDto.getItemNm(), item.getItemNm());
+        assertEquals(itemFormDto.getBrand(), item.getBrand());
         assertEquals(itemFormDto.getItemSellStatus(), item.getItemSellStatus());
         assertEquals(itemFormDto.getItemDetail(), item.getItemDetail());
         assertEquals(itemFormDto.getPrice(), item.getPrice());
