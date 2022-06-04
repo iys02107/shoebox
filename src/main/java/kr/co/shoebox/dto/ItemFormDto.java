@@ -29,7 +29,55 @@ public class ItemFormDto {
     private String itemDetail;
 
     @NotNull(message = "재고는 필수 입력 값입니다.")
-    private Integer stockNumber;
+    private Integer size220;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size225;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size230;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size235;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size240;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size245;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size250;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size255;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size260;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size265;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size270;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size275;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size280;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size285;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size290;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size295;
+
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer size300;
 
     private ItemSellStatus itemSellStatus;
 

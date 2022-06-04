@@ -13,14 +13,14 @@
     <script th:inline="javascript">
         $(document).ready(function(){
 
-            calculateToalPrice();
+            calculateTotalPrice();
 
             $("#count").change( function(){
-                calculateToalPrice();
+                calculateTotalPrice();
             });
         });
 
-        function calculateToalPrice(){
+        function calculateTotalPrice(){
             var count = $("#count").val();
             var price = $("#price").val();
             var totalPrice = price*count;
@@ -159,7 +159,7 @@
             <div class="text-right">
                 <div class="h4 text-danger text-left">
                     <input type="hidden" th:value="${item.price}" id="price" name="price">
-                    <span th:text="${item.price}"></span>원
+                    <span th:text="|*{#numbers.formatInteger(item.price,3,'COMMA')} 원|"></span>
                 </div>
                 <div class="input-group w-50">
                     <div class="input-group-prepend">
