@@ -50,7 +50,7 @@ public class CartService {
             savedCartItem.addCount(cartItemDto.getCount());
             return savedCartItem.getId();
         } else {
-            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount());
+            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount(), cartItemDto.getSize220Count(), cartItemDto.getSize225Count(), cartItemDto.getSize230Count(), cartItemDto.getSize235Count(), cartItemDto.getSize240Count(), cartItemDto.getSize245Count(), cartItemDto.getSize250Count(), cartItemDto.getSize255Count(), cartItemDto.getSize260Count(), cartItemDto.getSize265Count(), cartItemDto.getSize270Count(), cartItemDto.getSize275Count(), cartItemDto.getSize280Count(), cartItemDto.getSize285Count(), cartItemDto.getSize290Count(), cartItemDto.getSize295Count(), cartItemDto.getSize300Count());
             cartItemRepository.save(cartItem);
             return cartItem.getId();
         }

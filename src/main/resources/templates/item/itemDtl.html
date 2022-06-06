@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout1}">
 
 <head>
@@ -15,13 +15,62 @@
 
             calculateTotalPrice();
 
-            $("#count").change( function(){
+            $("#size220Count").change( function(){
                 calculateTotalPrice();
             });
+            $("#size225Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size230Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size235Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size240Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size245Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size250Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size255Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size260Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size265Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size270Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size275Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size280Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size285Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size290Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size295Count").change( function(){
+                calculateTotalPrice();
+            });
+            $("#size300Count").change( function(){
+                calculateTotalPrice();
+            });
+
         });
 
         function calculateTotalPrice(){
-            var count = $("#count").val();
+            var count = $("#size220Count").val()+$("#size225Count").val()+$("#size230Count").val()+$("#size235Count").val()+$("#size240Count").val()+$("#size245Count").val()+$("#size250Count").val()+$("#size255Count").val()+$("#size260Count").val()+$("#size265Count").val()+$("#size270Count").val()+$("#size275Count").val()+$("#size280Count").val()+$("#size285Count").val()+$("#size290Count").val()+$("#size295Count").val()+$("#size300Count").val();
             var price = $("#price").val();
             var totalPrice = price*count;
             $("#totalPrice").html(totalPrice + '원');
@@ -34,7 +83,24 @@
             var url = "/order";
             var paramData = {
                 itemId : $("#itemId").val(),
-                count : $("#count").val()
+                count : $("#count").val(),
+                size220Count: $("#size220Count").val(),
+                size225Count: $("#size225Count").val(),
+                size230Count: $("#size230Count").val(),
+                size235Count: $("#size235Count").val(),
+                size240Count: $("#size240Count").val(),
+                size245Count: $("#size245Count").val(),
+                size250Count: $("#size250Count").val(),
+                size255Count: $("#size255Count").val(),
+                size260Count: $("#size260Count").val(),
+                size265Count: $("#size265Count").val(),
+                size270Count: $("#size270Count").val(),
+                size275Count: $("#size275Count").val(),
+                size280Count: $("#size280Count").val(),
+                size285Count: $("#size285Count").val(),
+                size290Count: $("#size290Count").val(),
+                size295Count: $("#size295Count").val(),
+                size300Count: $("#size300Count").val()
             };
 
             var param = JSON.stringify(paramData);
@@ -74,7 +140,24 @@
             var url = "/cart";
             var paramData = {
                 itemId : $("#itemId").val(),
-                count : $("#count").val()
+                count : $("#count").val(),
+                size220Count: $("#size220Count").val(),
+                size225Count: $("#size225Count").val(),
+                size230Count: $("#size230Count").val(),
+                size235Count: $("#size235Count").val(),
+                size240Count: $("#size240Count").val(),
+                size245Count: $("#size245Count").val(),
+                size250Count: $("#size250Count").val(),
+                size255Count: $("#size255Count").val(),
+                size260Count: $("#size260Count").val(),
+                size265Count: $("#size265Count").val(),
+                size270Count: $("#size270Count").val(),
+                size275Count: $("#size275Count").val(),
+                size280Count: $("#size280Count").val(),
+                size285Count: $("#size285Count").val(),
+                size290Count: $("#size290Count").val(),
+                size295Count: $("#size295Count").val(),
+                size300Count: $("#size300Count").val()
             };
 
             var param = JSON.stringify(paramData);
@@ -92,7 +175,7 @@
                 cache   : false,
                 success  : function(result, status){
                     alert("상품을 장바구니에 담았습니다.");
-                    location.href='/';
+                    location.reload();
                 },
                 error : function(jqXHR, status, error){
 
@@ -106,7 +189,6 @@
                 }
             });
         }
-
     </script>
 </th:block>
 
@@ -135,6 +217,37 @@
             height:auto;
             width:50%;
         }
+        .btn{
+            border: solid black 1px;
+            margin-bottom: 1px;
+        }
+
+        input[type=radio]{
+            display: none;
+            margin: 5px;
+        }
+        input[type=radio] + label{
+            margin: 1px;
+            padding: 5px 15px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            font-size: 13px !important;
+            width: 55px;
+            text-align: center;
+        }
+        input[type=radio]:disabled + label{
+            background-color: red;
+        }
+        input[type=radio]:checked + label{
+            background-color: orange;
+            color:#fff;
+        }
+        input[type=radio]:enabled:hover + label{
+            background-color: yellow;
+            color: black;
+        }
+
+
     </style>
 </th:block>
 
@@ -147,10 +260,10 @@
             <img th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
         </div>
         <div class="wd50">
-            <span th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
+            <span th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
                 판매중
             </span>
-            <span th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
+            <span th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
                 품절
             </span>
             <div class="h4" th:text="${item.itemNm}"></div>
@@ -161,6 +274,49 @@
                     <input type="hidden" th:value="${item.price}" id="price" name="price">
                     <span th:text="|*{#numbers.formatInteger(item.price,3,'COMMA')} 원|"></span>
                 </div>
+                <div class="button1">
+                    <input type="radio" th:if="${item.size220}==0" name="size" class="btn" id="size220_dis" disabled><label for="size220_dis" th:if="${item.size220}==0">220</label>
+                    <input type="radio" th:unless="${item.size220}==0" name="size" class="btn" id="size220"><label for="size220" th:unless="${item.size220}==0">220</label>
+                    <input type="radio" th:if="${item.size225}==0" name="size" class="btn" id="size225_dis" disabled><label for="size225_dis" th:if="${item.size225}==0">225</label>
+                    <input type="radio" th:unless="${item.size225}==0" name="size" class="btn" id="size225"><label for="size225" th:unless="${item.size225}==0">225</label>
+                    <input type="radio" th:if="${item.size230}==0" name="size" class="btn" id="size230_dis" disabled><label for="size230_dis" th:if="${item.size230}==0">230</label>
+                    <input type="radio" th:unless="${item.size230}==0" name="size" class="btn" id="size230"><label for="size230" th:unless="${item.size230}==0">230</label>
+                    <input type="radio" th:if="${item.size235}==0" name="size" class="btn" id="size235_dis" disabled><label for="size235_dis" th:if="${item.size235}==0">235</label>
+                    <input type="radio" th:unless="${item.size235}==0" name="size" class="btn" id="size235"><label for="size235" th:unless="${item.size235}==0">235</label>
+                    <input type="radio" th:if="${item.size240}==0" name="size" class="btn" id="size240_dis" disabled><label for="size240_dis" th:if="${item.size240}==0">240</label>
+                    <input type="radio" th:unless="${item.size240}==0" name="size" class="btn" id="size240"><label for="size240" th:unless="${item.size240}==0">240</label>
+                </div>
+                <div class="button2">
+                    <input type="radio" th:if="${item.size245}==0" name="size" class="btn" id="size245_dis" disabled><label for="size245_dis" th:if="${item.size245}==0">245</label>
+                    <input type="radio" th:unless="${item.size245}==0" name="size" class="btn" id="size245"><label for="size245" th:unless="${item.size245}==0">245</label>
+                    <input type="radio" th:if="${item.size250}==0" name="size" class="btn" id="size250_dis" disabled><label for="size250_dis" th:if="${item.size250}==0">250</label>
+                    <input type="radio" th:unless="${item.size250}==0" name="size" class="btn" id="size250"><label for="size250" th:unless="${item.size250}==0">250</label>
+                    <input type="radio" th:if="${item.size255}==0" name="size" class="btn" id="size255_dis" disabled><label for="size255_dis" th:if="${item.size255}==0">255</label>
+                    <input type="radio" th:unless="${item.size255}==0" name="size" class="btn" id="size255"><label for="size255" th:unless="${item.size255}==0">255</label>
+                    <input type="radio" th:if="${item.size260}==0" name="size" class="btn" id="size260_dis" disabled><label for="size260_dis" th:if="${item.size260}==0">260</label>
+                    <input type="radio" th:unless="${item.size260}==0" name="size" class="btn" id="size260"><label for="size260" th:unless="${item.size260}==0">260</label>
+                    <input type="radio" th:if="${item.size265}==0" name="size" class="btn" id="size265_dis" disabled><label for="size265_dis" th:if="${item.size265}==0">265</label>
+                    <input type="radio" th:unless="${item.size265}==0" name="size" class="btn" id="size265"><label for="size265" th:unless="${item.size265}==0">265</label>
+                </div>
+                <div class="button3">
+                    <input type="radio" th:if="${item.size270}==0" name="size" class="btn" id="size270_dis" disabled><label for="size270_dis" th:if="${item.size270}==0">270</label>
+                    <input type="radio" th:unless="${item.size270}==0" name="size" class="btn" id="size270"><label for="size270" th:unless="${item.size270}==0">270</label>
+                    <input type="radio" th:if="${item.size275}==0" name="size" class="btn" id="size275_dis" disabled><label for="size275_dis" th:if="${item.size275}==0">275</label>
+                    <input type="radio" th:unless="${item.size275}==0" name="size" class="btn" id="size275"><label for="size275" th:unless="${item.size275}==0">275</label>
+                    <input type="radio" th:if="${item.size280}==0" name="size" class="btn" id="size280_dis" disabled><label for="size280_dis" th:if="${item.size280}==0">280</label>
+                    <input type="radio" th:unless="${item.size280}==0" name="size" class="btn" id="size280"><label for="size280" th:unless="${item.size280}==0">280</label>
+                    <input type="radio" th:if="${item.size285}==0" name="size" class="btn" id="size285_dis" disabled><label for="size285_dis" th:if="${item.size285}==0">285</label>
+                    <input type="radio" th:unless="${item.size285}==0" name="size" class="btn" id="size285"><label for="size285" th:unless="${item.size285}==0">285</label>
+                    <input type="radio" th:if="${item.size290}==0" name="size" class="btn" id="size290_dis" disabled><label for="size290_dis" th:if="${item.size290}==0">290</label>
+                    <input type="radio" th:unless="${item.size290}==0" name="size" class="btn" id="size290"><label for="size290" th:unless="${item.size290}==0">290</label>
+                </div>
+                <div class="button4">
+                    <input type="radio" th:if="${item.size295}==0" name="size" class="btn" id="size295_dis" disabled><label for="size295_dis" th:if="${item.size295}==0">295</label>
+                    <input type="radio" th:unless="${item.size295}==0" name="size" class="btn" id="size295"><label for="size295" th:unless="${item.size295}==0">295</label>
+                    <input type="radio" th:if="${item.size300}==0" name="size" class="btn" id="size300_dis" disabled><label for="size300_dis" th:if="${item.size300}==0">300</label>
+                    <input type="radio" th:unless="${item.size300}==0" name="size" class="btn" id="size300"><label for="size300" th:unless="${item.size300}==0">300</label>
+                </div>
+
                 <div class="input-group w-50">
                     <div class="input-group-prepend">
                         <span class="input-group-text">수량</span>
@@ -174,11 +330,11 @@
                 <h5>결제 금액</h5>
                 <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
             </div>
-            <div th:if="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">
+            <div th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>
                 <button type="button" class="btn btn-primary btn-lg" onclick="order()">주문하기</button>
             </div>
-            <div th:unless="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL}" class="text-right">
+            <div th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-danger btn-lg">품절</button>
             </div>
         </div>
