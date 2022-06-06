@@ -31,7 +31,7 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()||memberService.passwordConfirm(memberFormDto,bindingResult)){
             return "member/memberForm";
         }
 

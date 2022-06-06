@@ -1,5 +1,6 @@
 package kr.co.shoebox.service;
 
+import kr.co.shoebox.dto.MemberFormDto;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 @Service
 @Transactional
@@ -28,6 +30,17 @@ public class MemberService implements UserDetailsService {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
     }
+    public boolean passwordConfirm(MemberFormDto memberFormDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return true;
+
+        if(memberFormDto.getPassword().equals(memberFormDto.getPasswordConfirm())==false){
+            bindingResult.rejectValue("passwordConfirm",null,"비밀번호가 일치하지 않습니다.");
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
