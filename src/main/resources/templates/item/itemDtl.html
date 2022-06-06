@@ -15,66 +15,18 @@
 
             calculateTotalPrice();
 
-            $("#size220Count").change( function(){
+            $("#count").change( function(){
                 calculateTotalPrice();
             });
-            $("#size225Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size230Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size235Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size240Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size245Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size250Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size255Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size260Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size265Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size270Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size275Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size280Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size285Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size290Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size295Count").change( function(){
-                calculateTotalPrice();
-            });
-            $("#size300Count").change( function(){
-                calculateTotalPrice();
-            });
-
         });
 
         function calculateTotalPrice(){
-            var count = $("#size220Count").val()+$("#size225Count").val()+$("#size230Count").val()+$("#size235Count").val()+$("#size240Count").val()+$("#size245Count").val()+$("#size250Count").val()+$("#size255Count").val()+$("#size260Count").val()+$("#size265Count").val()+$("#size270Count").val()+$("#size275Count").val()+$("#size280Count").val()+$("#size285Count").val()+$("#size290Count").val()+$("#size295Count").val()+$("#size300Count").val();
+            var count = $("#count").val();
             var price = $("#price").val();
-            var totalPrice = price*count;
-            $("#totalPrice").html(totalPrice + '원');
+            var totalPrice = price * count;
+            $("#totalPrice").html(totalPrice.toLocaleString() + '원');
         }
+
 
         function order(){
             var token = $("meta[name='_csrf']").attr("content");
@@ -328,7 +280,7 @@
 
             <div class="text-right mgt-50">
                 <h5>결제 금액</h5>
-                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
+                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold" th:text="|*{#numbers.formatInteger(totalPrice,3,'COMMA')} 원|"></h3>
             </div>
             <div th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>
