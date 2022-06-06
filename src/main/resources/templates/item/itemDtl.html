@@ -26,6 +26,10 @@
             var totalPrice = price * count;
             $("#totalPrice").html(totalPrice.toLocaleString() + '원');
         }
+        function selectSize(){
+            var size = $(":input:radio[name=size]:checked").val();
+            console.log(size);
+        }
 
 
         function order(){
@@ -36,23 +40,7 @@
             var paramData = {
                 itemId : $("#itemId").val(),
                 count : $("#count").val(),
-                size220Count: $("#size220Count").val(),
-                size225Count: $("#size225Count").val(),
-                size230Count: $("#size230Count").val(),
-                size235Count: $("#size235Count").val(),
-                size240Count: $("#size240Count").val(),
-                size245Count: $("#size245Count").val(),
-                size250Count: $("#size250Count").val(),
-                size255Count: $("#size255Count").val(),
-                size260Count: $("#size260Count").val(),
-                size265Count: $("#size265Count").val(),
-                size270Count: $("#size270Count").val(),
-                size275Count: $("#size275Count").val(),
-                size280Count: $("#size280Count").val(),
-                size285Count: $("#size285Count").val(),
-                size290Count: $("#size290Count").val(),
-                size295Count: $("#size295Count").val(),
-                size300Count: $("#size300Count").val()
+                size : $(":input:radio[name=size]:checked").val();
             };
 
             var param = JSON.stringify(paramData);
@@ -93,23 +81,7 @@
             var paramData = {
                 itemId : $("#itemId").val(),
                 count : $("#count").val(),
-                size220Count: $("#size220Count").val(),
-                size225Count: $("#size225Count").val(),
-                size230Count: $("#size230Count").val(),
-                size235Count: $("#size235Count").val(),
-                size240Count: $("#size240Count").val(),
-                size245Count: $("#size245Count").val(),
-                size250Count: $("#size250Count").val(),
-                size255Count: $("#size255Count").val(),
-                size260Count: $("#size260Count").val(),
-                size265Count: $("#size265Count").val(),
-                size270Count: $("#size270Count").val(),
-                size275Count: $("#size275Count").val(),
-                size280Count: $("#size280Count").val(),
-                size285Count: $("#size285Count").val(),
-                size290Count: $("#size290Count").val(),
-                size295Count: $("#size295Count").val(),
-                size300Count: $("#size300Count").val()
+                size : $(":input:radio[name=size]:checked").val();
             };
 
             var param = JSON.stringify(paramData);
@@ -228,45 +200,45 @@
                 </div>
                 <div class="button1">
                     <input type="radio" th:if="${item.size220}==0" name="size" class="btn" id="size220_dis" disabled><label for="size220_dis" th:if="${item.size220}==0">220</label>
-                    <input type="radio" th:unless="${item.size220}==0" name="size" class="btn" id="size220"><label for="size220" th:unless="${item.size220}==0">220</label>
+                    <input type="radio" th:unless="${item.size220}==0" name="size" class="btn" id="size220" value="size220" onclick="selectSize()"><label for="size220" th:unless="${item.size220}==0">220</label>
                     <input type="radio" th:if="${item.size225}==0" name="size" class="btn" id="size225_dis" disabled><label for="size225_dis" th:if="${item.size225}==0">225</label>
-                    <input type="radio" th:unless="${item.size225}==0" name="size" class="btn" id="size225"><label for="size225" th:unless="${item.size225}==0">225</label>
+                    <input type="radio" th:unless="${item.size225}==0" name="size" class="btn" id="size225" value="size225" onclick="selectSize()"><label for="size225" th:unless="${item.size225}==0">225</label>
                     <input type="radio" th:if="${item.size230}==0" name="size" class="btn" id="size230_dis" disabled><label for="size230_dis" th:if="${item.size230}==0">230</label>
-                    <input type="radio" th:unless="${item.size230}==0" name="size" class="btn" id="size230"><label for="size230" th:unless="${item.size230}==0">230</label>
+                    <input type="radio" th:unless="${item.size230}==0" name="size" class="btn" id="size230" value="size230" onclick="selectSize()"><label for="size230" th:unless="${item.size230}==0">230</label>
                     <input type="radio" th:if="${item.size235}==0" name="size" class="btn" id="size235_dis" disabled><label for="size235_dis" th:if="${item.size235}==0">235</label>
-                    <input type="radio" th:unless="${item.size235}==0" name="size" class="btn" id="size235"><label for="size235" th:unless="${item.size235}==0">235</label>
+                    <input type="radio" th:unless="${item.size235}==0" name="size" class="btn" id="size235" value="size235" onclick="selectSize()"><label for="size235" th:unless="${item.size235}==0">235</label>
                     <input type="radio" th:if="${item.size240}==0" name="size" class="btn" id="size240_dis" disabled><label for="size240_dis" th:if="${item.size240}==0">240</label>
-                    <input type="radio" th:unless="${item.size240}==0" name="size" class="btn" id="size240"><label for="size240" th:unless="${item.size240}==0">240</label>
+                    <input type="radio" th:unless="${item.size240}==0" name="size" class="btn" id="size240" value="size240" onclick="selectSize()"><label for="size240" th:unless="${item.size240}==0">240</label>
                 </div>
                 <div class="button2">
                     <input type="radio" th:if="${item.size245}==0" name="size" class="btn" id="size245_dis" disabled><label for="size245_dis" th:if="${item.size245}==0">245</label>
-                    <input type="radio" th:unless="${item.size245}==0" name="size" class="btn" id="size245"><label for="size245" th:unless="${item.size245}==0">245</label>
+                    <input type="radio" th:unless="${item.size245}==0" name="size" class="btn" id="size245" value="size245" onclick="selectSize()"><label for="size245" th:unless="${item.size245}==0">245</label>
                     <input type="radio" th:if="${item.size250}==0" name="size" class="btn" id="size250_dis" disabled><label for="size250_dis" th:if="${item.size250}==0">250</label>
-                    <input type="radio" th:unless="${item.size250}==0" name="size" class="btn" id="size250"><label for="size250" th:unless="${item.size250}==0">250</label>
+                    <input type="radio" th:unless="${item.size250}==0" name="size" class="btn" id="size250" value="size250" onclick="selectSize()"><label for="size250" th:unless="${item.size250}==0">250</label>
                     <input type="radio" th:if="${item.size255}==0" name="size" class="btn" id="size255_dis" disabled><label for="size255_dis" th:if="${item.size255}==0">255</label>
-                    <input type="radio" th:unless="${item.size255}==0" name="size" class="btn" id="size255"><label for="size255" th:unless="${item.size255}==0">255</label>
+                    <input type="radio" th:unless="${item.size255}==0" name="size" class="btn" id="size255" value="size255" onclick="selectSize()"><label for="size255" th:unless="${item.size255}==0">255</label>
                     <input type="radio" th:if="${item.size260}==0" name="size" class="btn" id="size260_dis" disabled><label for="size260_dis" th:if="${item.size260}==0">260</label>
-                    <input type="radio" th:unless="${item.size260}==0" name="size" class="btn" id="size260"><label for="size260" th:unless="${item.size260}==0">260</label>
+                    <input type="radio" th:unless="${item.size260}==0" name="size" class="btn" id="size260" value="size260" onclick="selectSize()"><label for="size260" th:unless="${item.size260}==0">260</label>
                     <input type="radio" th:if="${item.size265}==0" name="size" class="btn" id="size265_dis" disabled><label for="size265_dis" th:if="${item.size265}==0">265</label>
-                    <input type="radio" th:unless="${item.size265}==0" name="size" class="btn" id="size265"><label for="size265" th:unless="${item.size265}==0">265</label>
+                    <input type="radio" th:unless="${item.size265}==0" name="size" class="btn" id="size265" value="size265" onclick="selectSize()"><label for="size265" th:unless="${item.size265}==0">265</label>
                 </div>
                 <div class="button3">
                     <input type="radio" th:if="${item.size270}==0" name="size" class="btn" id="size270_dis" disabled><label for="size270_dis" th:if="${item.size270}==0">270</label>
-                    <input type="radio" th:unless="${item.size270}==0" name="size" class="btn" id="size270"><label for="size270" th:unless="${item.size270}==0">270</label>
+                    <input type="radio" th:unless="${item.size270}==0" name="size" class="btn" id="size270" value="size270" onclick="selectSize()"><label for="size270" th:unless="${item.size270}==0">270</label>
                     <input type="radio" th:if="${item.size275}==0" name="size" class="btn" id="size275_dis" disabled><label for="size275_dis" th:if="${item.size275}==0">275</label>
-                    <input type="radio" th:unless="${item.size275}==0" name="size" class="btn" id="size275"><label for="size275" th:unless="${item.size275}==0">275</label>
+                    <input type="radio" th:unless="${item.size275}==0" name="size" class="btn" id="size275" value="size275" onclick="selectSize()"><label for="size275" th:unless="${item.size275}==0">275</label>
                     <input type="radio" th:if="${item.size280}==0" name="size" class="btn" id="size280_dis" disabled><label for="size280_dis" th:if="${item.size280}==0">280</label>
-                    <input type="radio" th:unless="${item.size280}==0" name="size" class="btn" id="size280"><label for="size280" th:unless="${item.size280}==0">280</label>
+                    <input type="radio" th:unless="${item.size280}==0" name="size" class="btn" id="size280" value="size280" onclick="selectSize()"><label for="size280" th:unless="${item.size280}==0">280</label>
                     <input type="radio" th:if="${item.size285}==0" name="size" class="btn" id="size285_dis" disabled><label for="size285_dis" th:if="${item.size285}==0">285</label>
-                    <input type="radio" th:unless="${item.size285}==0" name="size" class="btn" id="size285"><label for="size285" th:unless="${item.size285}==0">285</label>
+                    <input type="radio" th:unless="${item.size285}==0" name="size" class="btn" id="size285" value="size285" onclick="selectSize()"><label for="size285" th:unless="${item.size285}==0">285</label>
                     <input type="radio" th:if="${item.size290}==0" name="size" class="btn" id="size290_dis" disabled><label for="size290_dis" th:if="${item.size290}==0">290</label>
-                    <input type="radio" th:unless="${item.size290}==0" name="size" class="btn" id="size290"><label for="size290" th:unless="${item.size290}==0">290</label>
+                    <input type="radio" th:unless="${item.size290}==0" name="size" class="btn" id="size290" value="size290" onclick="selectSize()"><label for="size290" th:unless="${item.size290}==0">290</label>
                 </div>
                 <div class="button4">
                     <input type="radio" th:if="${item.size295}==0" name="size" class="btn" id="size295_dis" disabled><label for="size295_dis" th:if="${item.size295}==0">295</label>
-                    <input type="radio" th:unless="${item.size295}==0" name="size" class="btn" id="size295"><label for="size295" th:unless="${item.size295}==0">295</label>
+                    <input type="radio" th:unless="${item.size295}==0" name="size" class="btn" id="size295" value="size295" onclick="selectSize()"><label for="size295" th:unless="${item.size295}==0">295</label>
                     <input type="radio" th:if="${item.size300}==0" name="size" class="btn" id="size300_dis" disabled><label for="size300_dis" th:if="${item.size300}==0">300</label>
-                    <input type="radio" th:unless="${item.size300}==0" name="size" class="btn" id="size300"><label for="size300" th:unless="${item.size300}==0">300</label>
+                    <input type="radio" th:unless="${item.size300}==0" name="size" class="btn" id="size300" value="size300" onclick="selectSize()"><label for="size300" th:unless="${item.size300}==0">300</label>
                 </div>
 
                 <div class="input-group w-50">
