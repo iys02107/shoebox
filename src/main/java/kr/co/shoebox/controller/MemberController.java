@@ -2,6 +2,7 @@ package kr.co.shoebox.controller;
 
 import kr.co.shoebox.dto.MemberFormDto;
 import kr.co.shoebox.entity.Member;
+import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 

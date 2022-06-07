@@ -43,7 +43,24 @@ class CartServiceTest {
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
         item.setItemSellStatus(ItemSellStatus.SELL);
-        item.setStockNumber(100);
+        item.setSize220(100);
+        item.setSize225(100);
+        item.setSize230(100);
+        item.setSize235(100);
+        item.setSize240(100);
+        item.setSize245(100);
+        item.setSize250(100);
+        item.setSize255(100);
+        item.setSize260(100);
+        item.setSize265(100);
+        item.setSize270(100);
+        item.setSize275(100);
+        item.setSize280(100);
+        item.setSize285(100);
+        item.setSize290(100);
+        item.setSize295(100);
+        item.setSize300(100);
+
         return itemRepository.save(item);
     }
 

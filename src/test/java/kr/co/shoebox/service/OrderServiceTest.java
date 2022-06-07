@@ -46,7 +46,23 @@ class OrderServiceTest {
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
         item.setItemSellStatus(ItemSellStatus.SELL);
-        item.setStockNumber(100);
+        item.setSize220(100);
+        item.setSize225(100);
+        item.setSize230(100);
+        item.setSize235(100);
+        item.setSize240(100);
+        item.setSize245(100);
+        item.setSize250(100);
+        item.setSize255(100);
+        item.setSize260(100);
+        item.setSize265(100);
+        item.setSize270(100);
+        item.setSize275(100);
+        item.setSize280(100);
+        item.setSize285(100);
+        item.setSize290(100);
+        item.setSize295(100);
+        item.setSize300(100);
         return itemRepository.save(item);
     }
 
@@ -94,7 +110,23 @@ class OrderServiceTest {
         orderService.cancelOrder(orderId);
 
         assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
-        assertEquals(100, item.getStockNumber());
+        assertEquals(100, item.getSize220());
+        assertEquals(100, item.getSize225());
+        assertEquals(100, item.getSize230());
+        assertEquals(100, item.getSize235());
+        assertEquals(100, item.getSize240());
+        assertEquals(100, item.getSize245());
+        assertEquals(100, item.getSize250());
+        assertEquals(100, item.getSize255());
+        assertEquals(100, item.getSize260());
+        assertEquals(100, item.getSize265());
+        assertEquals(100, item.getSize270());
+        assertEquals(100, item.getSize275());
+        assertEquals(100, item.getSize280());
+        assertEquals(100, item.getSize285());
+        assertEquals(100, item.getSize290());
+        assertEquals(100, item.getSize295());
+        assertEquals(100, item.getSize300());
     }
 
 }

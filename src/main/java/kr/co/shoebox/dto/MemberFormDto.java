@@ -23,8 +23,17 @@ public class MemberFormDto {
     private String password;
 
     @NotEmpty(message="비밀번호를 한번 더 입력하세요")
-    private String passwordConfirm;
+    private String passwordCheck;
 
-    @NotEmpty(message = "주소는 필수 입력 값입니다.")
-    private String address;
+    @NotEmpty(message = "우편번호는 필수 입력 값입니다.")
+    private String postcode;
+
+    @NotEmpty(message = "도로명 주소는 필수 입력 값입니다.")
+    private String roadAddress;
+
+    @NotEmpty(message = "상세주소는 필수 입력 값입니다.")
+    private String detailAddress;
+
+    @NotEmpty(message = "휴대폰 번호는 필수 입력 값입니다.")
+    private String phoneNumber;
 }

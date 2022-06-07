@@ -41,7 +41,7 @@ public class OrderService {
         Member member = memberRepository.findByEmail(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
-        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount(), orderDto.getSize220Count(), orderDto.getSize225Count(), orderDto.getSize230Count(), orderDto.getSize235Count(), orderDto.getSize240Count(), orderDto.getSize245Count(), orderDto.getSize250Count(), orderDto.getSize255Count(), orderDto.getSize260Count(), orderDto.getSize265Count(), orderDto.getSize270Count(), orderDto.getSize275Count(), orderDto.getSize280Count(), orderDto.getSize285Count(), orderDto.getSize290Count(), orderDto.getSize295Count(), orderDto.getSize300Count());
+        OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getSize(), orderDto.getCount());
         orderItemList.add(orderItem);
         Order order = Order.createOrder(member, orderItemList);
         orderRepository.save(order);
@@ -103,7 +103,7 @@ public class OrderService {
             Item item = itemRepository.findById(orderDto.getItemId())
                     .orElseThrow(EntityNotFoundException::new);
 
-            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount(), orderDto.getSize220Count(), orderDto.getSize225Count(), orderDto.getSize230Count(), orderDto.getSize235Count(), orderDto.getSize240Count(), orderDto.getSize245Count(), orderDto.getSize250Count(), orderDto.getSize255Count(), orderDto.getSize260Count(), orderDto.getSize265Count(), orderDto.getSize270Count(), orderDto.getSize275Count(), orderDto.getSize280Count(), orderDto.getSize285Count(), orderDto.getSize290Count(), orderDto.getSize295Count(), orderDto.getSize300Count());
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getSize(), orderDto.getCount());
             orderItemList.add(orderItem);
         }
 

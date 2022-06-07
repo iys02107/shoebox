@@ -47,10 +47,10 @@ public class CartService {
         CartItem savedCartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
 
         if(savedCartItem != null){
-            savedCartItem.addCount(cartItemDto.getCount());
+            savedCartItem.addCount(cartItemDto.getSize(), cartItemDto.getCount());
             return savedCartItem.getId();
         } else {
-            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount(), cartItemDto.getSize220Count(), cartItemDto.getSize225Count(), cartItemDto.getSize230Count(), cartItemDto.getSize235Count(), cartItemDto.getSize240Count(), cartItemDto.getSize245Count(), cartItemDto.getSize250Count(), cartItemDto.getSize255Count(), cartItemDto.getSize260Count(), cartItemDto.getSize265Count(), cartItemDto.getSize270Count(), cartItemDto.getSize275Count(), cartItemDto.getSize280Count(), cartItemDto.getSize285Count(), cartItemDto.getSize290Count(), cartItemDto.getSize295Count(), cartItemDto.getSize300Count());
+            CartItem cartItem = CartItem.createCartItem(cart, item, cartItemDto.getCount(), cartItemDto.getSize());
             cartItemRepository.save(cartItem);
             return cartItem.getId();
         }
@@ -85,11 +85,11 @@ public class CartService {
         return true;
     }
 
-    public void updateCartItemCount(Long cartItemId, int count){
+    public void updateCartItemCount(Long cartItemId, String size, int count){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        cartItem.updateCount(count);
+        cartItem.updateCount(size, count);
     }
 
     public void deleteCartItem(Long cartItemId) {
@@ -109,6 +109,7 @@ public class CartService {
             OrderDto orderDto = new OrderDto();
             orderDto.setItemId(cartItem.getItem().getId());
             orderDto.setCount(cartItem.getCount());
+            orderDto.setSize(cartItem.getSize());
             orderDtoList.add(orderDto);
         }
 

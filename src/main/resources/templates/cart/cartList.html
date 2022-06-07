@@ -36,7 +36,7 @@
             var cartItemId = obj.id.split('_')[1];
             var price = $("#price_" + cartItemId).data("price");
             var totalPrice = count*price;
-            $("#totalPrice_" + cartItemId).html(totalPrice+"원");
+            $("#totalPrice_" + cartItemId).html(totalPrice.toLocaleString() +"원");
             getOrderTotalPrice();
             updateCartItemCount(cartItemId, count);
         }
@@ -232,6 +232,7 @@
                                       th:data-price="${cartItem.price}"
                                       th:text="|*{#numbers.formatInteger(cartItem.price,3,'COMMA')} 원|" class="align-self-center mr-2">
                                 </span>
+                                <span th:text="${cartItem.size}"></span>
                                 <input type="number" name="count" th:id="'count_' + ${cartItem.cartItemId}"
                                        th:value="${cartItem.count}" min="1"
                                        onchange="changeCount(this)" class="form-control mr-2" >
