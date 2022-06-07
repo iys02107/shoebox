@@ -28,11 +28,16 @@
         }
         function selectSize(){
             var size = $(":input:radio[name=size]:checked").val();
+
             console.log(size);
         }
 
 
         function order(){
+           if(!$(":input:radio[name=size]:checked").val()){
+                alert('사이즈를 선택해주세요.');
+                location.reload();
+           }else{
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             var url = "/order";
@@ -70,9 +75,14 @@
 
                 }
             });
+            }
         }
 
         function addCart(){
+            if(!$(":input:radio[name=size]:checked").val()){
+                alert('사이즈를 선택해주세요.');
+                location.reload();
+           }else{
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -111,6 +121,7 @@
 
                 }
             });
+            }
         }
     </script>
 </th:block>
