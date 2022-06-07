@@ -15,7 +15,6 @@
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:inline="javascript">
         $(document).ready(function(){
             var errorMessage = [[${errorMessage}]];
@@ -112,7 +111,7 @@
         </div>
         <div class="form-group">
             <label th:for="phoneNumber" style="margin-top: 12px">휴대폰 번호</label>
-            <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="휴대폰 번호 입력( - 없이 입력)">
+            <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="휴대폰 번호 입력(-를 제외하고 입력해주세요.)">
             <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="fieldError">Incorrect data</p>
         </div>
 
