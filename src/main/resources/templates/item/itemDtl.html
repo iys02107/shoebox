@@ -28,11 +28,16 @@
         }
         function selectSize(){
             var size = $(":input:radio[name=size]:checked").val();
+
             console.log(size);
         }
 
 
         function order(){
+           if(!$(":input:radio[name=size]:checked").val()){
+                alert('사이즈를 선택해주세요.');
+                location.reload();
+           }else{
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             var url = "/order";
@@ -70,9 +75,14 @@
 
                 }
             });
+            }
         }
 
         function addCart(){
+            if(!$(":input:radio[name=size]:checked").val()){
+                alert('사이즈를 선택해주세요.');
+                location.reload();
+           }else{
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -111,6 +121,7 @@
 
                 }
             });
+            }
         }
     </script>
 </th:block>
@@ -251,7 +262,7 @@
 
             <div class="text-right mgt-50">
                 <h5>결제 금액</h5>
-                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold" th:text="|*{#numbers.formatInteger(totalPrice,3,'COMMA')} 원|"></h3>
+                <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
             </div>
             <div th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>
