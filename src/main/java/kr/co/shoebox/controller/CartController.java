@@ -65,7 +65,7 @@ public class CartController {
             return new ResponseEntity<String>("수정 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
-        cartService.updateCartItemCount(cartItemId, size, count);
+        cartService.updateCartItemCount(cartItemId, count);
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
 

@@ -78,6 +78,7 @@ class CartServiceTest {
 
         CartItemDto cartItemDto = new CartItemDto();
         cartItemDto.setCount(5);
+        cartItemDto.setSize("size220");
         cartItemDto.setItemId(item.getId());
 
         Long cartItemId = cartService.addCart(cartItemDto, member.getEmail());
@@ -86,6 +87,7 @@ class CartServiceTest {
 
         assertEquals(item.getId(), cartItem.getItem().getId());
         assertEquals(cartItemDto.getCount(), cartItem.getCount());
+        assertEquals(cartItemDto.getSize(), cartItem.getSize());
     }
 
 }

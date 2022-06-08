@@ -27,7 +27,7 @@ public class CartItem extends BaseEntity {
 
     private String size;
 
-    public static CartItem createCartItem(Cart cart, Item item, int count , String size) {
+    public static CartItem createCartItem(Cart cart, Item item, int count, String size) {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setItem(item);
@@ -36,13 +36,11 @@ public class CartItem extends BaseEntity {
         return cartItem;
     }
 
-    public void addCount(String size, int count){
-        this.size = size;
+    public void addCount(int count){
         this.count += count;
     }
 
-    public void updateCount(String size, int count){
-        this.size = size;
+    public void updateCount(int count){
         this.count = count;
     }
 
