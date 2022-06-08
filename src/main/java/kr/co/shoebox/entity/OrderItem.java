@@ -1,5 +1,6 @@
 package kr.co.shoebox.entity;
 
+import kr.co.shoebox.dto.OrderItemDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,12 +29,15 @@ public class OrderItem extends BaseEntity {
     private String size;
 
     public static OrderItem createOrderItem(Item item, String size, int count){
+
         OrderItem orderItem = new OrderItem();
+
         orderItem.setItem(item);
         orderItem.setSize(size);
         orderItem.setCount(count);
         orderItem.setOrderPrice(item.getPrice());
-        item.removeStock(size,count);
+        item.removeStock(size, count);
+
         return orderItem;
     }
 

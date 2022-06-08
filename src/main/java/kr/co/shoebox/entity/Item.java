@@ -2,10 +2,12 @@ package kr.co.shoebox.entity;
 
 import kr.co.shoebox.constant.ItemSellStatus;
 import kr.co.shoebox.dto.ItemFormDto;
+import kr.co.shoebox.dto.OrderItemDto;
 import kr.co.shoebox.exception.OutOfStockException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
 
@@ -114,217 +116,434 @@ public class Item extends BaseEntity {
         this.itemSellStatus = itemFormDto.getItemSellStatus();
     }
 
-    public void removeStock_220(int count){
-        int restStock = this.size220 - count;
-        if(restStock<0){
-            throw new OutOfStockException("220사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size220 + ")");
+
+//
+//    public void removeStock_220(int count){
+//        int restStock = this.size220 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("220사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size220 + ")");
+//        }
+//        this.size220 = restStock;
+//    }
+//
+//    public void addStock_220(int count){
+//        this.size220 += count;
+//    }
+//
+//
+//    public void removeStock_225(int count){
+//        int restStock = this.size225 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("225사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size225 + ")");
+//        }
+//        this.size225 = restStock;
+//    }
+//
+//    public void addStock_225(int count){
+//        this.size225 += count;
+//    }
+//
+//    public void removeStock_230(int count){
+//        int restStock = this.size230 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("230사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size230 + ")");
+//        }
+//        this.size230 = restStock;
+//    }
+//
+//    public void addStock_230(int count){
+//        this.size230 += count;
+//    }
+//
+//
+//    public void removeStock_235(int count){
+//        int restStock = this.size235 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("235사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size235 + ")");
+//        }
+//        this.size235 = restStock;
+//    }
+//
+//    public void addStock_235(int count){
+//        this.size235 += count;
+//    }
+//
+//    public void removeStock_240(int count){
+//        int restStock = this.size240 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("240사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size240 + ")");
+//        }
+//        this.size240 = restStock;
+//    }
+//
+//    public void addStock_240(int count){
+//        this.size240 += count;
+//    }
+//
+//    public void removeStock_245(int count){
+//        int restStock = this.size245 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("245사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size245 + ")");
+//        }
+//        this.size245 = restStock;
+//    }
+//
+//    public void addStock_245(int count){
+//        this.size245 += count;
+//    }
+//
+//
+//    public void removeStock_250(int count){
+//        int restStock = this.size250 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("250사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size250 + ")");
+//        }
+//        this.size250 = restStock;
+//    }
+//
+//    public void addStock_250(int count){
+//        this.size250 += count;
+//    }
+//
+//    public void removeStock_255(int count){
+//        int restStock = this.size255 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("255사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size255 + ")");
+//        }
+//        this.size255 = restStock;
+//    }
+//
+//    public void addStock_255(int count){
+//        this.size255 += count;
+//    }
+//
+//    public void removeStock_260(int count){
+//        int restStock = this.size260 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("260사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size260 + ")");
+//        }
+//        this.size260 = restStock;
+//    }
+//
+//    public void addStock_260(int count){
+//        this.size260 += count;
+//    }
+//
+//    public void removeStock_265(int count){
+//        int restStock = this.size265 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("265사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size265 + ")");
+//        }
+//        this.size265 = restStock;
+//    }
+//
+//    public void addStock_265(int count){
+//        this.size265 += count;
+//    }
+//
+//
+//    public void removeStock_270(int count){
+//        int restStock = this.size270 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("270사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size270 + ")");
+//        }
+//        this.size270 = restStock;
+//    }
+//
+//    public void addStock_270(int count){
+//        this.size270 += count;
+//    }
+//
+//    public void removeStock_275(int count){
+//        int restStock = this.size275 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("275사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size275 + ")");
+//        }
+//        this.size275 = restStock;
+//    }
+//
+//    public void addStock_275(int count){
+//        this.size275 += count;
+//    }
+//
+//    public void removeStock_280(int count){
+//        int restStock = this.size280 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("280사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size280 + ")");
+//        }
+//        this.size280 = restStock;
+//    }
+//
+//    public void addStock_280(int count){
+//        this.size280 += count;
+//    }
+//
+//    public void removeStock_285(int count){
+//        int restStock = this.size285 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("285사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size285 + ")");
+//        }
+//        this.size285 = restStock;
+//    }
+//
+//    public void addStock_285(int count){
+//        this.size285 += count;
+//    }
+//
+//    public void removeStock_290(int count){
+//        int restStock = this.size290 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("290사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size290 + ")");
+//        }
+//        this.size290 = restStock;
+//    }
+//
+//    public void addStock_290(int count){
+//        this.size290 += count;
+//    }
+//
+//    public void removeStock_295(int count){
+//        int restStock = this.size295 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("295사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size295 + ")");
+//        }
+//        this.size295 = restStock;
+//    }
+//
+//    public void addStock_295(int count){
+//        this.size295 += count;
+//    }
+//
+//    public void removeStock_300(int count){
+//        int restStock = this.size300 - count;
+//        if(restStock<0){
+//            throw new OutOfStockException("300사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size300 + ")");
+//        }
+//        this.size220 = restStock;
+//    }
+//
+//    public void addStock_300(int count){
+//        this.size300 += count;
+//    }
+
+    public void removeStock(@Param("size") String size, int count) {
+
+        int restStock = 0;
+
+        switch (size){
+
+            case "size220":
+                restStock = this.size220 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("220사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size220 + ")");
+                }
+                this.size220 = restStock;
+                break;
+
+            case "size225":
+                restStock = this.size225 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("225사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size225 + ")");
+                }
+                this.size225 = restStock;
+                break;
+
+            case "size230":
+                restStock = this.size230 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("230사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size230 + ")");
+                }
+                this.size230 = restStock;
+                break;
+
+            case "size235":
+                restStock = this.size235 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("235사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size235 + ")");
+                }
+                this.size235 = restStock;
+                break;
+
+            case "size240":
+                restStock = this.size240 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("240사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size240 + ")");
+                }
+                this.size240 = restStock;
+                break;
+
+            case "size245":
+                restStock = this.size245 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("245사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size245 + ")");
+                }
+                this.size245 = restStock;
+                break;
+
+            case "size250":
+                restStock = this.size250 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("250사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size250 + ")");
+                }
+                this.size250 = restStock;
+                break;
+
+            case "size255":
+                restStock = this.size255 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("255사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size255 + ")");
+                }
+                this.size255 = restStock;
+                break;
+
+            case "size260":
+                restStock = this.size260 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("260사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size260 + ")");
+                }
+                this.size260 = restStock;
+                break;
+
+            case "size265":
+                restStock = this.size265 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("265사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size265 + ")");
+                }
+                this.size265 = restStock;
+                break;
+
+            case "size270":
+                restStock = this.size270 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("270사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size270 + ")");
+                }
+                this.size270 = restStock;
+                break;
+
+            case "size275":
+                restStock = this.size275 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("275사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size275 + ")");
+                }
+                this.size275 = restStock;
+                break;
+
+            case "size280":
+                restStock = this.size280 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("280사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size280 + ")");
+                }
+                this.size280 = restStock;
+                break;
+
+            case "size285":
+                restStock = this.size285 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("285사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size285 + ")");
+                }
+                this.size285 = restStock;
+                break;
+
+            case "size290":
+                restStock = this.size290 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("290사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size290 + ")");
+                }
+                this.size290 = restStock;
+                break;
+
+            case "size295":
+                restStock = this.size295 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("295사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size295 + ")");
+                }
+                this.size295 = restStock;
+                break;
+
+            case "size300":
+                restStock = this.size300 - count;
+                if(restStock<0){
+                    throw new OutOfStockException("300사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size300 + ")");
+                }
+                this.size300 = restStock;
+                break;
         }
-        this.size220 = restStock;
-    }
-
-    public void addStock_220(int count){
-        this.size220 += count;
-    }
 
 
-    public void removeStock_225(int count){
-        int restStock = this.size225 - count;
-        if(restStock<0){
-            throw new OutOfStockException("225사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size225 + ")");
-        }
-        this.size225 = restStock;
-    }
-
-    public void addStock_225(int count){
-        this.size225 += count;
-    }
-
-    public void removeStock_230(int count){
-        int restStock = this.size230 - count;
-        if(restStock<0){
-            throw new OutOfStockException("230사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size230 + ")");
-        }
-        this.size230 = restStock;
-    }
-
-    public void addStock_230(int count){
-        this.size230 += count;
-    }
-
-
-    public void removeStock_235(int count){
-        int restStock = this.size235 - count;
-        if(restStock<0){
-            throw new OutOfStockException("235사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size235 + ")");
-        }
-        this.size235 = restStock;
-    }
-
-    public void addStock_235(int count){
-        this.size235 += count;
-    }
-
-    public void removeStock_240(int count){
-        int restStock = this.size240 - count;
-        if(restStock<0){
-            throw new OutOfStockException("240사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size240 + ")");
-        }
-        this.size240 = restStock;
-    }
-
-    public void addStock_240(int count){
-        this.size240 += count;
-    }
-
-    public void removeStock_245(int count){
-        int restStock = this.size245 - count;
-        if(restStock<0){
-            throw new OutOfStockException("245사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size245 + ")");
-        }
-        this.size245 = restStock;
-    }
-
-    public void addStock_245(int count){
-        this.size245 += count;
-    }
-
-
-    public void removeStock_250(int count){
-        int restStock = this.size250 - count;
-        if(restStock<0){
-            throw new OutOfStockException("250사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size250 + ")");
-        }
-        this.size250 = restStock;
-    }
-
-    public void addStock_250(int count){
-        this.size250 += count;
-    }
-
-    public void removeStock_255(int count){
-        int restStock = this.size255 - count;
-        if(restStock<0){
-            throw new OutOfStockException("255사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size255 + ")");
-        }
-        this.size255 = restStock;
-    }
-
-    public void addStock_255(int count){
-        this.size255 += count;
-    }
-
-    public void removeStock_260(int count){
-        int restStock = this.size260 - count;
-        if(restStock<0){
-            throw new OutOfStockException("260사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size260 + ")");
-        }
-        this.size260 = restStock;
-    }
-
-    public void addStock_260(int count){
-        this.size260 += count;
-    }
-
-    public void removeStock_265(int count){
-        int restStock = this.size265 - count;
-        if(restStock<0){
-            throw new OutOfStockException("265사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size265 + ")");
-        }
-        this.size265 = restStock;
-    }
-
-    public void addStock_265(int count){
-        this.size265 += count;
-    }
-
-
-    public void removeStock_270(int count){
-        int restStock = this.size270 - count;
-        if(restStock<0){
-            throw new OutOfStockException("270사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size270 + ")");
-        }
-        this.size270 = restStock;
-    }
-
-    public void addStock_270(int count){
-        this.size270 += count;
-    }
-
-    public void removeStock_275(int count){
-        int restStock = this.size275 - count;
-        if(restStock<0){
-            throw new OutOfStockException("275사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size275 + ")");
-        }
-        this.size275 = restStock;
-    }
-
-    public void addStock_275(int count){
-        this.size275 += count;
-    }
-
-    public void removeStock_280(int count){
-        int restStock = this.size280 - count;
-        if(restStock<0){
-            throw new OutOfStockException("280사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size280 + ")");
-        }
-        this.size280 = restStock;
-    }
-
-    public void addStock_280(int count){
-        this.size280 += count;
-    }
-
-    public void removeStock_285(int count){
-        int restStock = this.size285 - count;
-        if(restStock<0){
-            throw new OutOfStockException("285사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size285 + ")");
-        }
-        this.size285 = restStock;
-    }
-
-    public void addStock_285(int count){
-        this.size285 += count;
-    }
-
-    public void removeStock_290(int count){
-        int restStock = this.size290 - count;
-        if(restStock<0){
-            throw new OutOfStockException("290사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size290 + ")");
-        }
-        this.size290 = restStock;
-    }
-
-    public void addStock_290(int count){
-        this.size290 += count;
-    }
-
-    public void removeStock_295(int count){
-        int restStock = this.size295 - count;
-        if(restStock<0){
-            throw new OutOfStockException("295사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size295 + ")");
-        }
-        this.size295 = restStock;
-    }
-
-    public void addStock_295(int count){
-        this.size295 += count;
-    }
-
-    public void removeStock_300(int count){
-        int restStock = this.size300 - count;
-        if(restStock<0){
-            throw new OutOfStockException("300사이즈의 재고가 부족 합니다. (현재 재고 수량: " + this.size300 + ")");
-        }
-        this.size220 = restStock;
-    }
-
-    public void addStock_300(int count){
-        this.size300 += count;
-    }
-
-    public void removeStock(String size, int count) {
     }
 
     public void addStock(String size, int count) {
+
+        switch (size){
+            case "size220":
+                this.size220 += count;
+                break;
+
+            case "size225":
+                this.size225 += count;
+                break;
+
+            case "size230":
+                this.size230 += count;
+                break;
+
+            case "size235":
+                this.size235 += count;
+                break;
+
+            case "size240":
+                this.size240 += count;
+                break;
+
+            case "size245":
+                this.size245 += count;
+                break;
+
+            case "size250":
+                this.size250 += count;
+                break;
+
+            case "size255":
+                this.size255 += count;
+                break;
+
+            case "size260":
+                this.size260 += count;
+                break;
+
+            case "size265":
+                this.size265 += count;
+                break;
+
+            case "size270":
+                this.size270 += count;
+                break;
+
+            case "size275":
+                this.size275 += count;
+                break;
+
+            case "size280":
+                this.size280 += count;
+                break;
+
+            case "size285":
+                this.size285 += count;
+                break;
+
+            case "size290":
+                this.size290 += count;
+                break;
+
+            case "size295":
+                this.size295 += count;
+                break;
+
+            case "size300":
+                this.size300 += count;
+                break;
+        }
+
+
     }
 }
