@@ -93,10 +93,13 @@ public class CartService {
         cartItem.updateCount(count);
     }
 
-    public void deleteCartItem(Long cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(EntityNotFoundException::new);
-        cartItemRepository.delete(cartItem);
+    public void deleteCartItem(List<CartItemDto> cartItemDtoList) {
+        for (CartItemDto cartItemDto : cartItemDtoList) {
+            CartItem cartItem = cartItemRepository
+                    .findById(cartItemDto.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+        }
     }
 
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){

@@ -31,19 +31,18 @@ public class OrderItem extends BaseEntity {
     public static OrderItem createOrderItem(Item item, String size, int count){
 
         OrderItem orderItem = new OrderItem();
-
         orderItem.setItem(item);
         orderItem.setSize(size);
         orderItem.setCount(count);
         orderItem.setOrderPrice(item.getPrice());
         item.removeStock(size, count);
-
         return orderItem;
     }
 
     public int getTotalPrice(){
         return orderPrice*count;
     }
+
 
     public void cancel() {
         this.getItem().addStock(size,count);

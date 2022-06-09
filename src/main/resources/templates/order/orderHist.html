@@ -118,11 +118,12 @@
                         <span id="count" th:text="${orderItem.count} +'개'"></span>
                         <span id="totalPrice" th:text="|*{#numbers.formatInteger(orderItem.count*orderItem.orderPrice,3,'COMMA')} 원|"></span>
                     </div>
-
                 </div>
             </div>
+            <h2 class="text-center">
+                총 주문 금액 : <span th:text="|*{#numbers.formatInteger(order.orderTotalPrice,3,'COMMA')} 원|" id="orderTotalPrice" class="text-danger"></span>
+            </h2>
         </div>
-
     </div>
 
     <div th:with="start=${(orders.number/maxPage)*maxPage + 1}, end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})" >

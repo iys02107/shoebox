@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter @Setter
 public class CartItemDto {
@@ -17,4 +18,8 @@ public class CartItemDto {
     private int count;
 
     private String size;
+
+    private Long CartItemId;
+
+    private List<CartItemDto> cartItemDtoList;
 }
