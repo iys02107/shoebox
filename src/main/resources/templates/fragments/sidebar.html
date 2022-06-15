@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="sidebar" th:fragment="sidebar">
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand"><a href="/members/myPage">
+                <span th:text="${userName}"></span>
+                <span>님의 마이페이지</span>
+            </a>
+            </li>
+            <li><a href="#">회원정보 수정</a></li>
+            <li><a href="/pwUpdate">비밀번호 변경</a></li>
+            <li><a href="/orders">주문 내역</a></li>
+            <li><a href="#">위시 리스트</a></li>
+            <li><a href="#">리뷰 관리</a></li>
+            <li><a href="#">회원 탈퇴</a></li>
+        </ul>
+    </div>
+</div>
+</html>

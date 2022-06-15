@@ -2,6 +2,8 @@ package kr.co.shoebox.controller;
 
 import kr.co.shoebox.dto.OrderDto;
 import kr.co.shoebox.dto.OrderHistDto;
+import kr.co.shoebox.entity.Member;
+import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,8 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
+
+    private final MemberRepository memberRepository;
 
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto
@@ -59,6 +63,10 @@ public class OrderController {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
+        Member currentMember = memberRepository.findByEmail(principal.getName());
+        String userName = currentMember.getName();
+
+        model.addAttribute("userName", userName);
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);

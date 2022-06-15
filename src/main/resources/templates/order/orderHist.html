@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layouts/layout2}">
 
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -89,7 +89,8 @@
 <div layout:fragment="content" class="content-mg">
 
     <h2 class="mb-4">
-        구매 이력
+        <span th:text="${userName}"></span>
+        <span>님의 구매 내역</span>
     </h2>
 
     <div th:each="order : ${orders.getContent()}">

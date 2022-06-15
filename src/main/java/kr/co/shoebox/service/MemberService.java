@@ -34,7 +34,7 @@ public class MemberService implements UserDetailsService {
         if(bindingResult.hasErrors())
             return true;
 
-        if(memberFormDto.getPassword().equals(memberFormDto.getPasswordCheck())==false){
+        if(!memberFormDto.getPassword().equals(memberFormDto.getPasswordCheck())){
             bindingResult.rejectValue("passwordConfirm",null,"비밀번호가 일치하지 않습니다.");
             return true;
         }
@@ -57,5 +57,7 @@ public class MemberService implements UserDetailsService {
                 .roles(member.getRole().toString())
                 .build();
     }
+
+
 
 }
