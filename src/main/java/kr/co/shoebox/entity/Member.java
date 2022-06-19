@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
         member.setEmail(memberFormDto.getEmail());
         member.setPostcode(memberFormDto.getPostcode());
         member.setRoadAddress(memberFormDto.getRoadAddress());
-        member.setDetailAddress(member.getDetailAddress());
+        member.setDetailAddress(memberFormDto.getDetailAddress());
         member.setPhoneNumber(memberFormDto.getPhoneNumber());
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);

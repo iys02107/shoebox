@@ -64,9 +64,8 @@ public class OrderController {
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         Member currentMember = memberRepository.findByEmail(principal.getName());
-        String userName = currentMember.getName();
 
-        model.addAttribute("userName", userName);
+        model.addAttribute("userName", currentMember.getName());
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
