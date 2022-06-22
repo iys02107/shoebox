@@ -1,6 +1,7 @@
 package kr.co.shoebox.controller;
 
 import kr.co.shoebox.dto.MemberFormDto;
+import kr.co.shoebox.dto.MemberUpdateDto;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.MemberService;
@@ -121,7 +122,7 @@ public class MemberController {
     @GetMapping("/memberUpdateForm")
     public String memberUpdateForm(Principal principal, Model model) {
         Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("userName", currentMember.getName());
+        model.addAttribute("name", currentMember.getName());
         model.addAttribute("email", currentMember.getEmail());
         model.addAttribute("postcode", currentMember.getPostcode());
         model.addAttribute("roadAddress", currentMember.getRoadAddress());
@@ -131,8 +132,14 @@ public class MemberController {
     }
 
     @PostMapping("/memberUpdate")
-    public String memberUpdate() {
-        return "member/memberUpdateForm";
+    public String memberUpdate(MemberUpdateDto memberUpdateDto, Principal principal) {
+        Member currentMember = memberRepository.findByEmail(principal.getName());
+        currentMember.setPostcode(memberUpdateDto.getPostcode());
+        currentMember.setRoadAddress(memberUpdateDto.getRoadAddress());
+        currentMember.setDetailAddress(memberUpdateDto.getDetailAddress());
+        currentMember.setPhoneNumber(memberUpdateDto.getPhoneNumber());
+        memberRepository.save(currentMember);
+        return "members/memberUpdateForm";
     }
 
 }
