@@ -6,6 +6,7 @@ import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 import java.security.Principal;
 
 
@@ -63,8 +65,8 @@ public class MemberController {
 
     @GetMapping(value = "/myPage")
     public String userName(Model model, Principal principal){
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("userName", currentMember.getName());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
         return "member/myPage";
     }
 
@@ -72,11 +74,13 @@ public class MemberController {
     @PostMapping(value = "/pwCheck")
     public String pwCheck(@RequestParam("password") String pw, Principal principal, Model model) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        if(!encoder.matches(pw, currentMember.getPassword())) {
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
+        if(!encoder.matches(pw, member.getPassword())) {
             model.addAttribute("pwCheckErrorMsg", "비밀번호가 일치하지 않습니다");
             return "member/pwCheckForm";
         } else {
+
             return "member/pwUpdateForm";
         }
 
@@ -84,62 +88,66 @@ public class MemberController {
 
     @GetMapping("/pwCheckForm")
     public String pwCheckForm(Principal principal, Model model) {
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("userName", currentMember.getName());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
         return "member/pwCheckForm";
     }
 
     @PostMapping("/pwUpdate")
     public String pwUpdate(Principal principal, Model model, @RequestParam("newPassword") String pw) {
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("userName", currentMember.getName());
-        currentMember.setPassword(passwordEncoder.encode(pw));
-        memberRepository.save(currentMember);
-        return "member/pwCheckForm";
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
+        member.setPassword(passwordEncoder.encode(pw));
+        memberRepository.save(member);
+        return "member/myPage";
     }
 
     @GetMapping("/memberDeleteForm")
     public String memberDelete(Principal principal, Model model) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("userName", currentMember.getName());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
         return "member/memberDeleteForm";
     }
 
     @PostMapping("/memberDelete")
     public String memberDeleteForm(@RequestParam("password") String pw, Principal principal, Model model) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        if(!encoder.matches(pw, currentMember.getPassword())) {
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
+        if(!encoder.matches(pw, member.getPassword())) {
             model.addAttribute("pwCheckErrorMsg", "비밀번호가 일치하지 않습니다");
             return "member/memberDeleteForm";
         } else {
-            memberRepository.delete(currentMember);
+            memberRepository.delete(member);
+            SecurityContextHolder.clearContext();
             return "redirect:/";
         }
     }
 
     @GetMapping("/memberUpdateForm")
     public String memberUpdateForm(Principal principal, Model model) {
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        model.addAttribute("name", currentMember.getName());
-        model.addAttribute("email", currentMember.getEmail());
-        model.addAttribute("postcode", currentMember.getPostcode());
-        model.addAttribute("roadAddress", currentMember.getRoadAddress());
-        model.addAttribute("detailAddress", currentMember.getDetailAddress());
-        model.addAttribute("phoneNumber", currentMember.getPhoneNumber());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
+        model.addAttribute("email", member.getEmail());
+        model.addAttribute("postcode", member.getPostcode());
+        model.addAttribute("roadAddress", member.getRoadAddress());
+        model.addAttribute("detailAddress", member.getDetailAddress());
+        model.addAttribute("phoneNumber", member.getPhoneNumber());
         return "member/memberUpdateForm";
     }
 
+
     @PostMapping("/memberUpdate")
     public String memberUpdate(MemberUpdateDto memberUpdateDto, Principal principal) {
-        Member currentMember = memberRepository.findByEmail(principal.getName());
-        currentMember.setPostcode(memberUpdateDto.getPostcode());
-        currentMember.setRoadAddress(memberUpdateDto.getRoadAddress());
-        currentMember.setDetailAddress(memberUpdateDto.getDetailAddress());
-        currentMember.setPhoneNumber(memberUpdateDto.getPhoneNumber());
-        memberRepository.save(currentMember);
-        return "members/memberUpdateForm";
+        Member member = memberRepository.findByEmail(principal.getName());
+        member.setPostcode(memberUpdateDto.getPostcode());
+        member.setRoadAddress(memberUpdateDto.getRoadAddress());
+        member.setDetailAddress(memberUpdateDto.getDetailAddress());
+        member.setPhoneNumber(memberUpdateDto.getPhoneNumber());
+        memberRepository.save(member);
+        return "member/myPage";
     }
+
 
 }

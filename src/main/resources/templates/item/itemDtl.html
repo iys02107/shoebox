@@ -20,6 +20,7 @@
             });
         });
 
+
         function calculateTotalPrice(){
             var count = $("#count").val();
             var price = $("#price").val();
@@ -77,6 +78,50 @@
             });
             }
         }
+
+        function addWish(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/wish";
+            var paramData = {
+                itemId : $("#itemId").val(),
+                itemNm : $("#itemNm").val(),
+                price : $("#price").val(),
+                itemDetail : $("#itemDetail").val(),
+                imgUrl : $("#imgUrl").val()
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("상품을 위시리스트에 추가했습니다.");
+                    location.href='/wish';
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
+
 
         function addCart(){
             if(!$(":input:radio[name=size]:checked").val()){
@@ -188,10 +233,9 @@
 <div layout:fragment="content" style="margin-left:25%;margin-right:25%">
 
     <input type="hidden" id="itemId" th:value="${item.id}">
-
     <div class="d-flex">
         <div class="repImgDiv">
-            <img th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
+            <img id="imgUrl" th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
         </div>
         <div class="wd50">
             <span th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">
@@ -200,7 +244,7 @@
             <span th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="badge btn-danger mgb-15" >
                 품절
             </span>
-            <div class="h4" th:text="${item.itemNm}"></div>
+            <div class="h4" id="itemNm" th:text="${item.itemNm}"></div>
             <hr class="my-4">
 
             <div class="text-right">
@@ -266,6 +310,7 @@
             </div>
             <div th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>
+                <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addWish()">위시리스트 추가</button>
                 <button type="button" class="btn btn-primary btn-lg" onclick="order()">주문하기</button>
             </div>
             <div th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
@@ -278,7 +323,7 @@
         <div class="container">
             <h4 class="display-5">상품 상세 설명</h4>
             <hr class="my-4">
-            <p class="lead" th:text="${item.itemDetail}"></p>
+            <p class="lead" id="itemDetail" th:text="${item.itemDetail}"></p>
         </div>
     </div>
 
