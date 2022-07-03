@@ -1,6 +1,7 @@
 package kr.co.shoebox.service;
 
 import kr.co.shoebox.dto.MemberFormDto;
+import kr.co.shoebox.dto.MemberUpdateDto;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+
+import java.security.Principal;
 
 @Service
 @Transactional
@@ -57,7 +60,5 @@ public class MemberService implements UserDetailsService {
                 .roles(member.getRole().toString())
                 .build();
     }
-
-
 
 }

@@ -63,7 +63,7 @@
         <div class="alert alert-danger" id="alert-danger">비밀번호가 일치하지 않습니다</div>
 
         <div style="text-align: center">
-            <button type="submit" class="btn btn-primary" id="submit" disabled onclick="alert('비밀번호가 변경되었습니다')">비밀번호 변경</button>
+            <button type="submit" class="btn btn-primary" id="submit" disabled>비밀번호 변경</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>

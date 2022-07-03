@@ -8,6 +8,8 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="member")
@@ -37,6 +39,14 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL
+            , orphanRemoval = true, fetch = FetchType.LAZY)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL
+            , orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member = new Member();

@@ -6,6 +6,8 @@ import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -121,7 +123,7 @@ public class MemberController {
         } else {
             memberRepository.delete(member);
             SecurityContextHolder.clearContext();
-            return "redirect:/";
+            return "member/alert";
         }
     }
 
@@ -129,24 +131,20 @@ public class MemberController {
     public String memberUpdateForm(Principal principal, Model model) {
         Member member = memberRepository.findByEmail(principal.getName());
         model.addAttribute("name", member.getName());
-        model.addAttribute("email", member.getEmail());
-        model.addAttribute("postcode", member.getPostcode());
-        model.addAttribute("roadAddress", member.getRoadAddress());
-        model.addAttribute("detailAddress", member.getDetailAddress());
-        model.addAttribute("phoneNumber", member.getPhoneNumber());
+        model.addAttribute("member", member);
         return "member/memberUpdateForm";
     }
 
 
     @PostMapping("/memberUpdate")
-    public String memberUpdate(MemberUpdateDto memberUpdateDto, Principal principal) {
+    public ResponseEntity<String> memberUpdate(@RequestBody MemberUpdateDto memberUpdateDto, Principal principal) {
         Member member = memberRepository.findByEmail(principal.getName());
         member.setPostcode(memberUpdateDto.getPostcode());
         member.setRoadAddress(memberUpdateDto.getRoadAddress());
         member.setDetailAddress(memberUpdateDto.getDetailAddress());
         member.setPhoneNumber(memberUpdateDto.getPhoneNumber());
         memberRepository.save(member);
-        return "member/myPage";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 

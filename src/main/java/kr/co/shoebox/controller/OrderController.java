@@ -65,7 +65,7 @@ public class OrderController {
 
         Member currentMember = memberRepository.findByEmail(principal.getName());
 
-        model.addAttribute("userName", currentMember.getName());
+        model.addAttribute("name", currentMember.getName());
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
