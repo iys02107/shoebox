@@ -44,6 +44,10 @@ public class Member extends BaseEntity {
             , orphanRemoval = true, fetch = FetchType.LAZY)
     private Cart cart;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL
+            , orphanRemoval = true, fetch = FetchType.LAZY)
+    private Wish wish;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL
             , orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();

@@ -137,7 +137,7 @@ public class MemberController {
 
 
     @PostMapping("/memberUpdate")
-    public ResponseEntity<String> memberUpdate(@RequestBody MemberUpdateDto memberUpdateDto, Principal principal) {
+    public ResponseEntity<String> memberUpdate(@Valid MemberUpdateDto memberUpdateDto, Principal principal) {
         Member member = memberRepository.findByEmail(principal.getName());
         member.setPostcode(memberUpdateDto.getPostcode());
         member.setRoadAddress(memberUpdateDto.getRoadAddress());
