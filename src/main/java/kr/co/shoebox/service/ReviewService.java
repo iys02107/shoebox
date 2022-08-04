@@ -29,7 +29,7 @@ public class ReviewService {
 
     private final ReviewItemRepository reviewItemRepository;
 
-    public Long saveReview(ReviewFormDto reviewFormDto, Long orderItemId, String email){
+    public ReviewItem saveReview(ReviewFormDto reviewFormDto, Long orderItemId, String email){
 
         ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItemId);
         Member member = memberRepository.findByEmail(email);
@@ -37,19 +37,13 @@ public class ReviewService {
         if(reviewItem == null){
             reviewItem = ReviewItem.createReviewItem(reviewFormDto, member, orderItemId);
             reviewItemRepository.save(reviewItem);
-            return reviewItem.getId();
+            return reviewItem;
         }else {
             throw new IllegalStateException("이미 리뷰 등록하였습니다.");
         }
 
     }
 
-    private void validateDuplicateReview(ReviewItem reviewItem){
-        ReviewItem findReviewItem = reviewItemRepository.findReviewItem(reviewItem.getOrderItemId());
-        if(findReviewItem != null){
-            throw new IllegalStateException("이미 리뷰 등록하였습니다.");
-        }
-    }
 
     @Transactional(readOnly = true)
     public List<ReviewDetailDto> getReviewList(String email){

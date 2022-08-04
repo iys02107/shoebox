@@ -24,7 +24,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping(value = "/cart")
-    public @ResponseBody ResponseEntity order(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, Principal principal){
+    public @ResponseBody ResponseEntity cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult, Principal principal){
 
         if(bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -50,7 +50,7 @@ public class CartController {
     }
 
     @GetMapping(value = "/cart")
-    public String orderHist(Principal principal, Model model){
+    public String cartList(Principal principal, Model model){
         List<CartDetailDto> cartDetailList = cartService.getCartList(principal.getName());
         model.addAttribute("cartItems", cartDetailList);
         return "cart/cartList";

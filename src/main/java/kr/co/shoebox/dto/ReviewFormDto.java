@@ -15,8 +15,6 @@ public class ReviewFormDto {
 
     private String rate;
 
-    private Long orderItemId;
-
 //    @QueryProjection
 //    public ReviewFormDto(Long reviewId, String title, String content, String reviewImgUrl, int rate, Item item){
 //        this.reviewId = reviewId;

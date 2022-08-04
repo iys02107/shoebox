@@ -45,18 +45,17 @@ public class ReviewController {
     }
 
     @PostMapping(value = "/new")
-    public @ResponseBody ResponseEntity newReview(@RequestBody OrderItemIdDTO orderItemIdDTO, @Valid ReviewFormDto reviewFormDto, Principal principal, Model model){
+    public String newReview(@Valid ReviewFormDto reviewFormDto, @RequestParam("orderItemId") Long orderItemId, Principal principal, Model model){
 
-        Long orderItemId = orderItemIdDTO.getOrderItemId();
-        Long reviewItemId;
+        ReviewItem reviewItem;
 
         try {
-            reviewItemId = reviewService.saveReview(reviewFormDto, orderItemId, principal.getName());
+            reviewItem = reviewService.saveReview(reviewFormDto, orderItemId, principal.getName());
         } catch(Exception e){
             throw new IllegalStateException("리뷰 오류입니다.");
         }
 
-        return new ResponseEntity<Long>(reviewItemId, HttpStatus.OK);
+        return "review/reviewMng";
     }
 
     @GetMapping(value = "/reviewMng")

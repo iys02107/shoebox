@@ -74,11 +74,6 @@ public class OrderController {
 
         return "order/orderHist";
     }
-    @PostMapping(value = {"/orders", "/orders/{page}"})
-    public String addReview(@RequestParam("orderItemId") Long orderItemId, Model model){
-        return "review/reviewForm";
-    }
-
 
     @PostMapping("/order/{orderId}/cancel")
     public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId , Principal principal){
