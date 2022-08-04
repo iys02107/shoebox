@@ -29,7 +29,6 @@ public class OrderItem extends BaseEntity {
     private String size;
 
     public static OrderItem createOrderItem(Item item, String size, int count){
-
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setSize(size);
@@ -42,7 +41,6 @@ public class OrderItem extends BaseEntity {
     public int getTotalPrice(){
         return orderPrice*count;
     }
-
 
     public void cancel() {
         this.getItem().addStock(size,count);

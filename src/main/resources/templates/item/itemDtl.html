@@ -235,7 +235,12 @@
     <input type="hidden" id="itemId" th:value="${item.id}">
     <div class="d-flex">
         <div class="repImgDiv">
-            <img id="imgUrl" th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
+            <img margin-bottom="20px" id="imgUrl" th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
+            <hr class="my-4">
+            <div id="review">
+                <h6>리뷰</h6>
+                <input type="text" th:value="${reviewTotal}" readonly>
+            </div>
         </div>
         <div class="wd50">
             <span th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="badge badge-primary mgb-15">

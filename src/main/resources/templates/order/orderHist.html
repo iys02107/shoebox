@@ -49,6 +49,48 @@
             });
         }
 
+
+
+        function addReview(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/reviews/new";
+
+            var paramData = {
+                orderItemId : $("#orderItemId").val()
+            };
+
+            console.log(paramData.orderItemId);
+
+            var param = JSON.stringify(paramData);
+
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json; charset=utf-8",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    location.href='/review/reviewAlert';
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert('오류입니다');
+                    }
+                }
+            });
+            }
+
     </script>
 
 </th:block>
@@ -112,12 +154,17 @@
                     <img th:src="${orderItem.imgUrl}" class = "rounded repImg" th:alt="${orderItem.itemNm}">
                 </div>
                 <div class="align-self-center w-75">
+<!--                    <input type="hidden" th:value="${orderItem.orderItemId}" id="orderItemId" name="orderItemId">-->
                     <span th:text="${orderItem.itemNm}" class="fs24 font-weight-bold"></span>
                     <div class="fs18 font-weight-light">
                         <span id="price" th:text="|*{#numbers.formatInteger(orderItem.orderPrice,3,'COMMA')} 원|"></span>
                         <span th:text="${orderItem.size}"></span>
                         <span id="count" th:text="${orderItem.count} +'개'"></span>
                         <span id="totalPrice" th:text="|*{#numbers.formatInteger(orderItem.count*orderItem.orderPrice,3,'COMMA')} 원|"></span>
+                        <form action="/reviews/new" role="form" method="get">
+                            <input type="hidden" th:value="${orderItem.orderItemId}" id="orderItemId" name="orderItemId">
+                            <button type="submit">리뷰 등록</button>
+                        </form>
                     </div>
                 </div>
             </div>
