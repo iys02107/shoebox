@@ -1,7 +1,5 @@
 package kr.co.shoebox.service;
 
-import kr.co.shoebox.dto.CartDetailDto;
-import kr.co.shoebox.dto.OrderItemIdDTO;
 import kr.co.shoebox.dto.ReviewDetailDto;
 import kr.co.shoebox.dto.ReviewFormDto;
 import kr.co.shoebox.entity.*;
@@ -10,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,19 +40,17 @@ public class ReviewService {
 
     }
 
+    public void updateReview(ReviewFormDto reviewFormDto, Long reviewItemId){
+       reviewItemRepository.updateReviewItem(reviewFormDto.getRate(), reviewFormDto.getTitle(), reviewFormDto.getContent(), reviewItemId);
+    }
+
 
     @Transactional(readOnly = true)
     public List<ReviewDetailDto> getReviewList(String email){
 
-        List<ReviewDetailDto> reviewDetailDtoList = new ArrayList<>();
+        List<ReviewDetailDto> reviewDetailDtoList;
 
         Member member = memberRepository.findByEmail(email);
-
-        ReviewItem reviewItem = reviewItemRepository.findReviewItemByMemberId(member.getId());
-        if(reviewItem == null){
-            throw new IllegalStateException("리뷰등록 안됨.");
-//            return reviewDetailDtoList;
-        }
 
         reviewDetailDtoList = reviewItemRepository.findReviewMngList(member.getId());
         return reviewDetailDtoList;

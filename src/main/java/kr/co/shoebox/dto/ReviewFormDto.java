@@ -3,9 +3,11 @@ package kr.co.shoebox.dto;
 import com.querydsl.core.annotations.QueryProjection;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.OrderItem;
+import kr.co.shoebox.entity.ReviewItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
 
@@ -21,6 +23,7 @@ public class ReviewFormDto {
 
     @NotBlank(message = "별점은 필수 입력 값입니다.")
     private String rate;
+
 
 //    @QueryProjection
 //    public ReviewFormDto(Long reviewId, String title, String content, String reviewImgUrl, int rate, Item item){

@@ -1,6 +1,5 @@
 package kr.co.shoebox.entity;
 
-import kr.co.shoebox.dto.OrderItemIdDTO;
 import kr.co.shoebox.dto.ReviewFormDto;
 import lombok.Getter;
 import lombok.Setter;

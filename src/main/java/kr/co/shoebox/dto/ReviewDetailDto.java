@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ReviewDetailDto {
 
-    private Long reviewId;
+    private Long id;
 
     private String title;
 
@@ -25,8 +25,8 @@ public class ReviewDetailDto {
 
 
     @QueryProjection
-    public ReviewDetailDto(Long reviewId, String title, String content, String rate, Long itemId, String imgUrl, String itemNm){
-        this.reviewId = reviewId;
+    public ReviewDetailDto(Long id, String title, String content, String rate, Long itemId, String imgUrl, String itemNm){
+        this.id = id;
         this.title = title;
         this.content = content;
         this.rate = rate;

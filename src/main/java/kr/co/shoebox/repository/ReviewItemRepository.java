@@ -4,7 +4,9 @@ package kr.co.shoebox.repository;
 import kr.co.shoebox.dto.ReviewDetailDto;
 import kr.co.shoebox.entity.ReviewItem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -32,6 +34,13 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and im.repImgYn = 'Y' " +
             "order by ri.regTime desc")
     List<ReviewDetailDto> findReviewMngList(Long memberId);
+
+    @Modifying
+    @Transactional
+    @Query("update ReviewItem ri " +
+            "set ri.rate = :rate, ri.title = :title, ri.content = :content " +
+            "where ri.id = :id")
+    void updateReviewItem(String rate, String title, String content, Long id);
 
 //    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.reviewId, ri.title, ri.content, ri.rate, ii.id, ii.imgUrl, ii.itemNm) " +
 //            "from ReviewItem ri, (select i.id id, im.imgUrl imgUrl, i.itemNm itemNm " +
