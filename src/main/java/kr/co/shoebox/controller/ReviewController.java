@@ -33,7 +33,7 @@ public class ReviewController {
 
     private final MemberRepository memberRepository;
 
-//    private final ReviewRepository reviewRepository;
+    //    private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
 
 
@@ -51,8 +51,9 @@ public class ReviewController {
 
         try {
             reviewItem = reviewService.saveReview(reviewFormDto, orderItemId, principal.getName());
-        } catch(Exception e){
-            throw new IllegalStateException("리뷰 오류입니다.");
+        } catch(IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "review/reviewForm";
         }
 
         return "review/reviewMng";
