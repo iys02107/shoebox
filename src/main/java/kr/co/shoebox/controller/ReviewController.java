@@ -75,9 +75,6 @@ public class ReviewController {
     }
     @PostMapping(value = "/update/{reviewItemId}")
     public String updateReview(@Valid ReviewFormDto reviewFormDto, @RequestParam("reviewItemId") Long reviewItemId, Principal principal, Model model){
-
-        ReviewItem reviewItem;
-
         try {
             reviewService.updateReview(reviewFormDto, reviewItemId);
         } catch(IllegalStateException e){
@@ -86,6 +83,11 @@ public class ReviewController {
         }
 
         return "review/reviewMng";
+    }
+
+    @DeleteMapping(value = "/delete/{reviewItemId}")
+    public void reviewDelete(@PathVariable("reviewItemId") Long reviewItemId){
+            reviewService.deleteReview(reviewItemId);
     }
 
 //    @PostMapping(value = "/reviewForm/{orderItemId}")

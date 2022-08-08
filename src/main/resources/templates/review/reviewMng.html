@@ -21,6 +21,37 @@
             $("#5").html("&#9733; &#9733; &#9733; &#9733; &#9733;");
         });
 
+
+        function deleteReview(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var reviewItemId = $("#reviewItemId").val();
+
+            var url = "/reviews/delete/"+reviewItemId;
+
+
+            var paramData = {
+               reviewItemId : reviewItemId
+            };
+
+            var param = JSON.stringify(paramData);
+
+            alert("리뷰가 삭제되었습니다.");
+            $.ajax({
+                url      : url,
+                type     : "DELETE",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false
+            });
+            location.href="/reviews/reviewMng";
+        }
     </script>
 
 </th:block>
@@ -109,7 +140,7 @@
                         <input type="hidden" th:value="${reviewItem.id}" id="reviewItemId" name="reviewItemId">
                         <button th:formaction="@{'/reviews/update/' + ${reviewItem.id} }" >수정</button>
                     </form>
-                    <button>삭제</button>
+                        <button onclick="deleteReview()">삭제</button>
                 </td>
             </tr>
             </tbody>

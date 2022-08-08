@@ -44,6 +44,10 @@ public class ReviewService {
        reviewItemRepository.updateReviewItem(reviewFormDto.getRate(), reviewFormDto.getTitle(), reviewFormDto.getContent(), reviewItemId);
     }
 
+    public void deleteReview(Long reviewItemId){
+        reviewItemRepository.deleteById(reviewItemId);
+    }
+
 
     @Transactional(readOnly = true)
     public List<ReviewDetailDto> getReviewList(String email){
