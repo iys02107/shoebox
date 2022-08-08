@@ -22,25 +22,20 @@
         });
 
 
-        function deleteReview(){
+        function deleteReview(reviewItemId){
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
-            var reviewItemId = $("#reviewItemId").val();
-
-            var url = "/reviews/delete/"+reviewItemId;
-
-
+            var url = "/reviews/delete/" + reviewItemId;
             var paramData = {
                reviewItemId : reviewItemId
             };
 
             var param = JSON.stringify(paramData);
 
-            alert("리뷰가 삭제되었습니다.");
             $.ajax({
                 url      : url,
-                type     : "DELETE",
+                type     : "POST",
                 contentType : "application/json",
                 data     : param,
                 beforeSend : function(xhr){
@@ -48,9 +43,20 @@
                     xhr.setRequestHeader(header, token);
                 },
                 dataType : "json",
-                cache   : false
+                cache   : false,
+                success  : function(result, status){
+                    alert("리뷰가 삭제되었습니다.");
+                    location.href='/reviews/reviewMng';
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
             });
-            location.href="/reviews/reviewMng";
         }
     </script>
 
@@ -93,8 +99,8 @@
 
         <table class="table">
             <colgroup>
-                <col width="30%"/>
-                <col width="10%"/>
+                <col width="20%"/>
+                <col width="20%"/>
                 <col width="10%"/>
                 <col width="40%"/>
                 <col width="10%"/>
@@ -139,8 +145,9 @@
                     <form role="form" method="get">
                         <input type="hidden" th:value="${reviewItem.id}" id="reviewItemId" name="reviewItemId">
                         <button th:formaction="@{'/reviews/update/' + ${reviewItem.id} }" >수정</button>
+
                     </form>
-                        <button onclick="deleteReview()">삭제</button>
+                    <button th:value="${reviewItem.id}" onclick="deleteReview(this.value)">삭제</button>
                 </td>
             </tr>
             </tbody>

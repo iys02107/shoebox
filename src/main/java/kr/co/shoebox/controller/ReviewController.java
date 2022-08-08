@@ -85,9 +85,14 @@ public class ReviewController {
         return "review/reviewMng";
     }
 
-    @DeleteMapping(value = "/delete/{reviewItemId}")
-    public void reviewDelete(@PathVariable("reviewItemId") Long reviewItemId){
-            reviewService.deleteReview(reviewItemId);
+    @PostMapping(value = "/delete/{reviewItemId}")
+    public @ResponseBody ResponseEntity reviewDelete(@PathVariable("reviewItemId") Long reviewItemId , Principal principal){
+
+        if(!reviewService.validateReview(reviewItemId, principal.getName())){
+            return new ResponseEntity<String>("리뷰 삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        reviewService.deleteReview(reviewItemId);
+        return new ResponseEntity<Long>(reviewItemId, HttpStatus.OK);
     }
 
 //    @PostMapping(value = "/reviewForm/{orderItemId}")

@@ -7,7 +7,9 @@ import kr.co.shoebox.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -58,6 +60,20 @@ public class ReviewService {
 
         reviewDetailDtoList = reviewItemRepository.findReviewMngList(member.getId());
         return reviewDetailDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validateReview(Long reviewId, String email){
+        Member curMember = memberRepository.findByEmail(email);
+        ReviewItem reviewItem = reviewItemRepository.findById(reviewId)
+                .orElseThrow(EntityNotFoundException::new);
+        Member savedMember = reviewItem.getMember();
+
+        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
+            return false;
+        }
+
+        return true;
     }
 
 //
