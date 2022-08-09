@@ -1,7 +1,9 @@
 package kr.co.shoebox.service;
 
+import kr.co.shoebox.dto.ReviewCalcDto;
 import kr.co.shoebox.dto.ReviewDetailDto;
 import kr.co.shoebox.dto.ReviewFormDto;
+import kr.co.shoebox.dto.ReviewItemDto;
 import kr.co.shoebox.entity.*;
 import kr.co.shoebox.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +77,34 @@ public class ReviewService {
 
         return true;
     }
+
+    @Transactional(readOnly = true)
+    public ReviewCalcDto getReviewCalc(Long itemId){
+
+        int count = reviewItemRepository.findReviewNull(itemId);
+
+        if(count == 0){
+            ReviewCalcDto reviewCalcDto = new ReviewCalcDto();
+            reviewCalcDto.setRate(0);
+            reviewCalcDto.setCount(Long.valueOf("0"));
+            return reviewCalcDto;
+        }else {
+            ReviewCalcDto reviewCalcDto2 = reviewItemRepository.findReviewCalc(itemId);
+            return reviewCalcDto2;
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewItemDto> getReviewItemList(Long itemId){
+
+        List<ReviewItemDto> reviewItemDtoList;
+
+        reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
+        return reviewItemDtoList;
+    }
+
+
 
 //
 //    private void validateDuplicateReview(Review review){

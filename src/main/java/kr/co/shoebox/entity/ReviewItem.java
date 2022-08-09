@@ -22,7 +22,7 @@ public class ReviewItem extends BaseEntity {
 
     private String content;
 
-    private String rate;
+    private int rate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")

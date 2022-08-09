@@ -95,6 +95,14 @@ public class ReviewController {
         return new ResponseEntity<Long>(reviewItemId, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/reviewList/{itemId}")
+    public String reviewList(@PathVariable("itemId") Long itemId, Model model){
+        List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
+
+        model.addAttribute("reviewItems", reviewItemDtoList);
+        return "review/reviewList";
+    }
+
 //    @PostMapping(value = "/reviewForm/{orderItemId}")
 //    public @ResponseBody ResponseEntity review(@RequestBody @Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, @PathVariable("orderItemId") Long orderItemId){
 //

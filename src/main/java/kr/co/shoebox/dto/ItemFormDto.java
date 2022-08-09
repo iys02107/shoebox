@@ -2,10 +2,15 @@ package kr.co.shoebox.dto;
 
 import kr.co.shoebox.constant.ItemSellStatus;
 import kr.co.shoebox.entity.Item;
+import kr.co.shoebox.entity.ReviewItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -78,6 +83,8 @@ public class ItemFormDto {
 
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer size300;
+
+    private List<ReviewDetailDto> reviewDetailDtoList = new ArrayList<>();
 
     private ItemSellStatus itemSellStatus;
 

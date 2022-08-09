@@ -2,13 +2,16 @@ package kr.co.shoebox.controller;
 
 import kr.co.shoebox.dto.ItemFormDto;
 import kr.co.shoebox.dto.ItemSearchDto;
+import kr.co.shoebox.dto.ReviewCalcDto;
 import kr.co.shoebox.dto.WishItemDto;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.entity.WishItem;
 import kr.co.shoebox.repository.MemberRepository;
+import kr.co.shoebox.repository.ReviewItemRepository;
 import kr.co.shoebox.repository.WishItemRepository;
 import kr.co.shoebox.service.ItemService;
+import kr.co.shoebox.service.ReviewService;
 import kr.co.shoebox.service.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,6 +40,8 @@ public class ItemController {
     private final ItemService itemService;
     private final WishItemRepository wishItemRepository;
     private final MemberRepository memberRepository;
+
+    private final ReviewService reviewService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
@@ -68,7 +73,7 @@ public class ItemController {
     }
 
     @GetMapping(value = "/admin/item/{itemId}")
-    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
+    public String itemForm(@PathVariable("itemId") Long itemId, Model model){
 
         try {
             ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
@@ -120,7 +125,11 @@ public class ItemController {
     @GetMapping(value = "/item/{itemId}")
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId, Principal principal){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
+
         model.addAttribute("item", itemFormDto);
+        model.addAttribute("review", reviewCalcDto);
+
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());
             try {

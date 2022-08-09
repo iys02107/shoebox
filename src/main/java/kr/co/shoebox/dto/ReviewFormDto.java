@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter @Setter
 public class ReviewFormDto {
@@ -21,8 +22,8 @@ public class ReviewFormDto {
     @Length(min= 5, message = "리뷰 내용은 5자 이상 작성하세요.")
     private String content;
 
-    @NotBlank(message = "별점은 필수 입력 값입니다.")
-    private String rate;
+    @NotNull(message = "별점은 필수 입력 값입니다.")
+    private int rate;
 
 
 //    @QueryProjection

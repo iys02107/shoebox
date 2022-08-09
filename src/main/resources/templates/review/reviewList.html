@@ -13,6 +13,14 @@
 
     <script th:inline="javascript">
 
+        $(document).ready(function(){
+            $("#1").html("&#9733; &#9734; &#9734; &#9734; &#9734;");
+            $("#2").html("&#9733; &#9733; &#9734; &#9734; &#9734;");
+            $("#3").html("&#9733; &#9733; &#9733; &#9734; &#9734;");
+            $("#4").html("&#9733; &#9733; &#9733; &#9733; &#9734;");
+            $("#5").html("&#9733; &#9733; &#9733; &#9733; &#9733;");
+        });
+
 
     </script>
 
@@ -48,8 +56,45 @@
 <div layout:fragment="content" class="content-mg">
 
     <h2 class="mb-4">
-        장바구니 목록
+        리뷰 목록
     </h2>
+
+    <div>
+
+        <table class="table">
+            <colgroup>
+                <col width="20%"/>
+                <col width="20%"/>
+                <col width="60%"/>
+            </colgroup>
+            <thead>
+            <tr class="text-center">
+                <td>별점</td>
+                <td>리뷰제목</td>
+                <td>리뷰내용</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reviewItem : ${reviewItems}">
+                <td class="text-center align-middle">
+                    <span th:id="${reviewItem.rate}" class="align-self-center mr-2">
+                    </span>
+                </td>
+                <td class="text-center align-middle">
+                    <span th:id="title"
+                          th:text="${reviewItem.title}" class="align-self-center mr-2">
+                    </span>
+                </td>
+                <td class="text-center align-middle">
+                    <span th:id="content"
+                          th:text="${reviewItem.content}" class="align-self-center mr-2">
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
 
 </div>
 

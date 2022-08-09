@@ -1,13 +1,11 @@
 package kr.co.shoebox.service;
 
-import kr.co.shoebox.dto.ItemFormDto;
-import kr.co.shoebox.dto.ItemImgDto;
-import kr.co.shoebox.dto.ItemSearchDto;
-import kr.co.shoebox.dto.MainItemDto;
+import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.ItemImg;
 import kr.co.shoebox.repository.ItemImgRepository;
 import kr.co.shoebox.repository.ItemRepository;
+import kr.co.shoebox.repository.ReviewItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +27,8 @@ public class ItemService {
     private final ItemImgService itemImgService;
 
     private final ItemImgRepository itemImgRepository;
+
+    private final ReviewItemRepository reviewItemRepository;
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
@@ -64,6 +64,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(EntityNotFoundException::new);
         ItemFormDto itemFormDto = ItemFormDto.of(item);
+
         itemFormDto.setItemImgDtoList(itemImgDtoList);
         return itemFormDto;
     }

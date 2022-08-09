@@ -1,7 +1,9 @@
 package kr.co.shoebox.repository;
 
 
+import kr.co.shoebox.dto.ReviewCalcDto;
 import kr.co.shoebox.dto.ReviewDetailDto;
+import kr.co.shoebox.dto.ReviewItemDto;
 import kr.co.shoebox.entity.ReviewItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -40,7 +42,31 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
     @Query("update ReviewItem ri " +
             "set ri.rate = :rate, ri.title = :title, ri.content = :content " +
             "where ri.id = :id")
-    void updateReviewItem(String rate, String title, String content, Long id);
+    void updateReviewItem(int rate, String title, String content, Long id);
+
+    @Transactional
+    @Query("select new kr.co.shoebox.dto.ReviewCalcDto(avg(ri.rate) as rate, count(*) as count) " +
+            "from ReviewItem ri, OrderItem oi " +
+            "join oi.item i " +
+            "where ri.orderItemId = oi.id " +
+            "and oi.item.id = :itemId " +
+            "order by ri.regTime desc")
+    ReviewCalcDto  findReviewCalc(Long itemId);
+
+    @Query("select count(*) " +
+            "from ReviewItem ri, OrderItem oi " +
+            "join oi.item i " +
+            "where ri.orderItemId = oi.id " +
+            "and oi.item.id = :itemId")
+    int findReviewNull(Long itemId);
+
+    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.title, ri.content, ri.rate) " +
+            "from ReviewItem ri, OrderItem oi " +
+            "join oi.item i " +
+            "where ri.orderItemId = oi.id " +
+            "and oi.item.id = :itemId " +
+            "order by ri.regTime desc")
+    List<ReviewItemDto> findReviewItemList(Long itemId);
 
 //    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.reviewId, ri.title, ri.content, ri.rate, ii.id, ii.imgUrl, ii.itemNm) " +
 //            "from ReviewItem ri, (select i.id id, im.imgUrl imgUrl, i.itemNm itemNm " +
