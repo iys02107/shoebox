@@ -19,7 +19,13 @@
                 calculateTotalPrice();
             });
 
+            fillingRating();
         });
+
+        function fillingRating(){
+            var percent = $("#rate").val()*10 + '%';
+            document.getElementById("star").style.width = percent;
+        }
 
         function calculateTotalPrice(){
             var count = $("#count").val();
@@ -278,6 +284,33 @@
             color: black;
         }
 
+        .star-ratings {
+          color: #aaa9a9;
+          position: relative;
+          unicode-bidi: bidi-override;
+          width: max-content;
+          -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+          -webkit-text-stroke-width: 1.3px;
+          -webkit-text-stroke-color: #2b2a29;
+        }
+
+        .star-ratings-fill {
+          color: #fff58c;
+          padding: 0;
+          position: absolute;
+          z-index: 1;
+          display: flex;
+          top: 0;
+          left: 0;
+          overflow: hidden;
+          -webkit-text-fill-color: gold;
+        }
+
+        .star-ratings-base {
+          z-index: 0;
+          padding: 0;
+        }
+
     </style>
 </th:block>
 
@@ -382,7 +415,18 @@
         <div class="container">
             <span><h4 class="display-5">상품상세정보</h4></span>
             <div>
-                별점(<span th:text="${review.rate}"></span>)
+                <input type="hidden" id="rate" th:value="${review.rate}">
+                평점(<span th:text="${review.rate}"></span>)
+                <div class="star-ratings">
+                    <div id="star"
+                         class="star-ratings-fill space-x-2 text-lg">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <div class="star-ratings-base space-x-2 text-lg">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                </div>
+
                 <a th:href="'/reviews/reviewList/' +${item.id}">
                     리뷰(<span th:text="${review.count}" ></span>)
                 </a>
