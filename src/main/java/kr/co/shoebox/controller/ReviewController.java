@@ -57,7 +57,7 @@ public class ReviewController {
             return "review/reviewForm";
         }
 
-        return "review/reviewMng";
+        return "review/reviewAlert";
     }
 
     @GetMapping(value = "/reviewMng")

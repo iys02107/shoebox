@@ -12,16 +12,6 @@
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
-
-        $(document).ready(function(){
-            $("#1").html("&#9733; &#9734; &#9734; &#9734; &#9734;");
-            $("#2").html("&#9733; &#9733; &#9734; &#9734; &#9734;");
-            $("#3").html("&#9733; &#9733; &#9733; &#9734; &#9734;");
-            $("#4").html("&#9733; &#9733; &#9733; &#9733; &#9734;");
-            $("#5").html("&#9733; &#9733; &#9733; &#9733; &#9733;");
-        });
-
-
     </script>
 
 </th:block>
@@ -77,8 +67,13 @@
             <tbody>
             <tr th:each="reviewItem : ${reviewItems}">
                 <td class="text-center align-middle">
-                    <span th:id="${reviewItem.rate}" class="align-self-center mr-2">
-                    </span>
+                    <th:block th:switch="${reviewItem.rate}">
+                        <span class="align-self-center mr-2" th:case="1">★☆☆☆☆</span>
+                        <span class="align-self-center mr-2" th:case="2">★★☆☆☆</span>
+                        <span class="align-self-center mr-2" th:case="3">★★★☆☆</span>
+                        <span class="align-self-center mr-2" th:case="4">★★★★☆</span>
+                        <span class="align-self-center mr-2" th:case="5">★★★★★</span>
+                    </th:block>
                 </td>
                 <td class="text-center align-middle">
                     <span th:id="title"
