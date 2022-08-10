@@ -21,7 +21,7 @@ public class ReviewCalcDto {
     @QueryProjection
     public ReviewCalcDto(double rate, Long count){
         super();
-        this.rate = rate;
+        this.rate = Math.round(rate*10)/10.0;
         this.count = count;
     }
 

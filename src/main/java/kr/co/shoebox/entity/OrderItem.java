@@ -1,6 +1,5 @@
 package kr.co.shoebox.entity;
 
-import kr.co.shoebox.dto.OrderItemDto;
 import lombok.Getter;
 import lombok.Setter;
 

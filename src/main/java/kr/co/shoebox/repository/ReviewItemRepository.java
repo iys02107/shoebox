@@ -51,7 +51,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "where ri.orderItemId = oi.id " +
             "and oi.item.id = :itemId " +
             "order by ri.regTime desc")
-    ReviewCalcDto  findReviewCalc(Long itemId);
+    ReviewCalcDto findReviewCalc(Long itemId);
 
     @Query("select count(*) " +
             "from ReviewItem ri, OrderItem oi " +
