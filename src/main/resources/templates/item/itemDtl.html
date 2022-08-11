@@ -23,7 +23,7 @@
         });
 
         function fillingRating(){
-            var percent = $("#rate").val()*10 + '%';
+            var percent = $("#rate").val()*20+1.5 + '%';
             document.getElementById("star").style.width = percent;
         }
 
@@ -35,7 +35,6 @@
         }
         function selectSize(){
             var size = $(":input:radio[name=size]:checked").val();
-
             console.log(size);
         }
 
@@ -234,7 +233,7 @@
         }
         .repImg{
             width:100%;
-            height:400px;
+            height:100%;
         }
         .wd50{
             height:auto;
@@ -337,7 +336,7 @@
                 <input type="hidden" th:value="${item.price}" id="price" name="price">
                 <span th:text="|*{#numbers.formatInteger(item.price,3,'COMMA')} 원|"></span>
             </div>
-            <hr class="my-4">
+            <hr class="my-2">
 
             <div class="text-right">
                 <span class="badge badge-danger mgb-15">품절된 사이즈</span>
@@ -393,7 +392,7 @@
                 </div>
                 <input type="number" name="count" id="count" class="form-control" value="1" min="1">
             </div>
-            <hr class="my-4">
+            <hr class="my-2">
             <div class="text-right mgt-10">
                 <h5>결제 금액</h5>
                 <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
@@ -405,43 +404,48 @@
             <div th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-danger btn-lg">품절</button>
             </div>
-
-
         </div>
     </div>
-    <hr class="my-4">
+    <hr class="my-2">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">상품상세정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">상품리뷰</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">상품문의</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="jumbotron jumbotron-fluid mgt-30">
+<!--        <input type="hidden" id="rate" th:value="${review.rate}">-->
+<!--        평점(<span th:text="${review.rate}"></span>)-->
+<!--        <div class="star-ratings">-->
+<!--            <div id="star" class="star-ratings-fill space-x-2 text-lg">-->
+<!--                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>-->
+<!--            </div>-->
+<!--            <div class="star-ratings-base space-x-2 text-lg">-->
+<!--                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <a th:href="'/reviews/reviewList/' +${item.id}">-->
+<!--            리뷰(<span th:text="${review.count}" ></span>)-->
+<!--        </a>-->
+
+    <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <span><h4 class="display-5">상품상세정보</h4></span>
-            <div>
-                <input type="hidden" id="rate" th:value="${review.rate}">
-                평점(<span th:text="${review.rate}"></span>)
-                <div class="star-ratings">
-                    <div id="star"
-                         class="star-ratings-fill space-x-2 text-lg">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                    </div>
-                    <div class="star-ratings-base space-x-2 text-lg">
-                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                    </div>
-                </div>
-
-                <a th:href="'/reviews/reviewList/' +${item.id}">
-                    리뷰(<span th:text="${review.count}" ></span>)
-                </a>
-            </div>
-            <span><h4 class="display-5">상품문의</h4></span>
-            <hr class="my-4">
+            <h4 class="display-5">상품상세정보</h4>
             <p class="lead" id="itemDetail" th:text="${item.itemDetail}"></p>
             <div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
                 <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="100%">
             </div>
         </div>
     </div>
-
-
-
 </div>
-
 </html>
