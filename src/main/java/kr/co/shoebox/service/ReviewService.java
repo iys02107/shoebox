@@ -1,12 +1,11 @@
 package kr.co.shoebox.service;
 
-import kr.co.shoebox.dto.ReviewCalcDto;
-import kr.co.shoebox.dto.ReviewDetailDto;
-import kr.co.shoebox.dto.ReviewFormDto;
-import kr.co.shoebox.dto.ReviewItemDto;
+import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.*;
 import kr.co.shoebox.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -103,8 +102,6 @@ public class ReviewService {
         reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
         return reviewItemDtoList;
     }
-
-
 
 //
 //    private void validateDuplicateReview(Review review){

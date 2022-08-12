@@ -1,9 +1,6 @@
 package kr.co.shoebox.controller;
 
-import kr.co.shoebox.dto.ItemFormDto;
-import kr.co.shoebox.dto.ItemSearchDto;
-import kr.co.shoebox.dto.ReviewCalcDto;
-import kr.co.shoebox.dto.WishItemDto;
+import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.entity.WishItem;
@@ -126,9 +123,11 @@ public class ItemController {
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId, Principal principal){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
+        List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);
+        model.addAttribute("reviewItems", reviewItemDtoList);
 
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());

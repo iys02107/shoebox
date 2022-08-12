@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviewItem")
@@ -24,6 +25,8 @@ public class ReviewItem extends BaseEntity {
 
     private int rate;
 
+    private LocalDateTime reviewDate;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -37,6 +40,7 @@ public class ReviewItem extends BaseEntity {
         reviewItem.setRate(reviewFormDto.getRate());
         reviewItem.setMember(member);
         reviewItem.setOrderItemId(orderItemId);
+        reviewItem.setReviewDate(LocalDateTime.now());
         return reviewItem;
     }
 

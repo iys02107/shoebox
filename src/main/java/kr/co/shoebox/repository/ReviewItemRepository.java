@@ -68,6 +68,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "order by ri.regTime desc")
     List<ReviewItemDto> findReviewItemList(Long itemId);
 
+
 //    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.reviewId, ri.title, ri.content, ri.rate, ii.id, ii.imgUrl, ii.itemNm) " +
 //            "from ReviewItem ri, (select i.id id, im.imgUrl imgUrl, i.itemNm itemNm " +
 //                                    "from ItemImg im, OrderItem oi " +

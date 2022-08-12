@@ -226,6 +226,9 @@
         .mgt-50{
             margin-top:50px;
         }
+        .mgt-70{
+            margin-top:70px;
+        }
         .repImgDiv{
             margin-right:15px;
             height:auto;
@@ -270,6 +273,10 @@
             color: black;
         }
 
+        .bi{
+            font-size: 32px;
+        }
+
         .m_set_red {
             color: red;
         }
@@ -285,6 +292,7 @@
 
         .star-ratings {
           color: #aaa9a9;
+          font-size: 25px;
           position: relative;
           unicode-bidi: bidi-override;
           width: max-content;
@@ -310,6 +318,16 @@
           padding: 0;
         }
 
+        .jumbotron {
+          padding-top: 2rem;
+        }
+
+        #navbar {
+          position:-webkit-sticky;
+          position:sticky;
+          top:0;
+        }
+
     </style>
 </th:block>
 
@@ -329,7 +347,7 @@
             </span>
             <div>
                 <span class="h4" id="itemNm" th:text="${item.itemNm}"></span>
-                <i th:if="${wishStatus} == true" class="bi bi-heart-fill m_set_pointer m_set_red" id="wish" onclick="deleteWish()"></i>
+                <i th:if="${wishStatus} == true" class="bi bi-heart-fill m_set_pointer m_set_red" onclick="deleteWish()"></i>
                 <i th:unless="${wishStatus} == true" class="bi bi-heart m_set_pointer m_set_black" id="unWish" onclick="addWish()"></i>
             </div>
             <div class="h4 text-danger text-left">
@@ -393,7 +411,7 @@
                 <input type="number" name="count" id="count" class="form-control" value="1" min="1">
             </div>
             <hr class="my-2">
-            <div class="text-right mgt-10">
+            <div class="text-right">
                 <h5>결제 금액</h5>
                 <h3 name="totalPrice" id="totalPrice" class="font-weight-bold"></h3>
             </div>
@@ -407,43 +425,86 @@
         </div>
     </div>
     <hr class="my-2">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="navbar">
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <ul class="navbar-nav mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">상품상세정보</a>
+                    <a class="nav-link" href="#itemDtl">상품상세정보</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">상품리뷰</a>
+                    <a class="nav-link" href="#review">상품리뷰(<span th:text="${review.count}" ></span>)</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">상품문의</a>
+                    <a class="nav-link" href="#qna">상품문의()</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#info">배송/반품/교환 안내</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-<!--        <input type="hidden" id="rate" th:value="${review.rate}">-->
-<!--        평점(<span th:text="${review.rate}"></span>)-->
-<!--        <div class="star-ratings">-->
-<!--            <div id="star" class="star-ratings-fill space-x-2 text-lg">-->
-<!--                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>-->
-<!--            </div>-->
-<!--            <div class="star-ratings-base space-x-2 text-lg">-->
-<!--                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <a th:href="'/reviews/reviewList/' +${item.id}">-->
-<!--            리뷰(<span th:text="${review.count}" ></span>)-->
-<!--        </a>-->
-
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h4 class="display-5">상품상세정보</h4>
+            <hr class="my-1" id="itemDtl">
+            <h4 class="display-5 mgt-70">상품상세정보</h4>
             <p class="lead" id="itemDetail" th:text="${item.itemDetail}"></p>
             <div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
                 <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="100%">
+            </div>
+        </div>
+        <div class="container">
+            <hr class="my-2">
+            <h4 class="display-5 mgt-30" id="review">상품리뷰(<span th:text="${review.count}" ></span>)</h4>
+            <input type="hidden" id="rate" th:value="${review.rate}">
+            <div class="star-ratings">
+                <div id="star" class="star-ratings-fill space-x-2 text-lg">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <div class="star-ratings-base space-x-2 text-lg">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+            </div>
+            (<span th:text="${review.rate}"></span>)
+
+            <div>
+                <table class="table">
+                    <colgroup>
+                        <col width="20%"/>
+                        <col width="20%"/>
+                        <col width="60%"/>
+                    </colgroup>
+                    <thead>
+                    <tr class="text-center">
+                        <td>별점</td>
+                        <td>리뷰제목</td>
+                        <td>리뷰내용</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reviewItem : ${reviewItems}">
+                        <td class="text-center align-middle">
+                            <th:block th:switch="${reviewItem.rate}">
+                                <span class="align-self-center mr-2" th:case="1">★☆☆☆☆</span>
+                                <span class="align-self-center mr-2" th:case="2">★★☆☆☆</span>
+                                <span class="align-self-center mr-2" th:case="3">★★★☆☆</span>
+                                <span class="align-self-center mr-2" th:case="4">★★★★☆</span>
+                                <span class="align-self-center mr-2" th:case="5">★★★★★</span>
+                            </th:block>
+                        </td>
+                        <td class="text-center align-middle">
+                    <span th:id="title"
+                          th:text="${reviewItem.title}" class="align-self-center mr-2">
+                    </span>
+                        </td>
+                        <td class="text-center align-middle">
+                    <span th:id="content"
+                          th:text="${reviewItem.content}" class="align-self-center mr-2">
+                    </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
