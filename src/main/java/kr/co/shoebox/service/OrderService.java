@@ -63,6 +63,11 @@ public class OrderService {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn
                         (orderItem.getItem().getId(), "Y");
                 ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItem.getId());
+                if(reviewItem==null){
+                    orderItem.setReviewStatus(false);
+                }else {
+                    orderItem.setReviewStatus(true);
+                }
                     OrderItemDto orderItemDto =
                             new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);
@@ -72,6 +77,25 @@ public class OrderService {
         }
 
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
+    }
+    public Boolean reviewStatus(String email, Pageable pageable) {
+
+        List<Order> orders = orderRepository.findOrders(email, pageable);
+        Boolean reviewStatus = false;
+
+        for (Order order : orders) {
+            OrderHistDto orderHistDto = new OrderHistDto(order);
+            List<OrderItem> orderItems = order.getOrderItems();
+            for (OrderItem orderItem : orderItems) {
+                ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItem.getId());
+                if(reviewItem == null){
+                    reviewStatus = false;
+                }else {
+                    reviewStatus = true;
+                }
+            }
+        }
+        return reviewStatus;
     }
 
     @Transactional(readOnly = true)

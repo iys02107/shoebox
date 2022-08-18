@@ -5,6 +5,7 @@ import kr.co.shoebox.dto.OrderHistDto;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.service.OrderService;
+import kr.co.shoebox.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    private final ReviewService reviewService;
     private final MemberRepository memberRepository;
 
     @PostMapping(value = "/order")
@@ -64,11 +66,13 @@ public class OrderController {
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         Member currentMember = memberRepository.findByEmail(principal.getName());
+        Boolean reviewStatus = orderService.reviewStatus(principal.getName(), pageable);
 
         model.addAttribute("name", currentMember.getName());
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
+
 
         return "order/orderHist";
     }

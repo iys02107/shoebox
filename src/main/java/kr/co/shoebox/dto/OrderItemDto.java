@@ -15,6 +15,7 @@ public class OrderItemDto {
         this.orderPrice = orderItem.getOrderPrice();
         this.imgUrl = imgUrl;
         this.orderItemId = orderItem.getId();
+        this.reviewStatus = orderItem.getReviewStatus();
     }
 
     private String itemNm; //상품명
@@ -27,5 +28,7 @@ public class OrderItemDto {
     private String imgUrl; //상품 이미지 경로
 
     private Long orderItemId;
+
+    private Boolean reviewStatus;
 
 }

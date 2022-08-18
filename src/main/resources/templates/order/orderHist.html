@@ -119,7 +119,12 @@
                         <span th:text="${orderItem.size}"></span>
                         <span id="count" th:text="${orderItem.count} +'개'"></span>
                         <span id="totalPrice" th:text="|*{#numbers.formatInteger(orderItem.count*orderItem.orderPrice,3,'COMMA')} 원|"></span>
-                        <a class="btn btn-primary" th:href="@{'/reviews/new/' + ${orderItem.orderItemId}}">리뷰 등록</a>
+                        <span th:if="${orderItem.reviewStatus}">
+                            <a class="btn btn-primary" th:href="@{'/reviews/new/' + ${orderItem.orderItemId}}">리뷰 등록</a>
+                        </span>
+                        <span th:unless="${orderItem.reviewStatus}">
+                            <button type="button" class="btn btn-danger btn-lg">리뷰 완료</button>
+                        </span>
                     </div>
                 </div>
             </div>

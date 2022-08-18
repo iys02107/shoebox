@@ -27,6 +27,8 @@ public class OrderItem extends BaseEntity {
 
     private String size;
 
+    private Boolean reviewStatus;
+
     public static OrderItem createOrderItem(Item item, String size, int count){
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
