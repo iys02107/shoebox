@@ -75,17 +75,11 @@
 
 <div layout:fragment="content">
 
-    <form role="form" method="post" th:object="${reviewFormDto}" id="myform">
+    <form action="/reviews/new" role="form" method="post" th:object="${reviewFormDto}" id="myform">
 
         <input type="hidden" th:value="${orderItemId}" id="orderItemId" name="orderItemId">
-        <input type="hidden" th:value="${reviewItemId}" id="reviewItemId" name="reviewItemId">
 
-        <div th:if="${#strings.isEmpty(reviewItemId)}">
-            <p class="h2">리뷰 등록</p>
-        </div>
-        <div th:unless="${#strings.isEmpty(reviewItemId)}">
-            <p class="h2">리뷰 수정</p>
-        </div>
+        <p class="h2">리뷰 등록</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -107,30 +101,17 @@
             <input type="hidden" th:field="*{rate}">
             <p th:if="${#fields.hasErrors('rate')}" th:errors="*{rate}" class="fieldError">Incorrect data</p>
         </div>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">제목</span>
-            </div>
-            <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요">
-            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>
-        </div>
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">리뷰 내용</span>
+                <span class="input-group-text">리뷰 작성</span>
             </div>
-            <input type="text" th:field="*{content}" class="form-control" placeholder="리뷰 내용을 입력해주세요">
+            <input type="text" th:field="*{content}" class="form-control" placeholder="리뷰 내용을 입력해주세요(5자 이상 200자 이하)">
             <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">Incorrect data</p>
         </div>
-
-        <div th:if="${#strings.isEmpty(reviewItemId)}" style="text-align: center">
-            <button th:formaction="@{/reviews/new}" type="submit" class="btn btn-primary">저장</button>
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-primary" id="submit">리뷰 저장</button>
         </div>
-        <div th:unless="${#strings.isEmpty(reviewItemId)}" style="text-align: center">
-            <button th:formaction="@{'/reviews/update/' + ${reviewItemId} }" type="submit" class="btn btn-primary">수정</button>
-        </div>
-
-
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>

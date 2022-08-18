@@ -328,6 +328,13 @@
           top:0;
         }
 
+         #contentTable {
+             text-overflow: ellipsis;
+             white-space: nowrap;
+             max-width: 20px;
+             overflow: hidden;
+         }
+
     </style>
 </th:block>
 
@@ -471,14 +478,14 @@
                 <table class="table">
                     <colgroup>
                         <col width="20%"/>
-                        <col width="20%"/>
                         <col width="60%"/>
+                        <col width="20%"/>
                     </colgroup>
                     <thead>
                     <tr class="text-center">
                         <td>별점</td>
-                        <td>리뷰제목</td>
-                        <td>리뷰내용</td>
+                        <td>리뷰</td>
+                        <td>작성자</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -492,15 +499,18 @@
                                 <span class="align-self-center mr-2" th:case="5">★★★★★</span>
                             </th:block>
                         </td>
-                        <td class="text-center align-middle">
-                    <span th:id="title"
-                          th:text="${reviewItem.title}" class="align-self-center mr-2">
-                    </span>
+                        <td class="text-center align-middle" id="contentTable">
+                            <span th:id="content"
+                                  th:text="${reviewItem.content}" class="align-self-center mr-2">
+                            </span>
                         </td>
-                        <td class="text-center align-middle">
-                    <span th:id="content"
-                          th:text="${reviewItem.content}" class="align-self-center mr-2">
-                    </span>
+                        <td class="text-center align-middle" style="font-size: 12px">
+                            <div th:id="writer"
+                                  th:text="${reviewItem.email}" class="align-self-center mr-2">
+                            </div>
+                            <div th:id="regTime"
+                                 th:text="${reviewItem.regTime}" class="align-self-center mr-2">
+                            </div>
                         </td>
                     </tr>
                     </tbody>

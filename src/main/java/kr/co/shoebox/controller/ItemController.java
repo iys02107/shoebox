@@ -124,6 +124,11 @@ public class ItemController {
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
         List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
+        for(int i=0; i< reviewItemDtoList.size(); i++){
+            Long memberId = reviewItemDtoList.get(i).getMemberId();
+            Member member = memberRepository.getById(memberId);
+            reviewItemDtoList.get(i).setEmail(member.getEmail().substring(0,3)+"*******");
+        }
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);

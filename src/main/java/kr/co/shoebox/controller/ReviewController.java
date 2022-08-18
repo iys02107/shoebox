@@ -38,8 +38,8 @@ public class ReviewController {
     private final OrderItemRepository orderItemRepository;
 
 
-    @GetMapping(value = "/new")
-    public String reviewForm(Model model, @RequestParam("orderItemId") Long orderItemId){
+    @GetMapping(value = "/new/{orderItemId}")
+    public String reviewForm(Model model, @PathVariable("orderItemId") Long orderItemId){
         model.addAttribute("reviewFormDto", new ReviewFormDto());
         model.addAttribute("orderItemId", orderItemId);
         return "review/reviewForm";
@@ -48,10 +48,10 @@ public class ReviewController {
     @PostMapping(value = "/new")
     public String newReview(@Valid ReviewFormDto reviewFormDto, @RequestParam("orderItemId") Long orderItemId, Principal principal, Model model){
 
-        ReviewItem reviewItem;
-
         try {
-            reviewItem = reviewService.saveReview(reviewFormDto, orderItemId, principal.getName());
+            Member member = memberRepository.findByEmail(principal.getName());
+            ReviewItem reviewItem = ReviewItem.createReviewItem(reviewFormDto,member,orderItemId);
+            reviewService.saveReview(reviewItem, orderItemId);
         } catch(IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "review/reviewForm";
@@ -64,24 +64,6 @@ public class ReviewController {
     public String reviewMng(Principal principal, Model model){
         List<ReviewDetailDto> reviewDetailDtoList = reviewService.getReviewList(principal.getName());
         model.addAttribute("reviewItems", reviewDetailDtoList);
-        return "review/reviewMng";
-    }
-
-    @GetMapping(value = "/update/{reviewItemId}")
-    public String reviewUpdate(Model model, @RequestParam("reviewItemId") Long reviewItemId){
-        model.addAttribute("reviewFormDto", new ReviewFormDto());
-        model.addAttribute("reviewItemId", reviewItemId);
-        return "review/reviewForm";
-    }
-    @PostMapping(value = "/update/{reviewItemId}")
-    public String updateReview(@Valid ReviewFormDto reviewFormDto, @RequestParam("reviewItemId") Long reviewItemId, Principal principal, Model model){
-        try {
-            reviewService.updateReview(reviewFormDto, reviewItemId);
-        } catch(IllegalStateException e){
-            model.addAttribute("errorMessage", e.getMessage());
-            return "review/reviewForm";
-        }
-
         return "review/reviewMng";
     }
 

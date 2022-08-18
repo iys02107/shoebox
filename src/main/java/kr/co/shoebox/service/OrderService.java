@@ -4,10 +4,7 @@ import kr.co.shoebox.dto.OrderDto;
 import kr.co.shoebox.dto.OrderHistDto;
 import kr.co.shoebox.dto.OrderItemDto;
 import kr.co.shoebox.entity.*;
-import kr.co.shoebox.repository.ItemImgRepository;
-import kr.co.shoebox.repository.ItemRepository;
-import kr.co.shoebox.repository.MemberRepository;
-import kr.co.shoebox.repository.OrderRepository;
+import kr.co.shoebox.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,6 +29,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     private final ItemImgRepository itemImgRepository;
+
+    private final ReviewItemRepository reviewItemRepository;
 
     public Long order(OrderDto orderDto, String email){
 
@@ -63,8 +62,9 @@ public class OrderService {
             for (OrderItem orderItem : orderItems) {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn
                         (orderItem.getItem().getId(), "Y");
-                OrderItemDto orderItemDto =
-                        new OrderItemDto(orderItem, itemImg.getImgUrl());
+                ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItem.getId());
+                    OrderItemDto orderItemDto =
+                            new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);
             }
 

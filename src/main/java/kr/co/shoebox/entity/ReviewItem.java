@@ -19,13 +19,9 @@ public class ReviewItem extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String title;
-
     private String content;
 
     private int rate;
-
-    private LocalDateTime reviewDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
@@ -35,12 +31,10 @@ public class ReviewItem extends BaseEntity {
 
     public static ReviewItem createReviewItem(ReviewFormDto reviewFormDto, Member member, Long orderItemId){
         ReviewItem reviewItem = new ReviewItem();
-        reviewItem.setTitle(reviewFormDto.getTitle());
         reviewItem.setContent(reviewFormDto.getContent());
         reviewItem.setRate(reviewFormDto.getRate());
         reviewItem.setMember(member);
         reviewItem.setOrderItemId(orderItemId);
-        reviewItem.setReviewDate(LocalDateTime.now());
         return reviewItem;
     }
 

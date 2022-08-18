@@ -27,7 +27,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and ri.member.id = :memberId")
     ReviewItem findReviewItemByMemberId(Long memberId);
 
-    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.id, ri.title, ri.content, ri.rate, i.id, im.imgUrl, i.itemNm) " +
+    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.id, ri.content, ri.rate, i.id, im.imgUrl, i.itemNm) " +
             "from ReviewItem ri, ItemImg im, OrderItem oi " +
             "join oi.item i " +
             "where ri.member.id = :memberId " +
@@ -36,13 +36,6 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and im.repImgYn = 'Y' " +
             "order by ri.regTime desc")
     List<ReviewDetailDto> findReviewMngList(Long memberId);
-
-    @Modifying
-    @Transactional
-    @Query("update ReviewItem ri " +
-            "set ri.rate = :rate, ri.title = :title, ri.content = :content " +
-            "where ri.id = :id")
-    void updateReviewItem(int rate, String title, String content, Long id);
 
     @Transactional
     @Query("select new kr.co.shoebox.dto.ReviewCalcDto(avg(ri.rate) as rate, count(*) as count) " +
@@ -60,7 +53,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and oi.item.id = :itemId")
     int findReviewNull(Long itemId);
 
-    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.title, ri.content, ri.rate) " +
+    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.content, ri.rate, ri.member.id, ri.regTime) " +
             "from ReviewItem ri, OrderItem oi " +
             "join oi.item i " +
             "where ri.orderItemId = oi.id " +
@@ -68,13 +61,4 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "order by ri.regTime desc")
     List<ReviewItemDto> findReviewItemList(Long itemId);
 
-
-//    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.reviewId, ri.title, ri.content, ri.rate, ii.id, ii.imgUrl, ii.itemNm) " +
-//            "from ReviewItem ri, (select i.id id, im.imgUrl imgUrl, i.itemNm itemNm " +
-//                                    "from ItemImg im, OrderItem oi " +
-//                                    "join oi.item i " +
-//                                    "where oi.id = :orderItemId " +
-//                                    "and oi.item.id = im.item.id " +
-//                                    "and im.repImgYn = 'Y') ii")
-//    List<ReviewDetailDto> findReviewList(Long orderItemId);
 }

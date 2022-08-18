@@ -10,8 +10,6 @@ public class ReviewDetailDto {
 
     private Long id;
 
-    private String title;
-
     private String content;
 
     private int rate;
@@ -22,12 +20,9 @@ public class ReviewDetailDto {
 
     private String itemNm;
 
-
-
     @QueryProjection
-    public ReviewDetailDto(Long id, String title, String content, int rate, Long itemId, String imgUrl, String itemNm){
+    public ReviewDetailDto(Long id, String content, int rate, Long itemId, String imgUrl, String itemNm){
         this.id = id;
-        this.title = title;
         this.content = content;
         this.rate = rate;
         this.itemId = itemId;

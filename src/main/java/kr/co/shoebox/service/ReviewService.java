@@ -18,33 +18,36 @@ import java.util.List;
 @Transactional
 public class ReviewService {
 
-    private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
-//    private final ReviewRepository reviewRepository;
 
     private final OrderItemRepository orderItemRepository;
 
-    private final OrderRepository orderRepository;
-
     private final ReviewItemRepository reviewItemRepository;
 
-    public ReviewItem saveReview(ReviewFormDto reviewFormDto, Long orderItemId, String email){
+//    public ReviewItem saveReview(ReviewFormDto reviewFormDto, Long orderItemId, String email){
+//
+//        ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItemId);
+//        Member member = memberRepository.findByEmail(email);
+//
+//        if(reviewItem == null){
+//            reviewItem = ReviewItem.createReviewItem(reviewFormDto, member, orderItemId);
+//            reviewItemRepository.save(reviewItem);
+//            return reviewItem;
+//        }else {
+//            throw new IllegalStateException("이미 리뷰 등록하였습니다.");
+//        }
+//    }
 
-        ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItemId);
-        Member member = memberRepository.findByEmail(email);
-
-        if(reviewItem == null){
-            reviewItem = ReviewItem.createReviewItem(reviewFormDto, member, orderItemId);
-            reviewItemRepository.save(reviewItem);
-            return reviewItem;
-        }else {
-            throw new IllegalStateException("이미 리뷰 등록하였습니다.");
-        }
-
+    public ReviewItem saveReview(ReviewItem reviewItem, Long orderItemId){
+        validateDuplicateReview(reviewItem, orderItemId);
+        return reviewItemRepository.save(reviewItem);
     }
 
-    public void updateReview(ReviewFormDto reviewFormDto, Long reviewItemId){
-       reviewItemRepository.updateReviewItem(reviewFormDto.getRate(), reviewFormDto.getTitle(), reviewFormDto.getContent(), reviewItemId);
+    private void validateDuplicateReview(ReviewItem reviewItem, Long orderItemId){
+        ReviewItem findReviewItem = reviewItemRepository.findReviewItem(orderItemId);
+        if(findReviewItem != null){
+            throw new IllegalStateException("이미 등록한 리뷰입니다.");
+        }
     }
 
     public void deleteReview(Long reviewItemId){
@@ -102,29 +105,5 @@ public class ReviewService {
         reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
         return reviewItemDtoList;
     }
-
-//
-//    private void validateDuplicateReview(Review review){
-//        Review findReview = reviewRepository.findReview(review.getOrder().getId());
-//        if(findReview != null){
-//            throw new IllegalStateException("이미 리뷰 작성이 완료되었습니다.");
-//        }
-//    }
-
-//    @Transactional(readOnly = true)
-//    public int getReviewTotal(Long itemId){
-//        Item item = itemRepository.getById(itemId);
-//        List<ReviewDetailDto> reviewListForCount = reviewRepository.findReviewList(item.getId());
-//
-//        int reviewTotalCount = 0;
-//
-//        if(reviewListForCount == null){
-//            return reviewTotalCount;
-//        }else{
-//           reviewTotalCount = reviewListForCount.toArray().length;
-//        };
-//        return reviewTotalCount;
-//    }
-
 
 }

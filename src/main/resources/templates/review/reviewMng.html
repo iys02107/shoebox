@@ -77,6 +77,12 @@
         .fs24{
             font-size:24px
         }
+        #contentTable {
+             text-overflow: ellipsis;
+             white-space: nowrap;
+             max-width: 20px;
+             overflow: hidden;
+         }
     </style>
 </th:block>
 
@@ -92,17 +98,15 @@
             <colgroup>
                 <col width="20%"/>
                 <col width="20%"/>
-                <col width="10%"/>
                 <col width="40%"/>
-                <col width="10%"/>
+                <col width="20%"/>
             </colgroup>
             <thead>
             <tr class="text-center">
                 <td>상품정보</td>
                 <td>별점</td>
-                <td>리뷰제목</td>
                 <td>리뷰내용</td>
-                <td>수정, 삭제</td>
+                <td>삭제</td>
             </tr>
             </thead>
             <tbody>
@@ -126,24 +130,13 @@
                         <span class="align-self-center mr-2" th:case="5">★★★★★</span>
                     </th:block>
                 </td>
-                <td class="text-center align-middle">
-                    <span th:id="title"
-                          th:text="${reviewItem.title}" class="align-self-center mr-2">
-                    </span>
-                </td>
-                <td class="text-center align-middle">
+                <td class="text-center align-middle" id="contentTable">
                     <span th:id="content"
                           th:text="${reviewItem.content}" class="align-self-center mr-2">
                     </span>
                 </td>
-
-                <td>
-                    <form role="form" method="get">
-                        <input type="hidden" th:value="${reviewItem.id}" id="reviewItemId" name="reviewItemId">
-                        <button th:formaction="@{'/reviews/update/' + ${reviewItem.id} }" >수정</button>
-
-                    </form>
-                    <button th:value="${reviewItem.id}" onclick="deleteReview(this.value)">삭제</button>
+                <td class="text-center align-middle">
+                    <button class="btn btn-danger" th:value="${reviewItem.id}" onclick="deleteReview(this.value)">삭제</button>
                 </td>
             </tr>
             </tbody>

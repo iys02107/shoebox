@@ -28,7 +28,6 @@ public class ItemService {
 
     private final ItemImgRepository itemImgRepository;
 
-    private final ReviewItemRepository reviewItemRepository;
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
 
