@@ -20,7 +20,82 @@
             });
 
             fillingRating();
+
+            var dt = $("#reviewTable").DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "searching": false,
+                "info": false,
+                "order": [ [3, "desc"] ],
+                "columnDefs": [
+                    { orderable: false, targets: 1 },
+                    { orderable: false, targets: 2 }
+                  ],
+                "language" : lang_kor,
+                "responsive": {
+                    details: {
+                        type: 'column',
+                        target: 1
+                    }
+                }
+            });
+
+            var detailRows = [];
+
+            $('#reviewTable tbody').on('click', 'td.contentCol', function () {
+                var tr = $(this).closest('tr');
+                var row = dt.row(tr);
+                var idx = detailRows.indexOf(tr.attr('id'));
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(row.data())).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
         });
+
+        function format(d) {
+            return (
+                d[1]
+            );
+        }
+
+        var lang_kor = {       
+            "decimal" : "",
+            "emptyTable" : "데이터가 없습니다.",
+            "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
+            "infoEmpty" : "0명",
+            "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+            "infoPostFix" : "",
+            "thousands" : ",",
+            "lengthMenu" : "_MENU_ 개씩 보기",
+            "loadingRecords" : "로딩중...",
+            "processing" : "처리중...",
+            "search" : "검색 : ",
+            "zeroRecords" : "검색된 데이터가 없습니다.",
+            "paginate" : {
+                "first" : "첫 페이지",
+                "last" : "마지막 페이지",
+                "next" : "다음",
+                "previous" : "이전"
+            },
+            "aria" : {
+                "sortAscending" : " :  오름차순 정렬",
+                "sortDescending" : " :  내림차순 정렬"
+            }
+        };
+
 
         function fillingRating(){
             var percent = $("#rate").val()*20+1.5 + '%';
@@ -169,44 +244,43 @@
                 alert('사이즈를 선택해주세요.');
                 location.reload();
            }else{
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = "/cart";
-            var paramData = {
-                itemId : $("#itemId").val(),
-                count : $("#count").val(),
-                size : $(":input:radio[name=size]:checked").val()
-            };
+                var url = "/cart";
+                var paramData = {
+                    itemId : $("#itemId").val(),
+                    count : $("#count").val(),
+                    size : $(":input:radio[name=size]:checked").val()
+                };
 
-            var param = JSON.stringify(paramData);
+                var param = JSON.stringify(paramData);
 
-            $.ajax({
-                url      : url,
-                type     : "POST",
-                contentType : "application/json",
-                data     : param,
-                beforeSend : function(xhr){
-                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                    xhr.setRequestHeader(header, token);
-                },
-                dataType : "json",
-                cache   : false,
-                success  : function(result, status){
-                    alert("상품을 장바구니에 담았습니다.");
-                    location.href='/cart';
-                },
-                error : function(jqXHR, status, error){
+                $.ajax({
+                    url      : url,
+                    type     : "POST",
+                    contentType : "application/json",
+                    data     : param,
+                    beforeSend : function(xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType : "json",
+                    cache   : false,
+                    success  : function(result, status){
+                        alert("상품을 장바구니에 담았습니다.");
+                        location.href='/cart';
+                    },
+                    error : function(jqXHR, status, error){
 
-                    if(jqXHR.status == '401'){
-                        alert('로그인 후 이용해주세요');
-                        location.href='/members/login';
-                    } else{
-                        alert(jqXHR.responseText);
+                        if(jqXHR.status == '401'){
+                            alert('로그인 후 이용해주세요');
+                            location.href='/members/login';
+                        } else{
+                            alert(jqXHR.responseText);
+                        }
                     }
-
-                }
-            });
+                });
             }
         }
 
@@ -328,7 +402,7 @@
           top:0;
         }
 
-         #contentTable {
+         .contentCol {
              text-overflow: ellipsis;
              white-space: nowrap;
              max-width: 20px;
@@ -473,46 +547,36 @@
                 </div>
             </div>
             (<span th:text="${review.rate}"></span>)
-
             <div>
-                <table class="table">
+                <table id="reviewTable" class="table text-center align-middle">
                     <colgroup>
                         <col width="20%"/>
-                        <col width="60%"/>
+                        <col width="40%"/>
+                        <col width="20%"/>
                         <col width="20%"/>
                     </colgroup>
                     <thead>
-                    <tr class="text-center">
-                        <td>별점</td>
-                        <td>리뷰</td>
-                        <td>작성자</td>
-                    </tr>
+                        <tr>
+                            <th>별점</th>
+                            <th>리뷰</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="reviewItem : ${reviewItems}">
-                        <td class="text-center align-middle">
-                            <th:block th:switch="${reviewItem.rate}">
-                                <span class="align-self-center mr-2" th:case="1">★☆☆☆☆</span>
-                                <span class="align-self-center mr-2" th:case="2">★★☆☆☆</span>
-                                <span class="align-self-center mr-2" th:case="3">★★★☆☆</span>
-                                <span class="align-self-center mr-2" th:case="4">★★★★☆</span>
-                                <span class="align-self-center mr-2" th:case="5">★★★★★</span>
-                            </th:block>
-                        </td>
-                        <td class="text-center align-middle" id="contentTable">
-                            <span th:id="content"
-                                  th:text="${reviewItem.content}" class="align-self-center mr-2">
-                            </span>
-                        </td>
-                        <td class="text-center align-middle" style="font-size: 12px">
-                            <div th:id="writer"
-                                  th:text="${reviewItem.email}" class="align-self-center mr-2">
-                            </div>
-                            <div th:id="regTime"
-                                 th:text="${reviewItem.regTime}" class="align-self-center mr-2">
-                            </div>
-                        </td>
-                    </tr>
+                        <tr th:each="reviewItem : ${reviewItems}">
+                            <td th:block th:switch="${reviewItem.rate}">
+                                <span th:case="1">★☆☆☆☆</span>
+                                <span th:case="2">★★☆☆☆</span>
+                                <span th:case="3">★★★☆☆</span>
+                                <span th:case="4">★★★★☆</span>
+                                <span th:case="5">★★★★★</span>
+                            </td:block>
+                            </td>
+                            <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
+                            <td th:text="${reviewItem.email}"></td>
+                            <td th:text="${reviewItem.regTime}"></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
