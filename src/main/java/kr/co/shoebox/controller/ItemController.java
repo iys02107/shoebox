@@ -8,6 +8,7 @@ import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.repository.ReviewItemRepository;
 import kr.co.shoebox.repository.WishItemRepository;
 import kr.co.shoebox.service.ItemService;
+import kr.co.shoebox.service.QuestionService;
 import kr.co.shoebox.service.ReviewService;
 import kr.co.shoebox.service.WishService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ public class ItemController {
     private final MemberRepository memberRepository;
 
     private final ReviewService reviewService;
+
+    private final QuestionService questionService;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
@@ -124,15 +127,14 @@ public class ItemController {
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
         List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
-        for(int i=0; i< reviewItemDtoList.size(); i++){
-            Long memberId = reviewItemDtoList.get(i).getMemberId();
-            Member member = memberRepository.getById(memberId);
-            reviewItemDtoList.get(i).setEmail(member.getEmail().substring(0,3)+"*******");
-        }
+        int questionCount = questionService.getQuestionCount(itemId);
+        List<QuestionDetailDto> questionDetailDtoList = questionService.getQuestionItemList(itemId);
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);
         model.addAttribute("reviewItems", reviewItemDtoList);
+        model.addAttribute("questionCount", questionCount);
+        model.addAttribute("questions", questionDetailDtoList);
 
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());
