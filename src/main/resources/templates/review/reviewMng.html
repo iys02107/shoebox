@@ -196,6 +196,7 @@
                         </div>
                         <div class="align-self-center">
                             <span th:text="${reviewItem.itemNm}" class="fs15 font-weight-bold"></span>
+                            (<span th:text="${reviewItem.size}" class="fs15"></span>)
                         </div>
                     </td>
                     <td th:block th:switch="${reviewItem.rate}" style="line-height: 120px">

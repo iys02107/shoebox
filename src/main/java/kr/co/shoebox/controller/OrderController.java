@@ -84,6 +84,10 @@ public class OrderController {
             return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
+        if(!orderService.validateCancelOrder(orderId)){
+            return new ResponseEntity<String>("등록된 리뷰가 있어서 주문을 취소할 수 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
         orderService.cancelOrder(orderId);
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }

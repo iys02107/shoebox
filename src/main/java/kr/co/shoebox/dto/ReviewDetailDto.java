@@ -25,8 +25,10 @@ public class ReviewDetailDto {
 
     private String regTime;
 
+    private String size;
+
     @QueryProjection
-    public ReviewDetailDto(Long id, String content, int rate, Long itemId, String imgUrl, String itemNm, LocalDateTime regTime){
+    public ReviewDetailDto(Long id, String content, int rate, Long itemId, String imgUrl, String itemNm, LocalDateTime regTime, String size){
         this.id = id;
         this.content = content;
         this.rate = rate;
@@ -34,6 +36,7 @@ public class ReviewDetailDto {
         this.imgUrl = imgUrl;
         this.itemNm = itemNm;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.size = size;
     }
 
 }

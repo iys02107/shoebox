@@ -118,6 +118,21 @@ public class OrderService {
         order.cancelOrder();
     }
 
+    public boolean validateCancelOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        int c= 0;
+        for(int i=0; i<order.getOrderItems().size(); i++){
+            if(order.getOrderItems().get(i).getReviewStatus()){
+                c++;
+            }
+        }
+        if(c>0){
+            return false;
+        }else
+            return true;
+    }
+
     public Long orders(List<OrderDto> orderDtoList, String email){
 
         Member member = memberRepository.findByEmail(email);
