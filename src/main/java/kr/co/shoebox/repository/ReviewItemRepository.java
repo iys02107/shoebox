@@ -27,7 +27,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and ri.member.id = :memberId")
     ReviewItem findReviewItemByMemberId(Long memberId);
 
-    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.id, ri.content, ri.rate, i.id, im.imgUrl, i.itemNm, ri.regTime, oi.size) " +
+    @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.id, ri.content, ri.rate, i.id, im.imgUrl, i.itemNm, ri.regTime) " +
             "from ReviewItem ri, ItemImg im, OrderItem oi " +
             "join oi.item i " +
             "where ri.member.id = :memberId " +
@@ -53,7 +53,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and oi.item.id = :itemId")
     int findReviewNull(Long itemId);
 
-    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.content, ri.rate, ri.member.id, ri.regTime, oi.size) " +
+    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.content, ri.rate, ri.member.id, ri.regTime) " +
             "from ReviewItem ri, OrderItem oi " +
             "join oi.item i " +
             "where ri.orderItemId = oi.id " +

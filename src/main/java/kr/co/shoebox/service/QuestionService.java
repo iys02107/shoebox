@@ -39,4 +39,10 @@ public class QuestionService {
         return questionDetailDtoList;
     }
 
+    public List<QuestionMngDto> getQuestionMngList(){
+        List<QuestionMngDto> questionMngDtoList;
+        questionMngDtoList = questionRepository.getQuestionList();
+        return questionMngDtoList;
+    }
+
 }

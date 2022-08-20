@@ -2,28 +2,24 @@ package kr.co.shoebox.controller;
 
 
 import kr.co.shoebox.dto.QuestionFormDto;
-import kr.co.shoebox.dto.QuestionMngDto;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.entity.Question;
-import kr.co.shoebox.entity.ReviewItem;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.repository.QuestionRepository;
 import kr.co.shoebox.service.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/answers")
 
-public class QuestionController {
+public class AnswerController {
 
     private final QuestionService questionService;
 
@@ -31,14 +27,14 @@ public class QuestionController {
 
     private final QuestionRepository questionRepository;
 
-    @GetMapping(value = "/questions/new/{itemId}")
+    @GetMapping(value = "/new/{itemId}")
     public String questionForm(Model model,  @PathVariable("itemId") Long itemId){
         model.addAttribute("questionFormDto", new QuestionFormDto());
         model.addAttribute("itemId", itemId);
         return "question/questionForm";
     }
 
-    @PostMapping(value = "/questions/new")
+    @PostMapping(value = "/new")
     public String newQuestion(@Valid QuestionFormDto questionFormDto, @RequestParam("itemId") Long itemId, Principal principal, Model model){
 
         try {
@@ -56,13 +52,5 @@ public class QuestionController {
         return "question/questionAlert";
     }
 
-    @GetMapping(value = "/admin/questions")
-    public String questionMng(Model model, Principal principal){
-
-        List<QuestionMngDto> questionMngDtoList = questionService.getQuestionMngList();
-        model.addAttribute("questions", questionMngDtoList);
-
-        return "question/questionMng";
-    }
 
 }
