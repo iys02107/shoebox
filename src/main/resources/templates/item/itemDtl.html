@@ -45,6 +45,7 @@
             $('#reviewTable tbody').on('click', 'td.contentCol', function () {
                 var tr = $(this).closest('tr');
                 var row = dt.row(tr);
+
                 var idx = detailRows.indexOf(tr.attr('id'));
 
                 if (row.child.isShown()) {
@@ -63,7 +64,51 @@
                     }
                 }
             });
-        });
+
+        var dt2 = $("#qnaTable").DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "searching": false,
+                "info": false,
+                "order": [ [3, "desc"] ],
+                "columnDefs": [
+                    { orderable: false, targets: 1 },
+                    { orderable: false, targets: 2 }
+                  ],
+                "language" : lang_kor,
+                "responsive": {
+                    details: {
+                        type: 'column',
+                        target: 1
+                    }
+                }
+            });
+
+            var detailRows2 = [];
+
+         $('#qnaTable tbody').on('click', 'td.contentCol', function () {
+                var tr = $(this).closest('tr');
+                var row = dt2.row(tr);
+
+                var idx = detailRows2.indexOf(tr.attr('id'));
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows2.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(row.data())).show();
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows2.push(tr.attr('id'));
+                    }
+                }
+            });
+       });
 
         function format(d) {
             return (
@@ -573,7 +618,7 @@
                                 <span th:case="5">★★★★★</span>
                             </td:block>
                             </td>
-                            <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
+                            <td id="reviewContent" th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
                             <td th:text="${reviewItem.email}"></td>
                             <td th:text="${reviewItem.regTime}"></td>
                         </tr>
@@ -586,10 +631,10 @@
             <h4 class="display-5 mgt-30" id="qna">상품문의(<span th:text="${questionCount}" ></span>)</h4>
             <div>
                 <a class="btn btn-primary" th:href="@{'/questions/new/' + ${item.id}}">문의하기</a>
-                <table class="table text-center align-middle">
+                <table id="qnaTable" class="table text-center align-middle">
                     <colgroup>
-                        <col width="15%"/>
-                        <col width="45%"/>
+                        <col width="20%"/>
+                        <col width="40%"/>
                         <col width="20%"/>
                         <col width="20%"/>
                     </colgroup>
@@ -604,26 +649,24 @@
 
                     <tbody>
                     <tr th:each="question : ${questions}">
-                        <td class="text-center align-middle">
+                        <td>
                             <input type="hidden" id="answerStatus" name="answerStatus" th:value="${question.answerId}">
-                            <span th:if="${#strings.isEmpty(answerStatus)}">답변대기중</span>
+                            <span th:if="${#strings.isEmpty(answerStatus)}">답변대기</span>
                             <span th:unless="${#strings.isEmpty(answerStatus)}">답변완료</span>
                         </td>
 
-                        <td class="text-center align-middle">
-                            <span id="questionTitle" th:text="${question.title}" class="align-self-center mr-2">
-                            </span>
+                        <td class="contentCol" style="cursor: pointer">
+                            <span th:text="${question.title}" class="align-self-center mr-2"></span>
+                            <input type="hidden" th:value="${question.content}" id="questionContent">
                         </td>
 <!--                        <td class="text-center align-middle">-->
-<!--                            <span th:id="asks_content"-->
-<!--                                  th:text="${asks.content}" class="align-self-center mr-2">-->
+<!--                            <span hidden th:text="${question.content}" class="align-self-center mr-2">-->
 <!--                            </span>-->
 <!--                        </td>-->
-                        <td class="text-center align-middle">
-                            <span th:text="${question.email}" class="align-self-center mr-2">
-                            </span>
+                        <td>
+                            <span th:text="${question.email}" class="align-self-center mr-2"></span>
                         </td>
-                        <td class="text-center align-middle">
+                        <td>
                             <span th:text="${question.regTime}" class="align-self-center mr-2"></span>
                         </td>
 
