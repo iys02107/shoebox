@@ -28,14 +28,14 @@
                 "info": false,
                 "order": [ [3, "desc"] ],
                 "columnDefs": [
-                    { orderable: false, targets: 1 },
-                    { orderable: false, targets: 2 }
+                    { orderable: false, targets: 2 },
+                    { orderable: false, targets: 3 }
                   ],
-                "language" : lang_kor,
+                "language" : lang_kor_review,
                 "responsive": {
                     details: {
                         type: 'column',
-                        target: 1
+                        target: 2
                     }
                 }
             });
@@ -67,11 +67,11 @@
 
         function format(d) {
             return (
-                d[1]
+                d[2]
             );
         }
 
-        var lang_kor = {       
+        var lang_kor_review = {       
             "decimal" : "",
             "emptyTable" : "등록된 리뷰가 없습니다.",
             "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
@@ -551,13 +551,15 @@
                 <table id="reviewTable" class="table text-center align-middle">
                     <colgroup>
                         <col width="20%"/>
-                        <col width="40%"/>
-                        <col width="20%"/>
-                        <col width="20%"/>
+                        <col width="15%"/>
+                        <col width="35%"/>
+                        <col width="15%"/>
+                        <col width="15%"/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th>별점</th>
+                            <th>사이즈</th>
                             <th>리뷰</th>
                             <th>작성자</th>
                             <th>작성일</th>
@@ -573,6 +575,7 @@
                                 <span th:case="5">★★★★★</span>
                             </td:block>
                             </td>
+                            <td th:text="${reviewItem.size}"></td>
                             <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
                             <td th:text="${reviewItem.email}"></td>
                             <td th:text="${reviewItem.regTime}"></td>

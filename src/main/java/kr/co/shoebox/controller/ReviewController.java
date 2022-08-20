@@ -34,7 +34,6 @@ public class ReviewController {
 
     private final MemberRepository memberRepository;
 
-    //    private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
 
 

@@ -26,13 +26,16 @@ public class ReviewItemDto {
 
     private String email;
 
+    private String size;
+
     @QueryProjection
-    public ReviewItemDto(Long id, String content, int rate, Long memberId, LocalDateTime regTime){
+    public ReviewItemDto(Long id, String content, int rate, Long memberId, LocalDateTime regTime, String size){
         this.id = id;
         this.content = content;
         this.rate = rate;
         this.memberId = memberId;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.size = size;
     }
 
 }

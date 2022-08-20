@@ -123,7 +123,7 @@
                             <a class="btn btn-primary" th:href="@{'/reviews/new/' + ${orderItem.orderItemId}}">리뷰 등록</a>
                         </span>
                         <span th:unless="${orderItem.reviewStatus}==false">
-                            <button type="button" class="btn btn-danger btn-lg">리뷰 완료</button>
+                            <button type="button" class="btn btn-dark" style="cursor: none">리뷰 완료</button>
                         </span>
                     </div>
                 </div>

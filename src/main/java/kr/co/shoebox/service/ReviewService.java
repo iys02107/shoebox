@@ -103,6 +103,11 @@ public class ReviewService {
         List<ReviewItemDto> reviewItemDtoList;
 
         reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
+        for(int i=0; i< reviewItemDtoList.size(); i++){
+            Long memberId = reviewItemDtoList.get(i).getMemberId();
+            Member member = memberRepository.getById(memberId);
+            reviewItemDtoList.get(i).setEmail(member.getEmail().substring(0,3)+"*******");
+        }
         return reviewItemDtoList;
     }
 
