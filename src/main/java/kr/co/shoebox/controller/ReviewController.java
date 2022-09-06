@@ -8,6 +8,7 @@ import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.repository.OrderItemRepository;
 import kr.co.shoebox.repository.OrderRepository;
 //import kr.co.shoebox.repository.ReviewRepository;
+import kr.co.shoebox.service.OrderService;
 import kr.co.shoebox.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -33,8 +34,6 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     private final MemberRepository memberRepository;
-
-    private final OrderItemRepository orderItemRepository;
 
 
     @GetMapping(value = "/new/{orderItemId}")
@@ -62,6 +61,8 @@ public class ReviewController {
     @GetMapping(value = "/reviewMng")
     public String reviewMng(Principal principal, Model model){
         List<ReviewDetailDto> reviewDetailDtoList = reviewService.getReviewList(principal.getName());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
         model.addAttribute("reviewItems", reviewDetailDtoList);
         return "review/reviewMng";
     }
@@ -75,40 +76,5 @@ public class ReviewController {
         reviewService.deleteReview(reviewItemId);
         return new ResponseEntity<Long>(reviewItemId, HttpStatus.OK);
     }
-
-//    @GetMapping(value = "/reviewList/{itemId}")
-//    public String reviewList(@PathVariable("itemId") Long itemId, Model model){
-//        List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
-//
-//        model.addAttribute("reviewItems", reviewItemDtoList);
-//        return "review/reviewList";
-//    }
-
-//    @PostMapping(value = "/reviewForm/{orderItemId}")
-//    public @ResponseBody ResponseEntity review(@RequestBody @Valid ReviewFormDto reviewFormDto, BindingResult bindingResult, @PathVariable("orderItemId") Long orderItemId){
-//
-//        if(bindingResult.hasErrors()){
-//            StringBuilder sb = new StringBuilder();
-//            List<FieldError> fieldErrors = bindingResult.getFieldErrors();3
-//
-//            for (FieldError fieldError : fieldErrors) {
-//                sb.append(fieldError.getDefaultMessage());
-//            }
-//
-//            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
-//        }
-//
-//        Long reviewItemId;
-//
-//        try {
-//            reviewItemId = reviewService.saveReview(reviewFormDto, orderItemId);
-//
-//        } catch(Exception e){
-//            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//
-//        return new ResponseEntity<Long>(reviewItemId, HttpStatus.OK);
-//    }
-
 
 }

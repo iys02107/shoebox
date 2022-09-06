@@ -35,7 +35,7 @@ public class ReviewItemDto {
         this.rate = rate;
         this.memberId = memberId;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.size = size;
+        this.size = size.substring(4);
     }
 
 }

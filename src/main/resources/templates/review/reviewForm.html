@@ -8,11 +8,6 @@
 
     <script th:inline="javascript">
         $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
-
              $('input[name="reviewStar"]').change(function() {
                 $('input[name="reviewStar"]').each(function() {
                     var value = $(this).val();
@@ -25,7 +20,18 @@
              });
         });
 
-
+        function check(form){
+            if(form.reviewStar.value == ''){
+                alert('별점을 선택해주세요.');
+                return false;
+            }
+            if(form.content.value == ''){
+                alert('리뷰내용을 입력해주세요.');
+                form.content.focus();
+                return false;
+            }
+            return true;
+        }
 
     </script>
 
@@ -34,6 +40,12 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        .content-mg{
+            margin-left:30%;
+            margin-right:30%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
         .input-group {
             margin-bottom : 15px
         }
@@ -44,38 +56,38 @@
             color: #bd2130;
         }
 
-        #myform fieldset{
+        fieldset{
             display: inline-block;
             direction: rtl;
             border: solid #ced4da 1px;
             border-radius: 0 0.25rem 0.25rem 0;
         }
-        #myform fieldset legend{
+        fieldset legend{
             text-align: right;
         }
-        #myform input[type=radio]{
+        input[type=radio]{
             display: none;
         }
-        #myform label{
+        label{
             font-size: 2em;
             color: transparent;
             text-shadow: 0 0 0 #f0f0f0;
         }
-        #myform label:hover{
+        label:hover{
             text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
         }
-        #myform label:hover ~ label{
+        label:hover ~ label{
             text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
         }
-        #myform input[type=radio]:checked ~ label{
+        input[type=radio]:checked ~ label{
             text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
         }
     </style>
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="content-mg">
 
-    <form action="/reviews/new" role="form" method="post" th:object="${reviewFormDto}" id="myform">
+    <form action="/reviews/new" role="form" method="post" th:object="${reviewFormDto}" onsubmit="return check(this)">
 
         <input type="hidden" th:value="${orderItemId}" id="orderItemId" name="orderItemId">
 
@@ -99,15 +111,13 @@
                     for="rate5">★</label>
             </fieldset>
             <input type="hidden" th:field="*{rate}">
-            <p th:if="${#fields.hasErrors('rate')}" th:errors="*{rate}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">리뷰 작성</span>
             </div>
-            <input type="text" th:field="*{content}" class="form-control" placeholder="리뷰 내용을 입력해주세요(5자 이상 200자 이하)">
-            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">Incorrect data</p>
+            <textarea th:field="*{content}" class="form-control" placeholder="리뷰 내용을 입력해주세요(5자 이상 200자 이하)" style="height: 150px"></textarea>
         </div>
         <div style="text-align: center">
             <button type="submit" class="btn btn-primary" id="submit">리뷰 저장</button>

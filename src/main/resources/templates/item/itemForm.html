@@ -39,6 +39,9 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        .content-mg{
+            margin : 1% 2%
+        }
         .input-group {
             margin-bottom : 15px
         }
@@ -51,7 +54,7 @@
     </style>
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="content-mg">
 
     <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
 

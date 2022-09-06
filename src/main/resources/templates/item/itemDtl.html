@@ -64,7 +64,7 @@
                 }
             });
 
-        var dt2 = $("#qnaTable").DataTable({
+            var dt2 = $("#qnaTable").DataTable({
                 "pageLength": 5,
                 "lengthChange": false,
                 "searching": false,
@@ -74,7 +74,7 @@
                     { orderable: false, targets: 1 },
                     { orderable: false, targets: 2 }
                   ],
-                "language" : lang_kor,
+                "language" : lang_kor_qna,
                 "responsive": {
                     details: {
                         type: 'column',
@@ -85,10 +85,9 @@
 
             var detailRows2 = [];
 
-         $('#qnaTable tbody').on('click', 'td.contentCol', function () {
+            $('#qnaTable tbody').on('click', 'td.contentCol', function () {
                 var tr = $(this).closest('tr');
                 var row = dt2.row(tr);
-
                 var idx = detailRows2.indexOf(tr.attr('id'));
 
                 if (row.child.isShown()) {
@@ -99,7 +98,7 @@
                     detailRows2.splice(idx, 1);
                 } else {
                     tr.addClass('details');
-                    row.child(format(row.data())).show();
+                    row.child(format2(row.data())).show();
 
                     // Add to the 'open' array
                     if (idx === -1) {
@@ -114,10 +113,39 @@
                 d[2]
             );
         }
+        function format2(d) {
+            return (
+                d[1]
+            );
+        }
 
         var lang_kor_review = {       
             "decimal" : "",
             "emptyTable" : "등록된 리뷰가 없습니다.",
+            "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
+            "infoEmpty" : "0명",
+            "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+            "infoPostFix" : "",
+            "thousands" : ",",
+            "lengthMenu" : "_MENU_ 개씩 보기",
+            "loadingRecords" : "로딩중...",
+            "processing" : "처리중...",
+            "search" : "검색 : ",
+            "zeroRecords" : "검색된 데이터가 없습니다.",
+            "paginate" : {
+                "first" : "첫 페이지",
+                "last" : "마지막 페이지",
+                "next" : "다음",
+                "previous" : "이전"
+            },
+            "aria" : {
+                "sortAscending" : " :  오름차순 정렬",
+                "sortDescending" : " :  내림차순 정렬"
+            }
+        };
+        var lang_kor_qna = {       
+            "decimal" : "",
+            "emptyTable" : "등록된 문의가 없습니다.",
             "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
             "infoEmpty" : "0명",
             "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
@@ -595,13 +623,15 @@
                 <table id="reviewTable" class="table text-center align-middle">
                     <colgroup>
                         <col width="20%"/>
-                        <col width="40%"/>
-                        <col width="20%"/>
-                        <col width="20%"/>
+                        <col width="15%"/>
+                        <col width="35%"/>
+                        <col width="15%"/>
+                        <col width="15%"/>
                     </colgroup>
                     <thead>
                         <tr>
                             <th>별점</th>
+                            <th>사이즈</th>
                             <th>리뷰</th>
                             <th>작성자</th>
                             <th>작성일</th>
@@ -617,7 +647,8 @@
                                 <span th:case="5">★★★★★</span>
                             </td:block>
                             </td>
-                            <td id="reviewContent" th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
+                            <td th:text="${reviewItem.size}"></td>
+                            <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
                             <td th:text="${reviewItem.email}"></td>
                             <td th:text="${reviewItem.regTime}"></td>
                         </tr>
@@ -658,10 +689,6 @@
                             <span th:text="${question.title}" class="align-self-center mr-2"></span>
                             <input type="hidden" th:value="${question.content}" id="questionContent">
                         </td>
-<!--                        <td class="text-center align-middle">-->
-<!--                            <span hidden th:text="${question.content}" class="align-self-center mr-2">-->
-<!--                            </span>-->
-<!--                        </td>-->
                         <td>
                             <span th:text="${question.email}" class="align-self-center mr-2"></span>
                         </td>

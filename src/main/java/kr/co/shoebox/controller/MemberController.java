@@ -123,7 +123,7 @@ public class MemberController {
         } else {
             memberRepository.delete(member);
             SecurityContextHolder.clearContext();
-            return "member/alert";
+            return "member/deleteAlert";
         }
     }
 
@@ -137,15 +137,13 @@ public class MemberController {
 
 
     @PostMapping("/memberUpdate")
-    public ResponseEntity<String> memberUpdate(@Valid MemberUpdateDto memberUpdateDto, Principal principal) {
+    public String memberUpdate(MemberUpdateDto memberUpdateDto, Principal principal) {
         Member member = memberRepository.findByEmail(principal.getName());
         member.setPostcode(memberUpdateDto.getPostcode());
         member.setRoadAddress(memberUpdateDto.getRoadAddress());
         member.setDetailAddress(memberUpdateDto.getDetailAddress());
         member.setPhoneNumber(memberUpdateDto.getPhoneNumber());
         memberRepository.save(member);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return "member/updateAlert";
     }
-
-
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layouts/layout2}">
 
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -28,7 +28,7 @@
                 "responsive": {
                     details: {
                         type: 'column',
-                        target: 1
+                        target: 2
                     }
                 }
             });
@@ -87,7 +87,7 @@
                 "sortAscending" : " :  오름차순 정렬",
                 "sortDescending" : " :  내림차순 정렬"
             }
-        };
+        }
 
         function deleteReview(reviewItemId){
             var token = $("meta[name='_csrf']").attr("content");

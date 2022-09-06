@@ -7,6 +7,12 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        .content-mg{
+            margin-left:25%;
+            margin-right:25%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
         .fieldError {
             color: #bd2130;
         }
@@ -66,9 +72,12 @@
 
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="content-mg">
 
     <form action="/members/new" role="form" method="post"  th:object="${memberFormDto}">
+        <p class="h2">
+            회원가입
+        </p>
         <div class="form-group">
             <label th:for="name">이름</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
