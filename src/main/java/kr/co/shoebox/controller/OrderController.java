@@ -29,7 +29,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final ReviewService reviewService;
     private final MemberRepository memberRepository;
 
     @PostMapping(value = "/order")
@@ -66,7 +65,6 @@ public class OrderController {
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         Member currentMember = memberRepository.findByEmail(principal.getName());
-        Boolean reviewStatus = orderService.reviewStatus(principal.getName(), pageable);
 
         model.addAttribute("name", currentMember.getName());
         model.addAttribute("orders", ordersHistDtoList);

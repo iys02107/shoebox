@@ -30,6 +30,11 @@
                 form.content.focus();
                 return false;
             }
+            if(form.content.value.length<5||form.content.value.length>200){
+                alert('리뷰는 5자 이상 200자 이하로 입력해주세요.');
+                form.content.focus();
+                return false;
+            }
             return true;
         }
 

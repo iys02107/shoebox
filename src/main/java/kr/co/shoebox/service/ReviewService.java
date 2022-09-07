@@ -19,24 +19,8 @@ import java.util.List;
 public class ReviewService {
 
     private final MemberRepository memberRepository;
-
-    private final OrderItemRepository orderItemRepository;
-
     private final ReviewItemRepository reviewItemRepository;
 
-//    public ReviewItem saveReview(ReviewFormDto reviewFormDto, Long orderItemId, String email){
-//
-//        ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItemId);
-//        Member member = memberRepository.findByEmail(email);
-//
-//        if(reviewItem == null){
-//            reviewItem = ReviewItem.createReviewItem(reviewFormDto, member, orderItemId);
-//            reviewItemRepository.save(reviewItem);
-//            return reviewItem;
-//        }else {
-//            throw new IllegalStateException("이미 리뷰 등록하였습니다.");
-//        }
-//    }
 
     public ReviewItem saveReview(ReviewItem reviewItem, Long orderItemId){
         validateDuplicateReview(reviewItem, orderItemId);

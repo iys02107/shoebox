@@ -1,5 +1,6 @@
 package kr.co.shoebox.dto;
 
+import kr.co.shoebox.constant.OrderStatus;
 import kr.co.shoebox.entity.OrderItem;
 import kr.co.shoebox.entity.ReviewItem;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class OrderItemDto {
         this.imgUrl = imgUrl;
         this.orderItemId = orderItem.getId();
         this.reviewStatus = orderItem.getReviewStatus();
+        this.orderStatus = orderItem.getOrderStatus();
     }
 
     private Long itemId;
@@ -33,5 +35,6 @@ public class OrderItemDto {
     private Long orderItemId;
 
     private Boolean reviewStatus;
+    private Boolean orderStatus;
 
 }

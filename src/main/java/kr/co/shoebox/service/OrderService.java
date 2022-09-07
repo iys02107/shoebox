@@ -1,5 +1,6 @@
 package kr.co.shoebox.service;
 
+import kr.co.shoebox.constant.OrderStatus;
 import kr.co.shoebox.dto.OrderDto;
 import kr.co.shoebox.dto.OrderHistDto;
 import kr.co.shoebox.dto.OrderItemDto;
@@ -63,6 +64,11 @@ public class OrderService {
                 ItemImg itemImg = itemImgRepository.findByItemIdAndRepImgYn
                         (orderItem.getItem().getId(), "Y");
                 ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItem.getId());
+                if(order.getOrderStatus() == OrderStatus.valueOf("ORDER")) {
+                    orderItem.setOrderStatus(true);
+                } else {
+                    orderItem.setOrderStatus(false);
+                }
                 if(reviewItem==null){
                     orderItem.setReviewStatus(false);
                 }else {
@@ -77,25 +83,6 @@ public class OrderService {
         }
 
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
-    }
-    public Boolean reviewStatus(String email, Pageable pageable) {
-
-        List<Order> orders = orderRepository.findOrders(email, pageable);
-        Boolean reviewStatus = false;
-
-        for (Order order : orders) {
-            OrderHistDto orderHistDto = new OrderHistDto(order);
-            List<OrderItem> orderItems = order.getOrderItems();
-            for (OrderItem orderItem : orderItems) {
-                ReviewItem reviewItem = reviewItemRepository.findReviewItem(orderItem.getId());
-                if(reviewItem == null){
-                    reviewStatus = false;
-                }else {
-                    reviewStatus = true;
-                }
-            }
-        }
-        return reviewStatus;
     }
 
     @Transactional(readOnly = true)
@@ -123,7 +110,7 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         int c= 0;
         for(int i=0; i<order.getOrderItems().size(); i++){
-            if(order.getOrderItems().get(i).getReviewStatus()){
+            if(order.getOrderItems().get(i).getReviewStatus()!=null){
                 c++;
             }
         }

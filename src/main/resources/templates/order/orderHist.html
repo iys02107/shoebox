@@ -12,22 +12,11 @@
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
-    $(document).ready(function(){
+        $(document).ready(function(){
             var errorMessage = [[${errorMessage}]];
             if(errorMessage != null){
                 alert(errorMessage);
             }
-
-             $('input[name="reviewStar"]').change(function() {
-                $('input[name="reviewStar"]').each(function() {
-                    var value = $(this).val();
-                    var checked = $(this).prop('checked');
-                    if(checked){
-                        console.log(value);
-                        $('#rate').val(value);
-                    }
-                });
-             });
         });
 
         function cancelOrder(orderId) {
@@ -66,7 +55,6 @@
                 }
             });
         }
-
     </script>
 
 </th:block>
@@ -139,7 +127,8 @@
                         <span id="count" th:text="${orderItem.count} +'개'"></span>
                         <span id="totalPrice" th:text="|*{#numbers.formatInteger(orderItem.count*orderItem.orderPrice,3,'COMMA')} 원|"></span>
                         <span th:if="${orderItem.reviewStatus}==false">
-                            <a class="btn btn-primary" th:href="@{'/reviews/new/' + ${orderItem.orderItemId}}">리뷰 등록</a>
+                            <a th:if="${orderItem.orderStatus}==true" class="btn btn-primary" th:href="@{'/reviews/new/' + ${orderItem.orderItemId}}">리뷰 등록</a>
+                            <a th:unless="${orderItem.orderStatus}==false"></a>
                         </span>
                         <span th:unless="${orderItem.reviewStatus}==false">
                             <button type="button" class="btn btn-dark" style="cursor: none">리뷰 완료</button>
