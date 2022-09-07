@@ -1,6 +1,7 @@
 package kr.co.shoebox.controller;
 
 
+import kr.co.shoebox.dto.AnswerDto;
 import kr.co.shoebox.dto.QuestionFormDto;
 import kr.co.shoebox.dto.QuestionMngDto;
 import kr.co.shoebox.entity.Member;
@@ -63,6 +64,12 @@ public class QuestionController {
         model.addAttribute("questions", questionMngDtoList);
 
         return "question/questionMng";
+    }
+
+    @PostMapping(value = "/admin/questions")
+    public @ResponseBody String addAnswer(@RequestBody AnswerDto answerDto, Principal principal){
+
+        return "answer/answerAlert";
     }
 
 }

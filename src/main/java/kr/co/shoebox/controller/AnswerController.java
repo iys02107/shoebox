@@ -28,9 +28,8 @@ public class AnswerController {
     private final QuestionRepository questionRepository;
 
     @GetMapping(value = "/new/{itemId}")
-    public String questionForm(Model model,  @PathVariable("itemId") Long itemId){
+    public String questionForm(Model model,  @RequestParam("questionId") Long questionId){
         model.addAttribute("questionFormDto", new QuestionFormDto());
-        model.addAttribute("itemId", itemId);
         return "question/questionForm";
     }
 

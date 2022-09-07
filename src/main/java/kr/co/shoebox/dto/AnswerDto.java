@@ -8,35 +8,23 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
-public class QuestionMngDto {
+public class AnswerDto {
 
     private Long id;
 
-    private Long itemId;
-
-    private String itemNm;
-
-    private String title;
-
     private String content;
-
-    private String email;
 
     private String regTime;
 
-    private Long answerId;
+    private Long questionId;
 
 
 @QueryProjection
-    public QuestionMngDto(Long id, Long itemId, String itemNm, String title, String content, String email, LocalDateTime regTime, Long answerId){
+    public AnswerDto(Long id, String content, LocalDateTime regTime, Long questionId){
         this.id = id;
-        this.itemId = itemId;
-        this.itemNm = itemNm;
-        this.title = title;
         this.content = content;
-        this.email = email;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        this.answerId = answerId;
+        this.questionId = questionId;
     }
 
 }

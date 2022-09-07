@@ -27,7 +27,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     int findQuestionCount(Long itemId);
 
 
-    @Query("select new kr.co.shoebox.dto.QuestionMngDto(q.id, i.itemNm, q.title, q.content, m.email, q.regTime, (select a.id from Answer a where a.questionId = q.id)) " +
+    @Query("select new kr.co.shoebox.dto.QuestionMngDto(q.id, i.id, i.itemNm, q.title, q.content, m.email, q.regTime, (select a.id from Answer a where a.questionId = q.id)) " +
             "from Question q, Item i " +
             "join q.member m " +
             "where q.itemId = i.id " +

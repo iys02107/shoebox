@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+
+
+    <script th:inline="javascript">
+
+    $(document).ready(function(){
+
+
+
+            var dt = $("#qnaTable").DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "searching": false,
+                "info": false,
+                "order": [ [3, "desc"] ],
+                "columnDefs": [
+                    { visible: false, targets: 2 },
+                    { visible: false, targets: 5 },
+                    { visible: false, targets: 6 }
+                  ],
+                "language" : lang_kor,
+                "responsive" : true
+            });
+
+            var detailRows = [];
+
+            $('#qnaTable tbody').on('click', 'td.contentCol', function () {
+                var tr = $(this).closest('tr');
+                var row = dt.row(tr);
+                var idx = detailRows.indexOf(tr.attr('id'));
+
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(row.data())).show();
+
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+        });
+
+<!--'<h4 style="float:left; margin-left:100px;" >Q</h4>' +-->
+<!--                '<span style="float:left; margin-left:50px;  line-height:50px;">' +-->
+<!--                    d[2] +-->
+<!--                '</span>' +-->
+<!--                '<span style="float:right; margin-right:100px;">' +-->
+<!--                    d[5] +-->
+<!--                '</span>'-->
+
+        function format(d) {
+             return (
+             '<td width="25%">Q</td><td width="55%">'+d[2]+'</td><td width="20%">'+d[5]+'</td>'
+             );
+        }
+        var lang_kor = {       
+            "decimal" : "",
+            "emptyTable" : "데이터가 없습니다.",
+            "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
+            "infoEmpty" : "0명",
+            "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+            "infoPostFix" : "",
+            "thousands" : ",",
+            "lengthMenu" : "_MENU_ 개씩 보기",
+            "loadingRecords" : "로딩중...",
+            "processing" : "처리중...",
+            "search" : "검색 : ",
+            "zeroRecords" : "검색된 데이터가 없습니다.",
+            "paginate" : {
+                "first" : "첫 페이지",
+                "last" : "마지막 페이지",
+                "next" : "다음",
+                "previous" : "이전"
+            },
+            "aria" : {
+                "sortAscending" : " :  오름차순 정렬",
+                "sortDescending" : " :  내림차순 정렬"
+            }
+        };
+
+
+        function show() {
+                $("#ex1").modal({
+                  fadeDuration: 1000,
+                });
+              }
+
+
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .content-mg{
+            margin-left:10%;
+            margin-right:10%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
+        }
+        .repImg{
+            height:100px;
+            width:100px;
+        }
+        .fs18{
+            font-size:18px
+        }
+        .fs24{
+            font-size:24px
+        }
+        .contentCol {
+             text-overflow: ellipsis;
+             white-space: nowrap;
+             max-width: 20px;
+             overflow: hidden;
+        }
+        .table td{
+            border-top: 0px;
+        }
+
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="content-mg">
+
+    <h2 class="mb-4">
+        리뷰 관리
+    </h2>
+
+    <div>
+        <table id="qnaTable" class="table text-center align-middle">
+            <colgroup>
+                <col width="25%"/>
+                <col width="30%"/>
+                <col width="0%"/>
+                <col width="25%"/>
+                <col width="20%"/>
+                <col width="0%"/>
+                <col width="0%"/>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>상품이름</th>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>작성자</th>
+                    <th>작성일</th>
+                    <th>답변여부</th>
+                    <th>모달</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="question : ${questions}">
+                    <td class="d-relative">
+                        <div class="align-self-center">
+                            <a th:href="'/item/'+ ${question.itemId}"><span th:text="${question.itemNm}"></span></a>
+                        </div>
+                    </td>
+                    <td th:text ="${question.title}" class="contentCol" style="cursor: pointer; "></td>
+                    <td  th:text="${question.content}"></td>
+                    <td th:text="${question.email}"></td>
+                    <td th:text="${question.regTime}"></td>
+                    <td>
+                        <input type="hidden" id="questionId" th:value="${question.id}">
+                        <input type="hidden" id="answerStatus" name="answerStatus" th:value="${question.answerId}">
+                        <a href="javascript:show()"><button th:if="${#strings.isEmpty(answerStatus)}" class="btn btn-primary" id="answerCol" th:value="${question.id}"  rel="modal:open">답변하기</button></a>
+                        <button th:unless="${#strings.isEmpty(answerStatus)}" class="btn btn-dark" th:value="${question.id}" disabled style="cursor:none">답변완료</button>
+                    </td>
+                    <td>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="modal" id="ex1">
+            <input type="text"  id="answer"><br>
+            <button id="saveAnswer" onclick="saveAnswer()">저장</button>
+        </div>
+    </div>
+</div>
+
+</html>
