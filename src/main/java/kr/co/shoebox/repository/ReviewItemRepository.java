@@ -22,10 +22,10 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
     ReviewItem findReviewItem(Long orderItemId);
 
     @Query("select ri " +
-            "from ReviewItem ri, OrderItem oi " +
-            "where ri.orderItemId = oi.id " +
-            "and ri.member.id = :memberId")
-    ReviewItem findReviewItemByMemberId(Long memberId);
+            "from ReviewItem ri " +
+            "where ri.id = :reviewItemId")
+    ReviewItem findReviewItemById(Long reviewItemId);
+
 
     @Query("select new kr.co.shoebox.dto.ReviewDetailDto(ri.id, ri.content, ri.rate, i.id, im.imgUrl, i.itemNm, ri.regTime, oi.size) " +
             "from ReviewItem ri, ItemImg im, OrderItem oi " +

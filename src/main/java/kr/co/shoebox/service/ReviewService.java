@@ -20,10 +20,14 @@ public class ReviewService {
 
     private final MemberRepository memberRepository;
     private final ReviewItemRepository reviewItemRepository;
+    private final OrderItemRepository orderItemRepository;
+
 
 
     public ReviewItem saveReview(ReviewItem reviewItem, Long orderItemId){
         validateDuplicateReview(reviewItem, orderItemId);
+        OrderItem orderItem = orderItemRepository.findByOrderItemId(orderItemId);
+        orderItem.setReviewStatus(true);
         return reviewItemRepository.save(reviewItem);
     }
 
@@ -35,6 +39,9 @@ public class ReviewService {
     }
 
     public void deleteReview(Long reviewItemId){
+        ReviewItem reviewItem = reviewItemRepository.findReviewItemById(reviewItemId);
+        OrderItem orderItem = orderItemRepository.findByOrderItemId(reviewItem.getOrderItemId());
+        orderItem.setReviewStatus(false);
         reviewItemRepository.deleteById(reviewItemId);
     }
 

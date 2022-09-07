@@ -69,11 +69,11 @@ public class OrderService {
                 } else {
                     orderItem.setOrderStatus(false);
                 }
-                if(reviewItem==null){
-                    orderItem.setReviewStatus(false);
-                }else {
-                    orderItem.setReviewStatus(true);
-                }
+//                if(reviewItem==null){
+//                    orderItem.setReviewStatus(false);
+//                }else {
+//                    orderItem.setReviewStatus(true);
+//                }
                     OrderItemDto orderItemDto =
                             new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);
@@ -110,7 +110,7 @@ public class OrderService {
                 .orElseThrow(EntityNotFoundException::new);
         int c= 0;
         for(int i=0; i<order.getOrderItems().size(); i++){
-            if(order.getOrderItems().get(i).getReviewStatus()!=null){
+            if(order.getOrderItems().get(i).getReviewStatus()){
                 c++;
             }
         }
