@@ -1,13 +1,8 @@
 package kr.co.shoebox.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import kr.co.shoebox.entity.Member;
-import kr.co.shoebox.entity.ReviewItem;
-import kr.co.shoebox.repository.MemberRepository;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 

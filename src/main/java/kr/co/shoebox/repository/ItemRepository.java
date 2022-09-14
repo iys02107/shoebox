@@ -13,7 +13,6 @@ public interface ItemRepository extends JpaRepository<Item, Long>,
         QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
 
 
-    Optional<Item> findById(Long itemId);
     List<Item> findByItemNm(String itemNm);
 
 

@@ -70,6 +70,7 @@
                 <option value="SOLD_OUT">품절</option>
             </select>
         </div>
+        <p th:if="${#fields.hasErrors('itemSellStatus')}" th:errors="*{itemSellStatus}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">

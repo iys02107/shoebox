@@ -6,7 +6,6 @@ import kr.co.shoebox.dto.ReviewDetailDto;
 import kr.co.shoebox.dto.ReviewItemDto;
 import kr.co.shoebox.entity.ReviewItem;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 

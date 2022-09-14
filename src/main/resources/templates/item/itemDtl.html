@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout1}">
 
@@ -64,7 +65,7 @@
                 }
             });
 
-        var dt2 = $("#qnaTable").DataTable({
+            var dt2 = $("#qnaTable").DataTable({
                 "pageLength": 5,
                 "lengthChange": false,
                 "searching": false,
@@ -72,23 +73,23 @@
                 "order": [ [3, "desc"] ],
                 "columnDefs": [
                     { orderable: false, targets: 1 },
-                    { orderable: false, targets: 2 }
+                    { orderable: false, targets: 2 },
+                    { visible: false, targets: 4 }
                   ],
-                "language" : lang_kor,
+                "language" : lang_kor_qna,
                 "responsive": {
                     details: {
                         type: 'column',
-                        target: 1
+                        target: 4
                     }
                 }
             });
 
             var detailRows2 = [];
 
-         $('#qnaTable tbody').on('click', 'td.contentCol', function () {
+            $('#qnaTable tbody').on('click', 'td.contentCol', function () {
                 var tr = $(this).closest('tr');
                 var row = dt2.row(tr);
-
                 var idx = detailRows2.indexOf(tr.attr('id'));
 
                 if (row.child.isShown()) {
@@ -99,7 +100,7 @@
                     detailRows2.splice(idx, 1);
                 } else {
                     tr.addClass('details');
-                    row.child(format(row.data())).show();
+                    row.child(format2(row.data())).show();
 
                     // Add to the 'open' array
                     if (idx === -1) {
@@ -114,10 +115,39 @@
                 d[2]
             );
         }
+        function format2(d) {
+            return (
+                d[4]
+            );
+        }
 
         var lang_kor_review = {       
             "decimal" : "",
             "emptyTable" : "등록된 리뷰가 없습니다.",
+            "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
+            "infoEmpty" : "0명",
+            "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+            "infoPostFix" : "",
+            "thousands" : ",",
+            "lengthMenu" : "_MENU_ 개씩 보기",
+            "loadingRecords" : "로딩중...",
+            "processing" : "처리중...",
+            "search" : "검색 : ",
+            "zeroRecords" : "검색된 데이터가 없습니다.",
+            "paginate" : {
+                "first" : "첫 페이지",
+                "last" : "마지막 페이지",
+                "next" : "다음",
+                "previous" : "이전"
+            },
+            "aria" : {
+                "sortAscending" : " :  오름차순 정렬",
+                "sortDescending" : " :  내림차순 정렬"
+            }
+        };
+        var lang_kor_qna = {       
+            "decimal" : "",
+            "emptyTable" : "등록된 문의가 없습니다.",
             "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
             "infoEmpty" : "0명",
             "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
@@ -550,7 +580,7 @@
         </div>
     </div>
     <hr class="my-2">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="navbar">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark" id="navbar" style="z-index:999;">
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav mt-2 mt-lg-0">
                 <li class="nav-item">
@@ -595,41 +625,48 @@
                 <table id="reviewTable" class="table text-center align-middle">
                     <colgroup>
                         <col width="20%"/>
-                        <col width="40%"/>
-                        <col width="20%"/>
-                        <col width="20%"/>
+                        <col width="15%"/>
+                        <col width="35%"/>
+                        <col width="15%"/>
+                        <col width="15%"/>
                     </colgroup>
                     <thead>
-                        <tr>
-                            <th>별점</th>
-                            <th>리뷰</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                        </tr>
+                    <tr>
+                        <th>별점</th>
+                        <th>사이즈</th>
+                        <th>리뷰</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="reviewItem : ${reviewItems}">
-                            <td th:block th:switch="${reviewItem.rate}">
-                                <span th:case="1">★☆☆☆☆</span>
-                                <span th:case="2">★★☆☆☆</span>
-                                <span th:case="3">★★★☆☆</span>
-                                <span th:case="4">★★★★☆</span>
-                                <span th:case="5">★★★★★</span>
+                    <tr th:each="reviewItem : ${reviewItems}">
+                        <td th:block th:switch="${reviewItem.rate}">
+                            <span th:case="1">★☆☆☆☆</span>
+                            <span th:case="2">★★☆☆☆</span>
+                            <span th:case="3">★★★☆☆</span>
+                            <span th:case="4">★★★★☆</span>
+                            <span th:case="5">★★★★★</span>
                             </td:block>
-                            </td>
-                            <td id="reviewContent" th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
-                            <td th:text="${reviewItem.email}"></td>
-                            <td th:text="${reviewItem.regTime}"></td>
-                        </tr>
+                        </td>
+                        <td th:text="${reviewItem.size}"></td>
+                        <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
+                        <td th:text="${reviewItem.email}"></td>
+                        <td th:text="${reviewItem.regTime}"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="container">
             <hr class="my-2">
-            <h4 class="display-5 mgt-30" id="qna">상품문의(<span th:text="${questionCount}" ></span>)</h4>
+            <h4 class="display-5 mgt-30" id="qna">상품문의(<span th:text="${qnaCount}" ></span>)</h4>
             <div>
-                <a class="btn btn-primary" th:href="@{'/questions/new/' + ${item.id}}">문의하기</a>
+                <a class="btn btn-primary" th:href="@{'/qna/question/new/' + ${item.id}}" sec:authorize="isAuthenticated()">문의하기</a>
+                <span sec:authorize="isAnonymous()">
+                    <a class="btn btn-primary" th:href="@{'/members/login'}">로그인</a>
+                    문의 작성은 로그인 후 가능합니다.
+                </span>
                 <table id="qnaTable" class="table text-center align-middle">
                     <colgroup>
                         <col width="20%"/>
@@ -647,28 +684,28 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="question : ${questions}">
+                    <tr th:each="qna : ${qnaList}">
                         <td>
-                            <input type="hidden" id="answerStatus" name="answerStatus" th:value="${question.answerId}">
+                            <input type="hidden" id="answerStatus" name="answerStatus" th:value="${qna.answer}">
                             <span th:if="${#strings.isEmpty(answerStatus)}">답변대기</span>
                             <span th:unless="${#strings.isEmpty(answerStatus)}">답변완료</span>
                         </td>
 
                         <td class="contentCol" style="cursor: pointer">
-                            <span th:text="${question.title}" class="align-self-center mr-2"></span>
-                            <input type="hidden" th:value="${question.content}" id="questionContent">
-                        </td>
-<!--                        <td class="text-center align-middle">-->
-<!--                            <span hidden th:text="${question.content}" class="align-self-center mr-2">-->
-<!--                            </span>-->
-<!--                        </td>-->
-                        <td>
-                            <span th:text="${question.email}" class="align-self-center mr-2"></span>
+                            <span th:if="${qna.qnASecret == T(kr.co.shoebox.constant.QnASecret).PUBLIC}"></span>
+                            <span th:unless="${qna.qnASecret == T(kr.co.shoebox.constant.QnASecret).PUBLIC}" class="bi bi-lock" style="font-size: 16px"></span>
+                            <span th:text="${qna.title}" class="align-self-center mr-2"></span>
                         </td>
                         <td>
-                            <span th:text="${question.regTime}" class="align-self-center mr-2"></span>
+                            <span th:text="${qna.createdBy}" class="align-self-center mr-2"></span>
                         </td>
-
+                        <td>
+                            <span th:text="${qna.regTime}" class="align-self-center mr-2"></span>
+                        </td>
+                        <td>
+                            <span>Q:</span>
+                            <span th:text="${qna.question}"></span>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

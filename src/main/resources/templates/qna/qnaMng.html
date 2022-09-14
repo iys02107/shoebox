@@ -5,8 +5,8 @@
       layout:decorate="~{layouts/layout1}">
 
 <head>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 </head>
 
@@ -15,11 +15,9 @@
 
 
 
-    <script th:inline="javascript">
+  <script th:inline="javascript">
 
     $(document).ready(function(){
-
-
 
             var dt = $("#qnaTable").DataTable({
                 "pageLength": 5,
@@ -28,12 +26,15 @@
                 "info": false,
                 "order": [ [3, "desc"] ],
                 "columnDefs": [
-                    { visible: false, targets: 2 },
-                    { visible: false, targets: 5 },
-                    { visible: false, targets: 6 }
+                    { visible: false, targets: 5 }
                   ],
                 "language" : lang_kor,
-                "responsive" : true
+                "responsive": {
+                    details: {
+                        type: 'column',
+                        target: 5
+                    }
+                }
             });
 
             var detailRows = [];
@@ -63,17 +64,9 @@
             });
         });
 
-<!--'<h4 style="float:left; margin-left:100px;" >Q</h4>' +-->
-<!--                '<span style="float:left; margin-left:50px;  line-height:50px;">' +-->
-<!--                    d[2] +-->
-<!--                '</span>' +-->
-<!--                '<span style="float:right; margin-right:100px;">' +-->
-<!--                    d[5] +-->
-<!--                '</span>'-->
-
         function format(d) {
              return (
-             '<td width="25%">Q</td><td width="55%">'+d[2]+'</td><td width="20%">'+d[5]+'</td>'
+              d[5]
              );
         }
         var lang_kor = {       
@@ -101,21 +94,13 @@
             }
         };
 
-
-        function show() {
-                $("#ex1").modal({
-                  fadeDuration: 1000,
-                });
-              }
-
-
     </script>
 
 </th:block>
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-    <style>
+  <style>
         .content-mg{
             margin-left:10%;
             margin-right:10%;
@@ -152,61 +137,54 @@
 
 <div layout:fragment="content" class="content-mg">
 
-    <h2 class="mb-4">
-        리뷰 관리
-    </h2>
+  <h2 class="mb-4">
+    문의 관리
+  </h2>
 
-    <div>
-        <table id="qnaTable" class="table text-center align-middle">
-            <colgroup>
-                <col width="25%"/>
-                <col width="30%"/>
-                <col width="0%"/>
-                <col width="25%"/>
-                <col width="20%"/>
-                <col width="0%"/>
-                <col width="0%"/>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>상품이름</th>
-                    <th>제목</th>
-                    <th>내용</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
-                    <th>답변여부</th>
-                    <th>모달</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="question : ${questions}">
-                    <td class="d-relative">
-                        <div class="align-self-center">
-                            <a th:href="'/item/'+ ${question.itemId}"><span th:text="${question.itemNm}"></span></a>
-                        </div>
-                    </td>
-                    <td th:text ="${question.title}" class="contentCol" style="cursor: pointer; "></td>
-                    <td  th:text="${question.content}"></td>
-                    <td th:text="${question.email}"></td>
-                    <td th:text="${question.regTime}"></td>
-                    <td>
-                        <input type="hidden" id="questionId" th:value="${question.id}">
-                        <input type="hidden" id="answerStatus" name="answerStatus" th:value="${question.answerId}">
-                        <a href="javascript:show()"><button th:if="${#strings.isEmpty(answerStatus)}" class="btn btn-primary" id="answerCol" th:value="${question.id}"  rel="modal:open">답변하기</button></a>
-                        <button th:unless="${#strings.isEmpty(answerStatus)}" class="btn btn-dark" th:value="${question.id}" disabled style="cursor:none">답변완료</button>
-                    </td>
-                    <td>
-
-                    </td>
-
-                </tr>
-            </tbody>
-        </table>
-        <div class="modal" id="ex1">
-            <input type="text"  id="answer"><br>
-            <button id="saveAnswer" onclick="saveAnswer()">저장</button>
-        </div>
-    </div>
+  <div>
+    <table id="qnaTable" class="table text-center align-middle">
+      <colgroup>
+        <col width="20%"/>
+        <col width="20%"/>
+        <col width="20%"/>
+        <col width="20%"/>
+        <col width="20%"/>
+      </colgroup>
+      <thead>
+      <tr>
+        <th>상품명</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>답변여부</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="qna : ${qnAList}">
+        <td class="d-relative">
+          <div class="align-self-center">
+            <a th:href="'/item/'+ ${qna.item.id}">
+              <span th:text="${qna.item.itemNm}"></span>
+            </a>
+          </div>
+        </td>
+        <td th:text="${qna.title}" class="contentCol" style="cursor: pointer "></td>
+        <td th:text="${qna.createdBy}"></td>
+        <td th:text="${#temporals.format(qna.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td>
+          <input type="hidden" id="answerStatus" name="answerStatus" th:value="${qna.answer}">
+          <a th:if="${#strings.isEmpty(answerStatus)}" class="btn btn-primary" id="answerCol" th:href="@{'/qna/answer/new/' + ${qna.id}}">답변하기</a>
+          <a th:unless="${#strings.isEmpty(answerStatus)}" class="btn btn-dark" disabled style="cursor:none">답변완료</a>
+        </td>
+        <td>
+          <span>Q:</span>
+          <span th:text="${qna.question}"></span>
+          <span th:text="${qna.answer}"></span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 </html>

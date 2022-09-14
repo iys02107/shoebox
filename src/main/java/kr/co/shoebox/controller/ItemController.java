@@ -3,14 +3,12 @@ package kr.co.shoebox.controller;
 import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.Member;
-import kr.co.shoebox.entity.WishItem;
 import kr.co.shoebox.repository.MemberRepository;
-import kr.co.shoebox.repository.ReviewItemRepository;
+import kr.co.shoebox.repository.QnARepository;
 import kr.co.shoebox.repository.WishItemRepository;
 import kr.co.shoebox.service.ItemService;
-import kr.co.shoebox.service.QuestionService;
+import kr.co.shoebox.service.QnAService;
 import kr.co.shoebox.service.ReviewService;
-import kr.co.shoebox.service.WishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -41,7 +38,9 @@ public class ItemController {
 
     private final ReviewService reviewService;
 
-    private final QuestionService questionService;
+    private final QnAService qnAService;
+
+    private final QnARepository qnARepository;
 
     @GetMapping(value = "/admin/item/new")
     public String itemForm(Model model){
@@ -127,14 +126,14 @@ public class ItemController {
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
         List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
-        int questionCount = questionService.getQuestionCount(itemId);
-        List<QuestionDetailDto> questionDetailDtoList = questionService.getQuestionItemList(itemId);
+        int qnaCount = qnAService.getQnACount(itemId);
+        List<QnADto> qnaList = qnARepository.findQnAByItemId(itemId);
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);
         model.addAttribute("reviewItems", reviewItemDtoList);
-        model.addAttribute("questionCount", questionCount);
-        model.addAttribute("questions", questionDetailDtoList);
+        model.addAttribute("qnaCount", qnaCount);
+        model.addAttribute("qnaList", qnaList);
 
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());

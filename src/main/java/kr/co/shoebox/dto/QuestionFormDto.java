@@ -1,9 +1,9 @@
 package kr.co.shoebox.dto;
 
+import kr.co.shoebox.constant.QnASecret;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotBlank;
 
 
@@ -14,22 +14,11 @@ public class QuestionFormDto {
     private String title;
 
     @NotBlank(message = "문의 내용은 필수 입력 값입니다.")
-    @Length(min= 5, message = "문의 내용은 5자 이상 작성하세요.")
-    private String content;
+    @Length(min= 5, max = 200, message = "문의 내용은 5자 이상 200자 이하로 작성하세요.")
+    private String question;
+
+    private QnASecret qnASecret;
 
     private Long itemId;
-
-
-
-
-//    @QueryProjection
-//    public ReviewFormDto(Long reviewId, String title, String content, String reviewImgUrl, int rate, Item item){
-//        this.reviewId = reviewId;
-//        this.title = title;
-//        this.content = content;
-//        this.reviewImgUrl = reviewImgUrl;
-//        this.rate = rate;
-//        this.item = item;
-//    }
 
 }
