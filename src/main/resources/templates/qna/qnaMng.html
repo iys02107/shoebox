@@ -26,13 +26,13 @@
                 "info": false,
                 "order": [ [3, "desc"] ],
                 "columnDefs": [
-                    { visible: false, targets: 5 }
+                    { visible: false, targets: 6 }
                   ],
                 "language" : lang_kor,
                 "responsive": {
                     details: {
                         type: 'column',
-                        target: 5
+                        target: 6
                     }
                 }
             });
@@ -66,12 +66,12 @@
 
         function format(d) {
              return (
-              d[5]
+              d[6]
              );
         }
         var lang_kor = {       
             "decimal" : "",
-            "emptyTable" : "데이터가 없습니다.",
+            "emptyTable" : "등록된 문의가 없습니다.",
             "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
             "infoEmpty" : "0명",
             "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
@@ -93,6 +93,43 @@
                 "sortDescending" : " :  내림차순 정렬"
             }
         };
+
+        function deleteQnA(qnAId){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/qna/delete/" + qnAId;
+            var paramData = {
+               qnAId : qnAId
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("문의가 삭제되었습니다.");
+                    location.href='/qna/qnaMng';
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
 
     </script>
 
@@ -144,11 +181,12 @@
   <div>
     <table id="qnaTable" class="table text-center align-middle">
       <colgroup>
+        <col width="15%"/>
         <col width="20%"/>
         <col width="20%"/>
         <col width="20%"/>
-        <col width="20%"/>
-        <col width="20%"/>
+        <col width="10%"/>
+        <col width="15%"/>
       </colgroup>
       <thead>
       <tr>
@@ -157,6 +195,7 @@
         <th>작성자</th>
         <th>작성일</th>
         <th>답변여부</th>
+        <th>수정/삭제</th>
       </tr>
       </thead>
       <tbody>
@@ -172,14 +211,28 @@
         <td th:text="${qna.createdBy}"></td>
         <td th:text="${#temporals.format(qna.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
         <td>
-          <a th:if="${qna.answer} == null" class="btn btn-primary" id="answerCol" th:href="@{'/qna/answer/new/' + ${qna.id}}">답변하기</a>
-          <a th:unless="${qna.answer} == null" class="btn btn-dark" disabled style="cursor:none">답변완료</a>
+          <span th:if="${qna.answer} == null">
+            <a class="btn btn-primary" th:href="@{'/qna/answer/new/' + ${qna.id}}">답변하기</a>
+          </span>
+          <span th:unless="${qna.answer} == null">답변완료</span>
         </td>
         <td>
-          <span>Q:</span>
-          <span th:text="${qna.question}"></span></br>
-          <span>A:</span>
-          <span th:text="${qna.answer}"></span>
+          <div th:if="${qna.answer} == null">
+            <button class="btn btn-danger" th:value="${qna.id}" onclick="deleteQnA(this.value)">삭제</button>
+          </div>
+          <div th:unless="${qna.answer} == null">
+            <a class="btn btn-primary" th:href="@{'/qna/answer/update/' + ${qna.id}}">답변수정</a>
+            <button class="btn btn-danger" th:value="${qna.id}" onclick="deleteQnA(this.value)">삭제</button>
+          </div>
+        </td>
+        <td>
+          <div th:if="${qna.answer} == null">Q:
+            <span th:text="${qna.question}"></span>
+          </div>
+          <div th:unless="${qna.answer} == null">Q:
+            <span th:text="${qna.question}"></span><br>
+            A: <span th:text="${qna.answer}"></span>
+          </div>
         </td>
       </tr>
       </tbody>

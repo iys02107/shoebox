@@ -1,10 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+    $(document).ready(function(){
+
+            var dt = $("#qnaTable").DataTable({
+                "pageLength": 5,
+                "lengthChange": false,
+                "searching": false,
+                "info": false,
+                "order": [ [3, "desc"] ],
+                "columnDefs": [
+                    { visible: false, targets: 5 },
+                    { orderable: false, targets: 1 },
+                    { orderable: false, targets: 2 },
+                    { orderable: false, targets: 4 }
+                  ],
+                "language" : lang_kor,
+                "responsive": {
+                    details: {
+                        type: 'column',
+                        target: 5
+                    }
+                }
+            });
+
+            var detailRows = [];
+
+            $('#qnaTable tbody').on('click', 'td.contentCol', function () {
+                var tr = $(this).closest('tr');
+                var row = dt.row(tr);
+                var idx = detailRows.indexOf(tr.attr('id'));
+
+
+                if (row.child.isShown()) {
+                    tr.removeClass('details');
+                    row.child.hide();
+
+                    // Remove from the 'open' array
+                    detailRows.splice(idx, 1);
+                } else {
+                    tr.addClass('details');
+                    row.child(format(row.data())).show();
+
+
+                    // Add to the 'open' array
+                    if (idx === -1) {
+                        detailRows.push(tr.attr('id'));
+                    }
+                }
+            });
+        });
+
+        function format(d) {
+             return (
+              d[5]
+             );
+        }
+        var lang_kor = {       
+            "decimal" : "",
+            "emptyTable" : "등록된 문의가 없습니다.",
+            "info" : "_START_ - _END_ (총 _TOTAL_ 명)",
+            "infoEmpty" : "0명",
+            "infoFiltered" : "(전체 _MAX_ 명 중 검색결과)",
+            "infoPostFix" : "",
+            "thousands" : ",",
+            "lengthMenu" : "_MENU_ 개씩 보기",
+            "loadingRecords" : "로딩중...",
+            "processing" : "처리중...",
+            "search" : "검색 : ",
+            "zeroRecords" : "검색된 데이터가 없습니다.",
+            "paginate" : {
+                "first" : "첫 페이지",
+                "last" : "마지막 페이지",
+                "next" : "다음",
+                "previous" : "이전"
+            },
+            "aria" : {
+                "sortAscending" : " :  오름차순 정렬",
+                "sortDescending" : " :  내림차순 정렬"
+            }
+        };
+
+        function deleteQnA(qnAId){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/qna/delete/" + qnAId;
+            var paramData = {
+               qnAId : qnAId
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("문의가 삭제되었습니다.");
+                    location.href='/qna/qnaList';
+                },
+                error : function(jqXHR, status, error){
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+        }
+
+    </script>
+
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+       .content-mg{
+            margin-left:25%;
+            margin-right:25%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
+        }
+        .repImg{
+            height:100px;
+            width:100px;
+        }
+        .fs18{
+            font-size:18px
+        }
+        .fs24{
+            font-size:24px
+        }
+        .contentCol {
+             text-overflow: ellipsis;
+             white-space: nowrap;
+             max-width: 20px;
+             overflow: hidden;
+        }
+        .table td{
+            border-top: 0px;
+        }
+
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="content-mg">
+
+    <h2 class="mb-4">
+        문의 내역
+    </h2>
+
+    <div>
+        <table id="qnaTable" class="table text-center align-middle">
+            <colgroup>
+                <col width="20%"/>
+                <col width="20%"/>
+                <col width="20%"/>
+                <col width="20%"/>
+                <col width="20%"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>답변여부</th>
+                <th>상품명</th>
+                <th>제목</th>
+                <th>작성일</th>
+                <th>수정/삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="qna : ${qnAList}">
+                <td>
+                    <span th:if="${qna.answer} == null">답변대기</span>
+                    <span th:unless="${qna.answer} == null">답변완료</span>
+                </td>
+                <td class="d-relative">
+                    <div class="repImgDiv align-self-center">
+                        <a th:href="'/item/'+ ${qna.item.id}">
+                            <span th:text="${qna.item.itemNm}" class="fs15 font-weight-bold"></span>
+                        </a>
+                    </div>
+                </td>
+                <td th:text="${qna.title}" class="contentCol" style="cursor: pointer "></td>
+                <td th:text="${#temporals.format(qna.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td>
+                    <div th:if="${qna.answer} == null">
+                        <a class="btn btn-primary" th:href="@{'/qna/update/' + ${qna.id}}">수정</a>
+                        <button class="btn btn-danger" th:value="${qna.id}" onclick="deleteQnA(this.value)">삭제</button>
+                    </div>
+                    <div th:unless="${qna.answer} == null">
+                        <button class="btn btn-danger" th:value="${qna.id}" onclick="deleteQnA(this.value)">삭제</button>
+                    </div>
+                </td>
+                <td>
+                    <div th:if="${qna.answer} == null">Q:
+                        <span th:text="${qna.question}"></span>
+                    </div>
+                    <div th:unless="${qna.answer} == null">Q:
+                        <span th:text="${qna.question}"></span><br>
+                        A: <span th:text="${qna.answer}"></span>
+                    </div>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 </html>

@@ -130,13 +130,12 @@ public class ItemController {
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
         List<ReviewItemDto> reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
-        int qnaCount = qnAService.getQnACount(itemId);
         List<QnADto> qnaList = qnARepository.findQnAByItemId(itemId);
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);
         model.addAttribute("reviewItems", reviewItemDtoList);
-        model.addAttribute("qnaCount", qnaCount);
+        model.addAttribute("qnaCount", qnaList.size());
         model.addAttribute("qnaList", qnaList);
 
         if(principal!=null){

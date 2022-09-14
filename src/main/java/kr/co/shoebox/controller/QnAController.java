@@ -1,6 +1,9 @@
 package kr.co.shoebox.controller;
 
+import kr.co.shoebox.constant.QnASecret;
+import kr.co.shoebox.constant.Role;
 import kr.co.shoebox.dto.AnswerFormDto;
+import kr.co.shoebox.dto.QnADto;
 import kr.co.shoebox.dto.QuestionFormDto;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.Member;
@@ -8,7 +11,10 @@ import kr.co.shoebox.entity.QnA;
 import kr.co.shoebox.repository.ItemRepository;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.repository.QnARepository;
+import kr.co.shoebox.service.QnAService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +33,8 @@ public class QnAController {
     private final QnARepository qnARepository;
 
     private final ItemRepository itemRepository;
+
+    private final QnAService qnAService;
 
     @GetMapping(value = "/question/new/{itemId}")
     public String questionForm(Model model, @PathVariable("itemId") Long itemId){
@@ -67,4 +75,56 @@ public class QnAController {
         model.addAttribute("qnAList", qnAList);
         return "qna/qnaMng";
     }
+
+    @GetMapping(value = "/qnaList")
+    public String qnaList(Model model, Principal principal){
+        List<QnA> qnAList = qnARepository.findQnAByCreatedBy(principal.getName());
+        Member member = memberRepository.findByEmail(principal.getName());
+        model.addAttribute("name", member.getName());
+        model.addAttribute("qnAList",qnAList);
+        return "qna/qnaList";
+    }
+
+    @PostMapping(value = "/delete/{qnAId}")
+    public @ResponseBody ResponseEntity qnaDelete(@PathVariable("qnAId") Long qnAId , Principal principal){
+
+        if(!qnAService.validateQnA(qnAId, principal.getName())&&memberRepository.findByEmail(principal.getName()).getRole().equals(Role.USER)){
+            return new ResponseEntity<String>("문의 삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+        qnARepository.deleteById(qnAId);
+        return new ResponseEntity<Long>(qnAId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/update/{qnAId}")
+    public String questionUpdateForm(Model model, @PathVariable("qnAId") Long qnAId){
+        QnA qnA = qnARepository.getById(qnAId);
+        model.addAttribute("qna",qnA);
+        return "qna/questionUpdateForm";
+    }
+
+    @PostMapping(value = "/update")
+    public String newAnswer(@RequestParam("question") String question, @RequestParam("id") Long id, @RequestParam("title") String title, @RequestParam("qnASecret") QnASecret qnASecret){
+        QnA qnA = qnARepository.getById(id);
+        qnA.setTitle(title);
+        qnA.setQuestion(question);
+        qnA.setQnASecret(qnASecret);
+        qnARepository.save(qnA);
+        return "qna/questionAlert";
+    }
+
+    @GetMapping(value = "/answer/update/{qnAId}")
+    public String answerUpdateForm(Model model, @PathVariable("qnAId") Long qnAId){
+        QnA qnA = qnARepository.getById(qnAId);
+        model.addAttribute("qna",qnA);
+        return "qna/answerUpdateForm";
+    }
+
+    @PostMapping(value = "/answer/update")
+    public String answerUpdate(@RequestParam("qnAId") Long qnAId, @RequestParam("answer") String answer){
+        QnA qnA = qnARepository.getById(qnAId);
+        qnA.setAnswer(answer);
+        qnARepository.save(qnA);
+        return "qna/answerAlert";
+    }
+
 }
