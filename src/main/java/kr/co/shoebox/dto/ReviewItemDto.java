@@ -19,18 +19,19 @@ public class ReviewItemDto {
 
     private String regTime;
 
-    private String email;
-
     private String size;
 
+    private String createdBy;
+
     @QueryProjection
-    public ReviewItemDto(Long id, String content, int rate, Long memberId, LocalDateTime regTime, String size){
+    public ReviewItemDto(Long id, String content, int rate, Long memberId, LocalDateTime regTime, String size, String createdBy){
         this.id = id;
         this.content = content;
         this.rate = rate;
         this.memberId = memberId;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         this.size = size.substring(4);
+        this.createdBy = createdBy;
     }
 
 }

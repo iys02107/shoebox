@@ -4,8 +4,6 @@ import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.*;
 import kr.co.shoebox.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -87,20 +85,4 @@ public class ReviewService {
         }
 
     }
-
-    @Transactional(readOnly = true)
-    public List<ReviewItemDto> getReviewItemList(Long itemId){
-
-        List<ReviewItemDto> reviewItemDtoList;
-
-        reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
-        for(int i=0; i< reviewItemDtoList.size(); i++){
-            Long memberId = reviewItemDtoList.get(i).getMemberId();
-            Member member = memberRepository.getById(memberId);
-            reviewItemDtoList.get(i).setEmail(member.getEmail().substring(0,3)+"*******");
-        }
-        return reviewItemDtoList;
-    }
-
-
 }

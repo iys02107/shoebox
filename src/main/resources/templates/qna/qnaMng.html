@@ -172,13 +172,13 @@
         <td th:text="${qna.createdBy}"></td>
         <td th:text="${#temporals.format(qna.regTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
         <td>
-          <input type="hidden" id="answerStatus" name="answerStatus" th:value="${qna.answer}">
-          <a th:if="${#strings.isEmpty(answerStatus)}" class="btn btn-primary" id="answerCol" th:href="@{'/qna/answer/new/' + ${qna.id}}">답변하기</a>
-          <a th:unless="${#strings.isEmpty(answerStatus)}" class="btn btn-dark" disabled style="cursor:none">답변완료</a>
+          <a th:if="${qna.answer} == null" class="btn btn-primary" id="answerCol" th:href="@{'/qna/answer/new/' + ${qna.id}}">답변하기</a>
+          <a th:unless="${qna.answer} == null" class="btn btn-dark" disabled style="cursor:none">답변완료</a>
         </td>
         <td>
           <span>Q:</span>
-          <span th:text="${qna.question}"></span>
+          <span th:text="${qna.question}"></span></br>
+          <span>A:</span>
           <span th:text="${qna.answer}"></span>
         </td>
       </tr>

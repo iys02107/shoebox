@@ -52,7 +52,7 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "and oi.item.id = :itemId")
     int findReviewNull(Long itemId);
 
-    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.content, ri.rate, ri.member.id, ri.regTime, oi.size) " +
+    @Query("select new kr.co.shoebox.dto.ReviewItemDto(ri.id, ri.content, ri.rate, ri.member.id, ri.regTime, oi.size, ri.createdBy) " +
             "from ReviewItem ri, OrderItem oi " +
             "join oi.item i " +
             "where ri.orderItemId = oi.id " +

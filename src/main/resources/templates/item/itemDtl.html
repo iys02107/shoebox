@@ -27,7 +27,7 @@
                 "lengthChange": false,
                 "searching": false,
                 "info": false,
-                "order": [ [3, "desc"] ],
+                "order": [ [4, "desc"] ],
                 "columnDefs": [
                     { orderable: false, targets: 2 },
                     { orderable: false, targets: 3 }
@@ -651,7 +651,14 @@
                         </td>
                         <td th:text="${reviewItem.size}"></td>
                         <td th:text="${reviewItem.content}" class="contentCol" style="cursor: pointer"></td>
-                        <td th:text="${reviewItem.email}"></td>
+                        <td>
+                            <div th:if="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${reviewItem.createdBy}">
+                                <span th:text="${reviewItem.createdBy}" class="align-self-center mr-2"></span>
+                            </div>
+                            <div th:unless="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${reviewItem.createdBy}">
+                                <span th:text="${#strings.substring(reviewItem.createdBy, 0, 3)+'*******'}" class="align-self-center mr-2"></span>
+                            </div>
+                        </td>
                         <td th:text="${reviewItem.regTime}"></td>
                     </tr>
                     </tbody>
@@ -686,9 +693,8 @@
                     <tbody>
                     <tr th:each="qna : ${qnaList}">
                         <td>
-                            <input type="hidden" id="answerStatus" name="answerStatus" th:value="${qna.answer}">
-                            <span th:if="${#strings.isEmpty(answerStatus)}">답변대기</span>
-                            <span th:unless="${#strings.isEmpty(answerStatus)}">답변완료</span>
+                            <span th:if="${qna.answer} == null">답변대기</span>
+                            <span th:unless="${qna.answer} == null">답변완료</span>
                         </td>
 
                         <td class="contentCol" style="cursor: pointer">
@@ -697,14 +703,40 @@
                             <span th:text="${qna.title}" class="align-self-center mr-2"></span>
                         </td>
                         <td>
-                            <span th:text="${qna.createdBy}" class="align-self-center mr-2"></span>
+                            <div th:if="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${qna.createdBy}">
+                                <span th:text="${qna.createdBy}" class="align-self-center mr-2"></span>
+                            </div>
+                            <div th:unless="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${qna.createdBy}">
+                                <span th:text="${#strings.substring(qna.createdBy, 0, 3)+'*******'}" class="align-self-center mr-2"></span>
+                            </div>
                         </td>
                         <td>
                             <span th:text="${qna.regTime}" class="align-self-center mr-2"></span>
                         </td>
                         <td>
-                            <span>Q:</span>
-                            <span th:text="${qna.question}"></span>
+                            <div th:if="${qna.qnASecret == T(kr.co.shoebox.constant.QnASecret).PUBLIC}">
+                                <div th:if="${qna.answer} == null">Q:
+                                    <span th:text="${qna.question}"></span>
+                                </div>
+                                <div th:unless="${qna.answer} == null">Q:
+                                    <span th:text="${qna.question}"></span><br>
+                                    A: <span th:text="${qna.answer}"></span>
+                                </div>
+                            </div>
+                            <div th:unless="${qna.qnASecret == T(kr.co.shoebox.constant.QnASecret).PUBLIC}">
+                                <div th:if="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${qna.createdBy}">
+                                    <div th:if="${qna.answer} == null">Q:
+                                        <span th:text="${qna.question}"></span>
+                                    </div>
+                                    <div th:unless="${qna.answer} == null">Q:
+                                        <span th:text="${qna.question}"></span><br>
+                                        A: <span th:text="${qna.answer}"></span>
+                                    </div>
+                                </div>
+                                <div th:unless="${member?.role == T(kr.co.shoebox.constant.Role).ADMIN} or ${member?.email} == ${qna.createdBy}">
+                                    비밀글입니다.
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

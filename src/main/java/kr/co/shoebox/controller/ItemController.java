@@ -1,10 +1,12 @@
 package kr.co.shoebox.controller;
 
+import kr.co.shoebox.constant.Role;
 import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.Item;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import kr.co.shoebox.repository.QnARepository;
+import kr.co.shoebox.repository.ReviewItemRepository;
 import kr.co.shoebox.repository.WishItemRepository;
 import kr.co.shoebox.service.ItemService;
 import kr.co.shoebox.service.QnAService;
@@ -37,6 +39,8 @@ public class ItemController {
     private final MemberRepository memberRepository;
 
     private final ReviewService reviewService;
+
+    private final ReviewItemRepository reviewItemRepository;
 
     private final QnAService qnAService;
 
@@ -125,7 +129,7 @@ public class ItemController {
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId, Principal principal){
         ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
-        List<ReviewItemDto> reviewItemDtoList = reviewService.getReviewItemList(itemId);
+        List<ReviewItemDto> reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
         int qnaCount = qnAService.getQnACount(itemId);
         List<QnADto> qnaList = qnARepository.findQnAByItemId(itemId);
 
@@ -138,6 +142,7 @@ public class ItemController {
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());
             try {
+                model.addAttribute("member",member);
                 Long wishId = member.getWish().getId();
                 Long wishItemId = wishItemRepository.findWishItem(wishId,itemId).getItem().getId();
                 if(itemId.equals(wishItemId)){

@@ -33,7 +33,7 @@ public class QnADto {
         this.title = title;
         this.question = question;
         this.answer = answer;
-        this.createdBy = createdBy.substring(0,3)+"*******";
+        this.createdBy = createdBy;
         this.itemId = itemId;
         this.qnASecret = qnASecret;
         this.regTime = regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
