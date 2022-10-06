@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -92,6 +93,15 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getMainItemPage(itemSearchDto, pageable);
+    }
+
+    public String getPayId(){
+        String uuid="";
+        for(int i=0;i<10;i++){
+            uuid = UUID.randomUUID().toString().replace("-","");
+            System.out.println(uuid);
+        }
+        return uuid;
     }
 
 }

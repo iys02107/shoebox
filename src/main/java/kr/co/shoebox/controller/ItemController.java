@@ -131,12 +131,15 @@ public class ItemController {
         ReviewCalcDto reviewCalcDto = reviewService.getReviewCalc(itemId);
         List<ReviewItemDto> reviewItemDtoList = reviewItemRepository.findReviewItemList(itemId);
         List<QnADto> qnaList = qnARepository.findQnAByItemId(itemId);
+        String payId = itemService.getPayId();
 
         model.addAttribute("item", itemFormDto);
         model.addAttribute("review", reviewCalcDto);
         model.addAttribute("reviewItems", reviewItemDtoList);
         model.addAttribute("qnaCount", qnaList.size());
         model.addAttribute("qnaList", qnaList);
+        model.addAttribute("payId", payId);
+
 
         if(principal!=null){
             Member member = memberRepository.findByEmail(principal.getName());

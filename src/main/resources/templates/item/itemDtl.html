@@ -188,10 +188,6 @@
         }
 
         function order(){
-           if(!$(":input:radio[name=size]:checked").val()){
-                alert('사이즈를 선택해주세요.');
-                location.reload();
-           }else{
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             var url = "/order";
@@ -215,7 +211,7 @@
                 dataType : "json",
                 cache   : false,
                 success  : function(result, status){
-                    alert("주문이 완료 되었습니다.");
+                    alert("주문이 완료되었습니다.");
                     location.href='/orders';
                 },
                 error : function(jqXHR, status, error){
@@ -229,7 +225,55 @@
 
                 }
             });
+
+        }
+
+        function confirmPay(){
+        if(!$(":input:radio[name=size]:checked").val()){
+           alert('사이즈를 선택해주세요.');
+           location.reload();
+        } else {
+            var memberStatus = $("#memberStatus").val();
+            if(memberStatus == "비회원"){
+                alert('로그인 후 이용해주세요');
+                location.href='/members/login';
+            }else{
+                var result = confirm("결제하시겠습니까?");
+                    if(result){
+                        payment();
+                    }else {
+                        alert("결제를 취소하셨습니다.");
+                        location.reload();
+                    }
+                }
             }
+        }
+
+        function payment(data) {
+        var price = $("#price").val();
+        var itemNm = $("#itemNm").text();
+        var memberName = $("#memberName").val();
+        var memberEmail = $("#memberEmail").val();
+        var memberPhoneNumber = $("#memberPhoneNumber").val();
+        var payId = $("#payId").val();
+
+            IMP.init('imp12578112');
+            IMP.request_pay({
+                pg: "kakaopay.TC0ONETIME",
+                pay_method: "card",
+                merchant_uid: payId,
+                name: itemNm,
+                amount: price, //금액
+                buyer_email : memberEmail,
+                buyer_name : memberName,
+                buyer_tel : memberPhoneNumber
+            }, function (rsp) {
+                if(rsp.success) {
+                    order();
+                } else {
+                    alert(rsp.error_msg);
+                }
+	        });
         }
 
         function addWish(){
@@ -487,6 +531,14 @@
 </th:block>
 
 <div layout:fragment="content" style="margin-left:25%;margin-right:25%">
+    <input type="hidden" sec:authorize="isAuthenticated()" id="memberName" th:value="${member.name}">
+    <input type="hidden" sec:authorize="isAuthenticated()" id="memberEmail" th:value="${member.email}">
+    <input type="hidden" sec:authorize="isAuthenticated()" id="memberPhoneNumber" th:value="${member.phoneNumber}">
+
+    <input type="hidden" sec:authorize="isAuthenticated()" id="payId" th:value="${payId}">
+
+    <input type="hidden" sec:authorize="isAnonymous()" id="memberStatus" value="비회원">
+
 
     <input type="hidden" id="itemId" th:value="${item.id}">
     <div class="d-flex">
@@ -572,7 +624,7 @@
             </div>
             <div th:if="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-light border border-primary btn-lg" onclick="addCart()">장바구니 담기</button>
-                <button type="button" class="btn btn-primary btn-lg" onclick="order()">주문하기</button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="confirmPay()">주문하기</button>
             </div>
             <div th:unless="${item.itemSellStatus == T(kr.co.shoebox.constant.ItemSellStatus).SELL}" class="text-right">
                 <button type="button" class="btn btn-danger btn-lg">품절</button>
