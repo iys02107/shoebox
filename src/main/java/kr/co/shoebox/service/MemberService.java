@@ -24,7 +24,6 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
-    private final PasswordEncoder passwordEncoder;
 
 
     public Member saveMember(Member member){
@@ -75,8 +74,6 @@ public class MemberService implements UserDetailsService {
         String pw = "";
         UUID uid = UUID.randomUUID();
         pw = uid.toString().substring(0,6);
-        member.setPassword(passwordEncoder.encode(pw));
-        memberRepository.save(member);
         return pw;
     }
 

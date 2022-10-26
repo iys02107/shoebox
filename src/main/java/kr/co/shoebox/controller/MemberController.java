@@ -99,7 +99,11 @@ public class MemberController {
         Boolean findPW = false;
         if(id!=null){
             findPW = true;
-            mailService.tmpPWMailSend(findPWDto.getEmail(),memberService.tmpPW(findPWDto.getEmail()));
+            String pw = memberService.tmpPW(findPWDto.getEmail());
+            Member member = memberRepository.findByEmail(findPWDto.getEmail());
+            member.setPassword(passwordEncoder.encode(pw));
+            memberRepository.save(member);
+            mailService.tmpPWMailSend(findPWDto.getEmail(),pw);
             model.addAttribute("result","가입하신 이메일 주소로 임시 비밀번호를 발송하였습니다.");
             model.addAttribute("findPW", findPW);
         } else {
