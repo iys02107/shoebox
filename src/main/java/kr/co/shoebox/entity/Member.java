@@ -35,6 +35,11 @@ public class Member extends BaseEntity {
 
     private String detailAddress;
 
+    private int question;
+
+    private String answer;
+
+    @Column(unique = true)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
@@ -60,6 +65,8 @@ public class Member extends BaseEntity {
         member.setRoadAddress(memberFormDto.getRoadAddress());
         member.setDetailAddress(memberFormDto.getDetailAddress());
         member.setPhoneNumber(memberFormDto.getPhoneNumber());
+        member.setQuestion(memberFormDto.getQuestion());
+        member.setAnswer(memberFormDto.getAnswer());
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);
         member.setRole(Role.USER);

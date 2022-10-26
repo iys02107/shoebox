@@ -42,8 +42,6 @@ public class ItemController {
 
     private final ReviewItemRepository reviewItemRepository;
 
-    private final QnAService qnAService;
-
     private final QnARepository qnARepository;
 
     @GetMapping(value = "/admin/item/new")

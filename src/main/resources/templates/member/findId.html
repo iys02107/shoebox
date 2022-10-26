@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+  <style>
+        .content-mg{
+            margin-left:25%;
+            margin-right:25%;
+            margin-top:2%;
+            margin-bottom:100px;
+        }
+    </style>
+</th:block>
+
+
+<div layout:fragment="content" class="content-mg">
+    <p class="h2">
+      아이디(이메일) 찾기 결과
+    </p>
+    <h4 style="font-weight: bold" th:text="${email}">
+    </h4>
+
+    <button class="btn btn-primary" onClick="location.href='/members/login'">로그인 페이지로 이동</button>
+    <button th:if="${findId == true}"class="btn btn-primary" onClick="location.href='/members/findPW'">비밀번호 찾기</button>
+    <button th:unless="${findId == true}"class="btn btn-primary" onClick="location.href='/members/findId'">아이디 찾기</button>
+</div>
+</html>

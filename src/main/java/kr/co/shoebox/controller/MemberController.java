@@ -1,13 +1,11 @@
 package kr.co.shoebox.controller;
 
-import kr.co.shoebox.dto.MemberFormDto;
-import kr.co.shoebox.dto.MemberUpdateDto;
+import kr.co.shoebox.dto.*;
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
+import kr.co.shoebox.service.MailService;
 import kr.co.shoebox.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +27,9 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+
+    private final MailService mailService;
+
 
     @GetMapping(value = "/new")
     public String memberForm(Model model){
@@ -64,6 +65,51 @@ public class MemberController {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "/member/memberLoginForm";
     }
+
+    @GetMapping(value = "/findId")
+    public String findId(){
+        return "/member/findIdForm";
+    }
+
+    @PostMapping(value = "/findId")
+    public String findId(FindIdDto findIdDto, Model model){
+            String email = memberRepository.findEmail(findIdDto.getName(),findIdDto.getPhoneNumber());
+            Boolean findId = false;
+            if(email!=null){
+                findId = true;
+                model.addAttribute("email", email);
+                model.addAttribute("findId", findId);
+            } else {
+                findId = false;
+                model.addAttribute("email", "입력하신 정보와 일치하는 회원이 없습니다.");
+                model.addAttribute("findId", findId);
+            }
+
+        return "member/findId";
+    }
+
+    @GetMapping(value = "/findPW")
+    public String findPW(){
+        return "/member/findPWForm";
+    }
+
+    @PostMapping(value = "/findPW")
+    public String findPW(FindPWDto findPWDto, Model model){
+        Long id = memberRepository.findPW(findPWDto.getEmail(), findPWDto.getQuestion(), findPWDto.getAnswer());
+        Boolean findPW = false;
+        if(id!=null){
+            findPW = true;
+            mailService.tmpPWMailSend(findPWDto.getEmail(),memberService.tmpPW(findPWDto.getEmail()));
+            model.addAttribute("result","가입하신 이메일 주소로 임시 비밀번호를 발송하였습니다.");
+            model.addAttribute("findPW", findPW);
+        } else {
+            findPW = false;
+            model.addAttribute("result", "본인확인 질문과 답변이 일치하지 않습니다.");
+            model.addAttribute("findPW", findPW);
+        }
+        return "/member/findPW";
+    }
+
 
     @GetMapping(value = "/myPage")
     public String userName(Model model, Principal principal){

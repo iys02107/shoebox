@@ -69,11 +69,6 @@ public class OrderService {
                 } else {
                     orderItem.setOrderStatus(false);
                 }
-//                if(reviewItem==null){
-//                    orderItem.setReviewStatus(false);
-//                }else {
-//                    orderItem.setReviewStatus(true);
-//                }
                     OrderItemDto orderItemDto =
                             new OrderItemDto(orderItem, itemImg.getImgUrl());
                 orderHistDto.addOrderItemDto(orderItemDto);

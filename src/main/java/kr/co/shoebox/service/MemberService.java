@@ -1,7 +1,8 @@
 package kr.co.shoebox.service;
 
+
 import kr.co.shoebox.dto.MemberFormDto;
-import kr.co.shoebox.dto.MemberUpdateDto;
+
 import kr.co.shoebox.entity.Member;
 import kr.co.shoebox.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +10,12 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
-import java.security.Principal;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -22,6 +24,9 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
+
     public Member saveMember(Member member){
         validateDuplicateMember(member);
         return memberRepository.save(member);
@@ -29,8 +34,12 @@ public class MemberService implements UserDetailsService {
 
     private void validateDuplicateMember(Member member){
         Member findMember = memberRepository.findByEmail(member.getEmail());
+        Member findMember1 = memberRepository.findByPhoneNumber(member.getPhoneNumber());
         if(findMember != null){
-            throw new IllegalStateException("이미 가입된 회원입니다.");
+            throw new IllegalStateException("해당 이메일은 이미 사용중입니다.");
+        }
+        if(findMember1 != null){
+            throw new IllegalStateException("입력하신 전화번호는 이미 가입되어 있습니다.");
         }
     }
     public boolean passwordConfirm(MemberFormDto memberFormDto, BindingResult bindingResult){
@@ -59,6 +68,16 @@ public class MemberService implements UserDetailsService {
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();
+    }
+
+    public String tmpPW(String email){
+        Member member = memberRepository.findByEmail(email);
+        String pw = "";
+        UUID uid = UUID.randomUUID();
+        pw = uid.toString().substring(0,6);
+        member.setPassword(passwordEncoder.encode(pw));
+        memberRepository.save(member);
+        return pw;
     }
 
 }

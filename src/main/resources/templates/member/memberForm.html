@@ -3,6 +3,127 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+
+        $(function(){
+            $('#password').keyup(function(){
+                  $("#alert-success").hide();
+                  $("#alert-danger").hide();
+            });
+            $(function(){
+                $("#alert-success").hide();
+                $("#alert-danger").hide();
+                $("input").keyup(function(){
+                    var pwd1=$("#password").val();
+                    var pwd2=$("#passwordCheck").val();
+                    if(pwd1 != "" || pwd2 != ""){
+                        if(pwd1 == pwd2){
+                            $("#alert-success").show();
+                            $("#alert-danger").hide();
+                        }else{
+                            $("#alert-success").hide();
+                            $("#alert-danger").show();
+                        }
+                    }
+                });
+            });
+        });
+
+        function checkEmail(){
+            if($("#email").val()==""){
+                alert('인증받을 이메일을 입력해주세요');
+                return false;
+            }
+            var serialNo = random()+random()+random()+random()+random()+random();
+            $("#serialNo").val(serialNo);
+            var title = "shoebox 회원인증번호 입니다.";
+            var message = "안녕하세요. shoebox 입니다.\n회원가입 인증번호는 " +serialNo+ " 입니다.";
+
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var param = {
+                 "address" : $("#email").val()
+                ,"title" : title
+                ,"message" : message
+            }
+
+            $.ajax({
+                url: "/mail"
+                ,type: "POST"
+                ,data: JSON.stringify(param)
+                ,contentType: "application/json"
+                ,dataType: "text"
+                ,beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                }
+                ,cache: false
+                ,success: function(data) {
+                    alert('인증번호를 발송했습니다.');
+                    document.getElementById("emailCode").focus();
+                },
+                error: function(jqXHR, status, error) {
+                    alert('이미 가입된 이메일입니다.');
+                }
+            });
+
+
+        }
+
+        function random(){
+            var random = Math.round((Math.random() * 9));
+            return random.toString();
+        }
+
+        function checkCode(){
+            if($("#serialNo").val()==$("#emailCode").val()){
+                alert('이메일 인증이 완료되었습니다.');
+                $(function(){
+                    $("#emailCodeCheck").val('인증 완료');
+                    $("#emailCode").attr("readonly", true);
+                    $("#emailCodeCheck").attr("disabled", true);
+                    $("#submit").attr("disabled", false);
+                });
+            }else{
+                alert('인증번호가 틀렸습니다.');
+            }
+        }
+    </script>
+
+    <script defer>
+    function execPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("roadAddress").value = roadAddr;
+
+            }
+        }).open();
+    }
+
+
+
+</script>
+
+</th:block>
+
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -19,59 +140,6 @@
     </style>
 </th:block>
 
-<!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
-        });
-
-    $(function(){
-        $('#password').keyup(function(){
-              $("#alert-success").hide();
-              $("#alert-danger").hide();
-        });
-        $(function(){
-            $("#alert-success").hide();
-            $("#alert-danger").hide();
-            $("input").keyup(function(){
-                var pwd1=$("#password").val();
-                var pwd2=$("#passwordCheck").val();
-                if(pwd1 != "" || pwd2 != ""){
-                    if(pwd1 == pwd2){
-                        $("#alert-success").show();
-                        $("#alert-danger").hide();
-                    }else{
-                        $("#alert-success").hide();
-                        $("#alert-danger").show();
-                    }
-                }
-            });
-        });
-    });
-
-    </script>
-    <script defer>
-    function execPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
-
-                document.getElementById('postcode').value = data.zonecode;
-                document.getElementById("roadAddress").value = roadAddr;
-
-            }
-        }).open();
-    }
-
-</script>
-
-</th:block>
-
 <div layout:fragment="content" class="content-mg">
 
     <form action="/members/new" role="form" method="post"  th:object="${memberFormDto}">
@@ -83,13 +151,25 @@
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
         </div>
-        <div class="form-group">
-            <label th:for="email">이메일주소</label>
-            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요">
+        <div class="input-group">
+            <label th:for="email">이메일 주소</label>
+            <div class="input-group">
+                <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요">
+                <input type="button" class="btn btn-primary" id="emailSend" value="인증번호 발송" onclick="checkEmail()"><br>
+            </div>
             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
         </div>
+        <div class="input-group">
+            <label th:for="emailCode" style="margin-top: 16px">인증번호 입력</label>
+            <div class="input-group">
+                <input type="hidden" id="serialNo" value="">
+                <input type="text" th:field="*{emailCode}" class="form-control" placeholder="인증번호 6자리 숫자 입력">
+                <input type="button" class="btn btn-primary" id="emailCodeCheck" value="인증번호 확인" onclick="checkCode()"><br>
+            </div>
+            <p th:if="${#fields.hasErrors('emailCode')}" th:errors="*{emailCode}" class="fieldError">Incorrect data</p>
+        </div>
         <div class="form-group">
-            <label th:for="password">비밀번호</label>
+            <label th:for="password" style="margin-top: 16px">비밀번호</label>
             <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
         </div>
@@ -100,6 +180,29 @@
         </div>
         <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
         <div class="alert alert-danger" id="alert-danger">비밀번호가 일치하지 않습니다.</div>
+
+        <div class="form-group">
+            <label th:for="question">본인확인 질문</label>
+            <div class="input-group">
+                <select th:field="*{question}">
+                    <option th:value="1">본인의 출신 초등학교는?</option>
+                    <option th:value="2">본인의 보물 1호는?</option>
+                    <option th:value="3">본인의 아버지 이름은?</option>
+                    <option th:value="4">본인의 어머니 이름은?</option>
+                    <option th:value="5">본인의 출생지는?</option>
+                </select>
+            </div>
+            <p th:if="${#fields.hasErrors('question')}" th:errors="*{question}" class="fieldError">Incorrect data</p>
+        </div>
+        <div class="form-group">
+            <label th:for="answer">본인확인 질문 답변</label>
+            <div class="input-group">
+                <input type="text" th:field="*{answer}" id="answer" class="form-control" placeholder="답변 입력">
+            </div>
+            <p th:if="${#fields.hasErrors('answer')}" th:errors="*{answer}" class="fieldError">Incorrect data</p>
+        </div>
+
+
         <div class="input-group">
             <label th:for="address">주소</label>
             <div class="input-group">
@@ -123,7 +226,7 @@
         </div>
 
         <div style="text-align: center">
-            <button type="submit" class="btn btn-primary" id="submit">회원가입 완료하기</button>
+            <button type="submit" class="btn btn-primary" id="submit" disabled>회원가입 완료하기</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>

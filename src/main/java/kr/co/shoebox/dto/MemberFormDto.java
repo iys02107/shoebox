@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Getter @Setter
 public class MemberFormDto {
@@ -18,6 +15,10 @@ public class MemberFormDto {
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
     @Email(message = "이메일 형식으로 입력해주세요.")
     private String email;
+
+    @NotBlank(message = "이메일 인증은 필수입니다.")
+    @Length(min = 6, max = 6, message = "올바른 인증번호를 입력하세요")
+    private String emailCode;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     @Pattern(regexp="(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
@@ -39,4 +40,9 @@ public class MemberFormDto {
     @NotBlank(message = "휴대폰 번호는 필수 입력 값입니다.")
     @Length(min= 10, max=11, message = "올바른 전화번호를 입력하세요")
     private String phoneNumber;
+
+    private int question;
+
+    @NotBlank(message = "본인확인 질문에 대한 답변은 필수 입력 값입니다.")
+    private String answer;
 }
